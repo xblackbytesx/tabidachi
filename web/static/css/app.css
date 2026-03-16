@@ -800,6 +800,153 @@ sl-details.day-notes {
 .legs-list { display: flex; flex-direction: column; gap: 8px; }
 
 /* ============================================================
+   Cover Images
+   ============================================================ */
+
+/* Trip card with cover image */
+.trip-card[style*="background-image"] {
+  color: #fff;
+  border-color: transparent;
+}
+.trip-card[style*="background-image"] .trip-card-title a,
+.trip-card[style*="background-image"] .trip-dates,
+.trip-card[style*="background-image"] .trip-home,
+.trip-card[style*="background-image"] .trip-legs {
+  color: rgba(255,255,255,0.9);
+}
+
+/* Trip view hero header with cover image */
+.trip-view-header-has-image {
+  border-radius: 12px;
+  padding: 32px 24px;
+  margin-bottom: 24px;
+  min-height: 180px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.trip-view-header-has-image .trip-view-title,
+.trip-view-header-has-image .trip-view-meta,
+.trip-view-header-has-image .trip-view-meta span { color: #fff; }
+.trip-view-header-has-image .btn-ghost { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.3); }
+
+/* Leg header with cover image */
+.leg-header-has-image {
+  border-radius: 8px;
+  padding: 20px 20px;
+  min-height: 100px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.leg-header-has-image .leg-destination,
+.leg-header-has-image .leg-num,
+.leg-header-has-image .leg-title,
+.leg-header-has-image .leg-region,
+.leg-header-has-image .leg-dates { color: #fff; }
+
+/* Image section in edit forms */
+.image-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.image-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.image-preview { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.image-preview-img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.image-credit { font-size: 12px; color: var(--text-muted); }
+.image-placeholder { font-size: 13px; color: var(--text-muted); margin: 0 0 12px; }
+.image-search-form { margin-bottom: 8px; }
+
+/* Image results grid */
+.image-results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.image-thumb-wrap { position: relative; }
+.image-thumb-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  background: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.image-thumb-btn:hover { border-color: var(--accent); }
+.image-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+.image-thumb-credit {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  font-size: 10px;
+  padding: 3px 6px;
+  display: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.image-thumb-wrap:hover .image-thumb-credit { display: block; }
+.search-empty, .search-error { font-size: 13px; color: var(--text-muted); padding: 8px 0; }
+
+/* Loading state while image download is in progress */
+.image-thumb-loading {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  border-radius: 4px;
+  align-items: center;
+  justify-content: center;
+}
+.image-thumb-loading::after {
+  content: '';
+  width: 20px; height: 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: img-spin 0.7s linear infinite;
+}
+@keyframes img-spin { to { transform: rotate(360deg); } }
+.image-thumb-btn.htmx-request { cursor: wait; }
+.image-thumb-btn.htmx-request .image-thumb-loading { display: flex; }
+.image-thumb-btn.htmx-request .image-thumb-credit { display: none; }
+
+/* Inline error message in image section */
+.image-error {
+  font-size: 13px;
+  color: #f87171;
+  background: rgba(248,113,113,0.1);
+  border: 1px solid rgba(248,113,113,0.3);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+}
+
+/* ============================================================
    Responsive
    ============================================================ */
 

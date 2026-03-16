@@ -10,7 +10,11 @@ import (
 templ TripView(csrfToken string, trip *domain.Trip) {
 	@layouts.Base(trip.Title, csrfToken) {
 		<div class="trip-view">
-			<div class="trip-view-header">
+			<div class={ "trip-view-header", templ.KV("trip-view-header-has-image", trip.CoverImageURL != "") }
+				if trip.CoverImageURL != "" {
+					style={ "background-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%), url(" + trip.CoverImageURL + "); background-size: cover; background-position: center;" }
+				}
+			>
 				<div class="trip-view-header-left">
 					<a href="/" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> All trips</a>
 					<div class="trip-view-title-block">
@@ -42,7 +46,11 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 				}
 				for legIdx, leg := range trip.Data.Legs {
 					<div class="leg-section" id={ fmt.Sprintf("leg-%d", legIdx) }>
-						<div class="leg-header">
+						<div class={ "leg-header", templ.KV("leg-header-has-image", leg.CoverImageURL != "") }
+							if leg.CoverImageURL != "" {
+								style={ "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.7) 100%), url(" + leg.CoverImageURL + "); background-size: cover; background-position: center;" }
+							}
+						>
 							<div class="leg-destination">
 								<span class="leg-num">Leg { fmt.Sprintf("%d", leg.Sequence) }</span>
 								<h2 class="leg-title">{ leg.Destination }</h2>

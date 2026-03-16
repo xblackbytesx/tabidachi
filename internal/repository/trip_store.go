@@ -31,7 +31,8 @@ func (s *TripStore) Create(ctx context.Context, t *domain.Trip) (*domain.Trip, e
 		 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		 RETURNING id, user_id, title, start_date, end_date,
 		           COALESCE(home_location,''), timezone, COALESCE(cover_color,''),
-		           data, created_at, updated_at`,
+		           data, created_at, updated_at,
+		           COALESCE(cover_image_url,''), COALESCE(cover_image_credit,'')`,
 		t.UserID, t.Title, t.StartDate, t.EndDate,
 		nullableString(t.HomeLocation), t.Timezone, nullableString(t.CoverColor),
 		dataJSON,
@@ -39,6 +40,7 @@ func (s *TripStore) Create(ctx context.Context, t *domain.Trip) (*domain.Trip, e
 		&result.ID, &result.UserID, &result.Title, &result.StartDate, &result.EndDate,
 		&result.HomeLocation, &result.Timezone, &result.CoverColor,
 		&dataRaw, &result.CreatedAt, &result.UpdatedAt,
+		&result.CoverImageURL, &result.CoverImageCredit,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("create trip: %w", err)
@@ -55,13 +57,15 @@ func (s *TripStore) GetByID(ctx context.Context, id, userID uuid.UUID) (*domain.
 	err := s.pool.QueryRow(ctx,
 		`SELECT id, user_id, title, start_date, end_date,
 		        COALESCE(home_location,''), timezone, COALESCE(cover_color,''),
-		        data, created_at, updated_at
+		        data, created_at, updated_at,
+		        COALESCE(cover_image_url,''), COALESCE(cover_image_credit,'')
 		 FROM trips WHERE id = $1 AND user_id = $2`,
 		id, userID,
 	).Scan(
 		&result.ID, &result.UserID, &result.Title, &result.StartDate, &result.EndDate,
 		&result.HomeLocation, &result.Timezone, &result.CoverColor,
 		&dataRaw, &result.CreatedAt, &result.UpdatedAt,
+		&result.CoverImageURL, &result.CoverImageCredit,
 	)
 	if err != nil {
 		return nil, fmt.Errorf("get trip: %w", err)
@@ -76,7 +80,8 @@ func (s *TripStore) List(ctx context.Context, userID uuid.UUID) ([]*domain.Trip,
 	rows, err := s.pool.Query(ctx,
 		`SELECT id, user_id, title, start_date, end_date,
 		        COALESCE(home_location,''), timezone, COALESCE(cover_color,''),
-		        data, created_at, updated_at
+		        data, created_at, updated_at,
+		        COALESCE(cover_image_url,''), COALESCE(cover_image_credit,'')
 		 FROM trips WHERE user_id = $1
 		 ORDER BY start_date DESC`,
 		userID,
@@ -94,6 +99,7 @@ func (s *TripStore) List(ctx context.Context, userID uuid.UUID) ([]*domain.Trip,
 			&t.ID, &t.UserID, &t.Title, &t.StartDate, &t.EndDate,
 			&t.HomeLocation, &t.Timezone, &t.CoverColor,
 			&dataRaw, &t.CreatedAt, &t.UpdatedAt,
+			&t.CoverImageURL, &t.CoverImageCredit,
 		); err != nil {
 			return nil, fmt.Errorf("scan trip: %w", err)
 		}
@@ -126,6 +132,30 @@ func (s *TripStore) Delete(ctx context.Context, id, userID uuid.UUID) error {
 		id, userID,
 	)
 	return err
+}
+
+// UpdateTripImage sets the cover_image_url and cover_image_credit for a trip.
+func (s *TripStore) UpdateTripImage(ctx context.Context, id, userID uuid.UUID, imageURL, credit string) error {
+	_, err := s.pool.Exec(ctx,
+		`UPDATE trips SET cover_image_url=$1, cover_image_credit=$2, updated_at=NOW()
+		 WHERE id=$3 AND user_id=$4`,
+		nullableString(imageURL), nullableString(credit), id, userID,
+	)
+	return err
+}
+
+// UpdateLegImage updates the CoverImageURL/Credit on a specific leg in the JSONB data.
+func (s *TripStore) UpdateLegImage(ctx context.Context, id, userID uuid.UUID, legIdx int, imageURL, credit string) error {
+	trip, err := s.GetByID(ctx, id, userID)
+	if err != nil {
+		return fmt.Errorf("update leg image: %w", err)
+	}
+	if legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return fmt.Errorf("update leg image: leg index %d out of range", legIdx)
+	}
+	trip.Data.Legs[legIdx].CoverImageURL = imageURL
+	trip.Data.Legs[legIdx].CoverImageCredit = credit
+	return s.Update(ctx, trip)
 }
 
 // nullableString returns nil for empty strings so PostgreSQL stores NULL.

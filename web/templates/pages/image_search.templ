@@ -1,0 +1,146 @@
+package pages
+
+import "github.com/hakken/hakken/internal/images"
+
+// ImageSearchResults renders the HTMX partial for image search results.
+// legIdx is empty string for trip-level searches, a number string for leg searches.
+templ ImageSearchResults(csrfToken, tripID, legIdx string, results []images.ImageResult) {
+	if legIdx == "" {
+		<div id="image-results" class="image-results-grid">
+			for _, r := range results {
+				@imageThumb(csrfToken, "/trips/"+tripID+"/image", "trip-image-section", r)
+			}
+			if len(results) == 0 {
+				<p class="search-empty">No results found.</p>
+			}
+		</div>
+	} else {
+		<div id={ "leg-image-results-" + legIdx } class="image-results-grid">
+			for _, r := range results {
+				@imageThumb(csrfToken, "/trips/"+tripID+"/legs/"+legIdx+"/image", "leg-image-section-"+legIdx, r)
+			}
+			if len(results) == 0 {
+				<p class="search-empty">No results found.</p>
+			}
+		</div>
+	}
+}
+
+templ imageThumb(csrfToken, postTarget, sectionID string, r images.ImageResult) {
+	<div class="image-thumb-wrap">
+		<button
+			type="button"
+			class="image-thumb-btn"
+			hx-post={ postTarget }
+			hx-vals={ `{"imageURL":"` + r.URL + `","credit":"` + r.Credit + `"}` }
+			hx-headers={ `{"X-CSRF-Token":"` + csrfToken + `"}` }
+			hx-target={ "#" + sectionID }
+			hx-select={ "#" + sectionID }
+			hx-swap="outerHTML"
+			hx-disabled-elt="this"
+		>
+			<img src={ r.URL } alt={ r.Credit } class="image-thumb" loading="lazy" referrerpolicy="no-referrer"/>
+			<div class="image-thumb-credit">{ r.Credit }</div>
+			<div class="image-thumb-loading" aria-hidden="true"></div>
+		</button>
+	</div>
+}
+
+// TripImagePreview renders the image section on the trip edit page.
+// errMsg is shown inline when non-empty (e.g. after a failed save).
+templ TripImagePreview(csrfToken, tripID, imageURL, credit string) {
+	@tripImageSection(csrfToken, tripID, imageURL, credit, "")
+}
+
+templ TripImagePreviewError(csrfToken, tripID, imageURL, credit, errMsg string) {
+	@tripImageSection(csrfToken, tripID, imageURL, credit, errMsg)
+}
+
+templ tripImageSection(csrfToken, tripID, imageURL, credit, errMsg string) {
+	<div class="image-section" id="trip-image-section">
+		<h3 class="image-section-title">Cover image</h3>
+		if errMsg != "" {
+			<p class="image-error">{ errMsg }</p>
+		}
+		if imageURL != "" {
+			<div class="image-preview">
+				<img src={ imageURL } alt={ credit } class="image-preview-img" referrerpolicy="no-referrer"/>
+				<p class="image-credit">{ credit }</p>
+				<button
+					type="button"
+					class="btn btn-sm btn-danger"
+					hx-delete={ "/trips/" + tripID + "/image" }
+					hx-headers={ `{"X-CSRF-Token":"` + csrfToken + `"}` }
+					hx-target="#trip-image-section"
+					hx-select="#trip-image-section"
+					hx-swap="outerHTML"
+				>Remove image</button>
+			</div>
+		} else {
+			<p class="image-placeholder">No cover image set.</p>
+		}
+		<div class="image-search-form">
+			<input
+				type="text"
+				class="field-input"
+				placeholder="Search for an image (e.g. Tokyo)..."
+				hx-get={ "/trips/" + tripID + "/image/search" }
+				hx-trigger="input changed delay:500ms"
+				hx-target="#image-results"
+				hx-select="#image-results"
+				hx-swap="outerHTML"
+				name="q"
+			/>
+		</div>
+		<div id="image-results"></div>
+	</div>
+}
+
+// LegImagePreview renders the image section for a leg on the trip edit page.
+templ LegImagePreview(csrfToken, tripID, legIdx, imageURL, credit string) {
+	@legImageSection(csrfToken, tripID, legIdx, imageURL, credit, "")
+}
+
+templ LegImagePreviewError(csrfToken, tripID, legIdx, imageURL, credit, errMsg string) {
+	@legImageSection(csrfToken, tripID, legIdx, imageURL, credit, errMsg)
+}
+
+templ legImageSection(csrfToken, tripID, legIdx, imageURL, credit, errMsg string) {
+	<div class={ "image-section", "leg-image-section" } id={ "leg-image-section-" + legIdx }>
+		<h4 class="image-section-title">Leg cover image</h4>
+		if errMsg != "" {
+			<p class="image-error">{ errMsg }</p>
+		}
+		if imageURL != "" {
+			<div class="image-preview">
+				<img src={ imageURL } alt={ credit } class="image-preview-img" referrerpolicy="no-referrer"/>
+				<p class="image-credit">{ credit }</p>
+				<button
+					type="button"
+					class="btn btn-sm btn-danger"
+					hx-delete={ "/trips/" + tripID + "/legs/" + legIdx + "/image" }
+					hx-headers={ `{"X-CSRF-Token":"` + csrfToken + `"}` }
+					hx-target={ "#leg-image-section-" + legIdx }
+					hx-select={ "#leg-image-section-" + legIdx }
+					hx-swap="outerHTML"
+				>Remove image</button>
+			</div>
+		} else {
+			<p class="image-placeholder">No image set.</p>
+		}
+		<div class="image-search-form">
+			<input
+				type="text"
+				class="field-input"
+				placeholder="Search for an image (e.g. Osaka)..."
+				hx-get={ "/trips/" + tripID + "/legs/" + legIdx + "/image/search" }
+				hx-trigger="input changed delay:500ms"
+				hx-target={ "#leg-image-results-" + legIdx }
+				hx-select={ "#leg-image-results-" + legIdx }
+				hx-swap="outerHTML"
+				name="q"
+			/>
+		</div>
+		<div id={ "leg-image-results-" + legIdx }></div>
+	</div>
+}

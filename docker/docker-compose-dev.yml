@@ -12,12 +12,16 @@ services:
       APP_BASE_URL: http://localhost:8080
       PORT: "8080"
       SECURE_COOKIES: "false"
+      PEXELS_API_KEY: ""
+      UNSPLASH_ACCESS_KEY: ""
+      UPLOADS_DIR: data/uploads
     volumes:
       - ..:/app
       # Anonymous volume shadows the bind-mount for the vendor directory so
       # the Shoelace + HTMX files baked into the image during `docker build`
       # are never overwritten by the host bind-mount.
       - /app/web/static/vendor
+      - hakken_uploads_dev:/app/data/uploads
     depends_on:
       hakken-db:
         condition: service_healthy
@@ -33,10 +37,11 @@ services:
     volumes:
       - hakken_pgdata_dev:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -h localhost -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U hakken"]
       interval: 5s
       timeout: 5s
       retries: 10
 
 volumes:
   hakken_pgdata_dev:
+  hakken_uploads_dev:

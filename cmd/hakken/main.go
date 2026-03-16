@@ -15,6 +15,7 @@ import (
 	"github.com/hakken/hakken/internal/config"
 	appdb "github.com/hakken/hakken/internal/db"
 	"github.com/hakken/hakken/internal/handler"
+	"github.com/hakken/hakken/internal/images"
 	appmiddleware "github.com/hakken/hakken/internal/middleware"
 	"github.com/hakken/hakken/internal/repository"
 	"github.com/labstack/echo/v4"
@@ -51,13 +52,15 @@ func main() {
 
 	userStore := repository.NewUserStore(pool)
 	tripStore := repository.NewTripStore(pool)
+	imageSvc := images.NewService(cfg.PexelsAPIKey, cfg.UnsplashKey, cfg.UploadsDir)
 
 	authHandler := handler.NewAuthHandler(userStore)
 	dashHandler := handler.NewDashboardHandler(tripStore)
-	tripHandler := handler.NewTripHandler(tripStore)
-	importHandler := handler.NewImportHandler(tripStore)
+	tripHandler := handler.NewTripHandler(tripStore, imageSvc)
+	importHandler := handler.NewImportHandler(tripStore, imageSvc)
 	promptHandler := handler.NewPromptHandler()
 	builderHandler := handler.NewBuilderHandler(tripStore)
+	imageHandler := handler.NewImageHandler(tripStore, imageSvc)
 
 	e := echo.New()
 	e.HideBanner = true
@@ -99,6 +102,7 @@ func main() {
 	})
 
 	e.Static("/static", "web/static")
+	e.Static("/uploads", cfg.UploadsDir)
 
 	e.GET("/health", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
@@ -129,6 +133,16 @@ func main() {
 	protected.POST("/trips/:id", tripHandler.Update)
 	protected.DELETE("/trips/:id", tripHandler.Delete)
 	protected.POST("/trips/:id/delete", tripHandler.Delete)
+
+	// Image management routes
+	protected.GET("/trips/:id/image/search", imageHandler.ImageSearch)
+	protected.POST("/trips/:id/image", imageHandler.SetTripImage)
+	protected.DELETE("/trips/:id/image", imageHandler.ClearTripImage)
+	protected.POST("/trips/:id/image/clear", imageHandler.ClearTripImage)
+	protected.GET("/trips/:id/legs/:legIdx/image/search", imageHandler.LegImageSearch)
+	protected.POST("/trips/:id/legs/:legIdx/image", imageHandler.SetLegImage)
+	protected.DELETE("/trips/:id/legs/:legIdx/image", imageHandler.ClearLegImage)
+	protected.POST("/trips/:id/legs/:legIdx/image/clear", imageHandler.ClearLegImage)
 
 	// Manual builder mutation endpoints
 	protected.POST("/trips/:id/legs", builderHandler.AddLeg)

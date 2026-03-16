@@ -17,17 +17,19 @@ type User struct {
 
 // Trip is the database row. Trip content (legs/days/events) lives in Data.
 type Trip struct {
-	ID           uuid.UUID
-	UserID       uuid.UUID
-	Title        string
-	StartDate    time.Time
-	EndDate      time.Time
-	HomeLocation string
-	Timezone     string
-	CoverColor   string
-	Data         TripData
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	ID               uuid.UUID
+	UserID           uuid.UUID
+	Title            string
+	StartDate        time.Time
+	EndDate          time.Time
+	HomeLocation     string
+	Timezone         string
+	CoverColor       string
+	CoverImageURL    string
+	CoverImageCredit string
+	Data             TripData
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
 }
 
 // IsActive returns true if today falls within the trip's date range.
@@ -50,14 +52,16 @@ type TripData struct {
 }
 
 type Leg struct {
-	Sequence      int            `json:"sequence"`
-	Destination   string         `json:"destination"`
-	Region        string         `json:"region,omitempty"`
-	StartDate     string         `json:"startDate"`
-	EndDate       string         `json:"endDate"`
-	Accommodation *Accommodation `json:"accommodation,omitempty"`
-	Notes         string         `json:"notes,omitempty"`
-	Days          []Day          `json:"days"`
+	Sequence        int            `json:"sequence"`
+	Destination     string         `json:"destination"`
+	Region          string         `json:"region,omitempty"`
+	StartDate       string         `json:"startDate"`
+	EndDate         string         `json:"endDate"`
+	Accommodation   *Accommodation `json:"accommodation,omitempty"`
+	Notes           string         `json:"notes,omitempty"`
+	Days            []Day          `json:"days"`
+	CoverImageURL   string         `json:"coverImageURL,omitempty"`
+	CoverImageCredit string        `json:"coverImageCredit,omitempty"`
 }
 
 type Accommodation struct {

@@ -7,17 +7,19 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hakken/hakken/internal/domain"
+	"github.com/hakken/hakken/internal/images"
 	"github.com/hakken/hakken/internal/repository"
 	"github.com/hakken/hakken/web/templates/pages"
 	"github.com/labstack/echo/v4"
 )
 
 type TripHandler struct {
-	trips *repository.TripStore
+	trips    *repository.TripStore
+	imageSvc *images.Service
 }
 
-func NewTripHandler(trips *repository.TripStore) *TripHandler {
-	return &TripHandler{trips: trips}
+func NewTripHandler(trips *repository.TripStore, imageSvc *images.Service) *TripHandler {
+	return &TripHandler{trips: trips, imageSvc: imageSvc}
 }
 
 func (h *TripHandler) NewMethod(c echo.Context) error {
@@ -81,6 +83,8 @@ func (h *TripHandler) Create(c echo.Context) error {
 		slog.Error("trip create", "err", err)
 		return render(c, http.StatusOK, pages.TripScratch(csrfToken(c)))
 	}
+
+	go images.AutoFetch(h.trips, h.imageSvc, created.ID, created.UserID)
 
 	return redirect(c, "/trips/"+created.ID.String()+"/edit")
 }

@@ -1,0 +1,6 @@
+.env
+go.sum
+data/uploads/*.jpg
+data/uploads/*.jpeg
+data/uploads/*.png
+data/uploads/*.webp

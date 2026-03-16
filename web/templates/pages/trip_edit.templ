@@ -52,6 +52,7 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 					<button type="submit" class="btn btn-primary">Save changes</button>
 				</div>
 			</form>
+			@TripImagePreview(csrfToken, trip.ID.String(), trip.CoverImageURL, trip.CoverImageCredit)
 		</div>
 		<!-- Legs builder -->
 		<div class="form-card">
@@ -158,6 +159,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 			>
 				<sl-icon name="plus-circle"></sl-icon> Add day
 			</button>
+			@LegImagePreview(csrfToken, tripID, strconv.Itoa(legIdx), leg.CoverImageURL, leg.CoverImageCredit)
 		</div>
 	</sl-details>
 	<!-- Accommodation dialog -->

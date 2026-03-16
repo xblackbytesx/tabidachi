@@ -32,8 +32,10 @@ templ Dashboard(csrfToken string, trips []*domain.Trip) {
 }
 
 templ TripCard(trip *domain.Trip) {
-	<div class="trip-card" style={ tripAccentStyle(trip.CoverColor) } id={ "trip-" + trip.ID.String() }>
-		<div class="trip-card-accent"></div>
+	<div class="trip-card" style={ tripCardStyle(trip) } id={ "trip-" + trip.ID.String() }>
+		if trip.CoverImageURL == "" {
+			<div class="trip-card-accent"></div>
+		}
 		<div class="trip-card-body">
 			<div class="trip-card-header">
 				<h3 class="trip-card-title">
@@ -79,4 +81,12 @@ func tripAccentStyle(color string) string {
 		return "--trip-accent: #6366f1;"
 	}
 	return "--trip-accent: " + color + ";"
+}
+
+func tripCardStyle(trip *domain.Trip) string {
+	base := tripAccentStyle(trip.CoverColor)
+	if trip.CoverImageURL != "" {
+		base += " background-image: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.75) 100%), url(" + trip.CoverImageURL + "); background-size: cover; background-position: center;"
+	}
+	return base
 }
