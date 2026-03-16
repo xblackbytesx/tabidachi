@@ -1,0 +1,7 @@
+.git
+.env
+*.md
+tmp/
+web/node_modules/
+web/static/vendor/
+go.sum

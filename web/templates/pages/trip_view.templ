@@ -1,0 +1,297 @@
+package pages
+
+import (
+	"fmt"
+	"time"
+	"github.com/hakken/hakken/internal/domain"
+	"github.com/hakken/hakken/web/templates/layouts"
+)
+
+templ TripView(csrfToken string, trip *domain.Trip) {
+	@layouts.Base(trip.Title, csrfToken) {
+		<div class="trip-view">
+			<div class="trip-view-header">
+				<div class="trip-view-header-left">
+					<a href="/" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> All trips</a>
+					<div class="trip-view-title-block">
+						<h1 class="trip-view-title">{ trip.Title }</h1>
+						<div class="trip-view-meta">
+							<span><sl-icon name="calendar3"></sl-icon> { trip.StartDate.Format("Jan 2") } — { trip.EndDate.Format("Jan 2, 2006") }</span>
+							if trip.HomeLocation != "" {
+								<span><sl-icon name="house"></sl-icon> { trip.HomeLocation }</span>
+							}
+							<span><sl-icon name="globe"></sl-icon> { trip.Timezone }</span>
+						</div>
+					</div>
+				</div>
+				<div class="trip-view-header-actions">
+					if trip.IsActive() {
+						<span class="badge badge-active badge-lg">Active now</span>
+					}
+					<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/edit") } class="btn btn-ghost btn-sm">
+						<sl-icon name="pencil"></sl-icon> Edit
+					</a>
+				</div>
+			</div>
+			<div class="timeline" id="timeline">
+				if len(trip.Data.Legs) == 0 {
+					<div class="empty-state">
+						<sl-icon name="map" class="empty-icon"></sl-icon>
+						<p>No itinerary yet. <a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/edit") }>Add legs and events</a>.</p>
+					</div>
+				}
+				for legIdx, leg := range trip.Data.Legs {
+					<div class="leg-section" id={ fmt.Sprintf("leg-%d", legIdx) }>
+						<div class="leg-header">
+							<div class="leg-destination">
+								<span class="leg-num">Leg { fmt.Sprintf("%d", leg.Sequence) }</span>
+								<h2 class="leg-title">{ leg.Destination }</h2>
+								if leg.Region != "" {
+									<span class="leg-region">{ leg.Region }</span>
+								}
+							</div>
+							<div class="leg-dates">{ leg.StartDate } — { leg.EndDate }</div>
+						</div>
+						if leg.Accommodation != nil {
+							<div class="accommodation-banner">
+								<sl-icon name="building"></sl-icon>
+								<span class="accomm-name">{ leg.Accommodation.Name }</span>
+								if leg.Accommodation.Neighborhood != "" {
+									<span class="accomm-neighborhood">{ leg.Accommodation.Neighborhood }</span>
+								}
+								<span class="accomm-dates">{ leg.Accommodation.CheckIn } → { leg.Accommodation.CheckOut }</span>
+								if leg.Accommodation.BookingReference != "" {
+									<span class="accomm-ref">Ref: { leg.Accommodation.BookingReference }</span>
+								}
+							</div>
+						}
+						if leg.Notes != "" {
+							<sl-details class="leg-notes">
+								<span slot="summary"><sl-icon name="info-circle"></sl-icon> Leg notes</span>
+								<p class="notes-text">{ leg.Notes }</p>
+							</sl-details>
+						}
+						for _, day := range leg.Days {
+							@daySection(trip, day)
+						}
+					</div>
+					if legIdx < len(trip.Data.Legs)-1 {
+						<div class="leg-connector">
+							<sl-icon name="arrow-down-circle" class="leg-connector-icon"></sl-icon>
+							<span class="leg-connector-label">{ trip.Data.Legs[legIdx+1].Destination }</span>
+						</div>
+					}
+				}
+			</div>
+		</div>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				scrollToToday();
+			});
+		</script>
+	}
+}
+
+templ daySection(trip *domain.Trip, day domain.Day) {
+	<div
+		class={ "day-section", templ.KV("day-today", isToday(day.Date)) }
+		data-date={ day.Date }
+		id={ fmt.Sprintf("day-%s", day.Date) }
+	>
+		<div class="day-header">
+			<div class="day-header-left">
+				<span class="day-number">Day { fmt.Sprintf("%d", dayNumber(trip, day.Date)) }</span>
+				<span class="day-date">{ formatDayDate(day.Date) }</span>
+				if day.Label != "" {
+					<span class="day-label">{ day.Label }</span>
+				}
+			</div>
+			<div class="day-header-right">
+				if day.Type != "" && day.Type != "normal" {
+					<span class={ "badge badge-day-type", "badge-" + day.Type }>{ domain.DayTypeLabel(day.Type) }</span>
+				}
+				if isToday(day.Date) {
+					<span class="badge badge-today">Today</span>
+				}
+				if day.Notes != "" {
+					<span class="day-has-notes"><sl-icon name="sticky"></sl-icon></span>
+				}
+			</div>
+		</div>
+		if day.Notes != "" {
+			<sl-details class="day-notes">
+				<span slot="summary"><sl-icon name="sticky"></sl-icon> Day notes</span>
+				<p class="notes-text">{ day.Notes }</p>
+			</sl-details>
+		}
+		<div class="events-list">
+			for _, event := range day.Events {
+				if event.Type == "transit" {
+					@transitConnector(event)
+				} else {
+					@eventCard(event)
+				}
+			}
+		</div>
+	</div>
+}
+
+templ eventCard(event domain.Event) {
+	<div class={ "event-card", "event-" + event.Type }>
+		<div class="event-time">
+			if event.StartTime != "" {
+				<span class="time-start">{ event.StartTime }</span>
+			}
+			if event.EndTime != "" {
+				<span class="time-end">{ event.EndTime }</span>
+			}
+		</div>
+		<div class="event-body">
+			<div class="event-header">
+				<span class="event-icon">
+					if event.Type == "accommodation" {
+						<sl-icon name="building"></sl-icon>
+					} else {
+						<sl-icon name="geo-alt"></sl-icon>
+					}
+				</span>
+				<span class="event-title">{ event.Title }</span>
+				if event.Optional {
+					<span class="badge badge-optional">Optional</span>
+				}
+			</div>
+			if event.Location != "" {
+				<div class="event-location"><sl-icon name="pin-map"></sl-icon> { event.Location }</div>
+			}
+			if event.Type == "accommodation" {
+				<div class="event-accomm-type">
+					if event.CheckIn {
+						<span class="badge badge-checkin">Check-in</span>
+					}
+					if event.CheckOut {
+						<span class="badge badge-checkout">Check-out</span>
+					}
+				</div>
+			}
+			if event.BookingReference != "" {
+				<div class="event-ref"><sl-icon name="ticket"></sl-icon> Ref: { event.BookingReference }</div>
+			}
+			if event.Notes != "" {
+				<div class="event-notes">{ event.Notes }</div>
+			}
+		</div>
+	</div>
+}
+
+templ transitConnector(event domain.Event) {
+	<div class={ "transit-connector", "transit-" + event.TransportMode }>
+		<div class="transit-line"></div>
+		<div class="transit-content">
+			<div class="transit-icon-wrap">
+				<sl-icon name={ domain.TransportIcon(event.TransportMode) } class="transit-icon"></sl-icon>
+			</div>
+			<div class="transit-info">
+				<div class="transit-title">{ event.Title }</div>
+				if event.Departure != nil && event.Arrival != nil {
+					<div class="transit-route">
+						<span class="transit-from">
+							{ event.Departure.Location }
+							if event.Departure.Code != "" {
+								<span class="transit-code">({ event.Departure.Code })</span>
+							}
+						</span>
+						<sl-icon name="arrow-right"></sl-icon>
+						<span class="transit-to">
+							{ event.Arrival.Location }
+							if event.Arrival.Code != "" {
+								<span class="transit-code">({ event.Arrival.Code })</span>
+							}
+						</span>
+					</div>
+				}
+				<div class="transit-meta">
+					if event.StartTime != "" {
+						<span class="transit-time">
+							{ event.StartTime }
+							if event.EndTime != "" {
+								→ { event.EndTime }
+							}
+						</span>
+					}
+					if event.Duration != "" {
+						<span class="transit-duration"><sl-icon name="clock"></sl-icon> { formatDuration(event.Duration) }</span>
+					}
+					if event.Carrier != "" {
+						<span class="transit-carrier">{ event.Carrier }</span>
+					}
+					if event.FlightNumber != "" {
+						<span class="transit-flight">{ event.FlightNumber }</span>
+					}
+				</div>
+				if event.Notes != "" {
+					<div class="transit-notes">{ event.Notes }</div>
+				}
+			</div>
+		</div>
+	</div>
+}
+
+func isToday(dateStr string) bool {
+	t, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		return false
+	}
+	now := time.Now()
+	return t.Year() == now.Year() && t.YearDay() == now.YearDay()
+}
+
+func dayNumber(trip *domain.Trip, dateStr string) int {
+	t, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		return 0
+	}
+	diff := t.Sub(trip.StartDate.Truncate(24 * time.Hour))
+	return int(diff.Hours()/24) + 1
+}
+
+func formatDayDate(dateStr string) string {
+	t, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		return dateStr
+	}
+	return t.Format("Monday, Jan 2")
+}
+
+func formatDuration(iso string) string {
+	// Convert ISO8601 duration like PT1H30M to "1h 30m"
+	if len(iso) < 3 || iso[0] != 'P' {
+		return iso
+	}
+	rest := iso[1:]
+	if len(rest) > 0 && rest[0] == 'T' {
+		rest = rest[1:]
+	}
+	result := ""
+	num := ""
+	for _, ch := range rest {
+		if ch >= '0' && ch <= '9' {
+			num += string(ch)
+		} else {
+			if num != "" {
+				switch ch {
+				case 'H':
+					result += num + "h "
+				case 'M':
+					result += num + "m"
+				case 'S':
+					result += num + "s"
+				}
+			}
+			num = ""
+		}
+	}
+	if result == "" {
+		return iso
+	}
+	return result
+}

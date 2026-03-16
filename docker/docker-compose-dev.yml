@@ -1,0 +1,42 @@
+services:
+  hakken-app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://hakken:hakken@hakken-db:5432/hakken?sslmode=disable
+      SESSION_SECRET: dev-session-secret-32-chars-min!!
+      CSRF_AUTH_KEY: dev-csrf-key-32-chars-minimum!!!
+      APP_BASE_URL: http://localhost:8080
+      PORT: "8080"
+      SECURE_COOKIES: "false"
+    volumes:
+      - ..:/app
+      # Anonymous volume shadows the bind-mount for the vendor directory so
+      # the Shoelace + HTMX files baked into the image during `docker build`
+      # are never overwritten by the host bind-mount.
+      - /app/web/static/vendor
+    depends_on:
+      hakken-db:
+        condition: service_healthy
+
+  hakken-db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: hakken
+      POSTGRES_PASSWORD: hakken
+      POSTGRES_DB: hakken
+    ports:
+      - "5432:5432"
+    volumes:
+      - hakken_pgdata_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  hakken_pgdata_dev:

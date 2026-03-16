@@ -1,0 +1,49 @@
+package pages
+
+import "github.com/hakken/hakken/web/templates/layouts"
+
+templ TripScratch(csrfToken string) {
+	@layouts.Base("New Trip", csrfToken) {
+		<div class="page-header">
+			<a href="/trips/new" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> Back</a>
+			<h1 class="page-title">New Trip</h1>
+		</div>
+		<div class="form-card">
+			<form method="POST" action="/trips" class="form-stack">
+				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+				<div class="field">
+					<label class="field-label" for="title">Trip title <span class="required">*</span></label>
+					<input class="field-input" type="text" id="title" name="title" required placeholder="e.g. Japan Spring 2025"/>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label" for="start_date">Start date <span class="required">*</span></label>
+						<input class="field-input" type="date" id="start_date" name="start_date" required/>
+					</div>
+					<div class="field">
+						<label class="field-label" for="end_date">End date <span class="required">*</span></label>
+						<input class="field-input" type="date" id="end_date" name="end_date" required/>
+					</div>
+				</div>
+				<div class="field">
+					<label class="field-label" for="home_location">Home location</label>
+					<input class="field-input" type="text" id="home_location" name="home_location" placeholder="e.g. London, UK"/>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label" for="timezone">Timezone</label>
+						<input class="field-input" type="text" id="timezone" name="timezone" placeholder="e.g. Asia/Tokyo" value="UTC"/>
+					</div>
+					<div class="field">
+						<label class="field-label" for="cover_color">Accent colour</label>
+						<input class="field-color" type="color" id="cover_color" name="cover_color" value="#6366f1"/>
+					</div>
+				</div>
+				<div class="form-actions">
+					<a href="/trips/new" class="btn btn-ghost">Cancel</a>
+					<button type="submit" class="btn btn-primary">Create trip</button>
+				</div>
+			</form>
+		</div>
+	}
+}

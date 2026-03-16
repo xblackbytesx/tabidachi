@@ -1,0 +1,82 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/hakken/hakken/internal/domain"
+	"github.com/hakken/hakken/web/templates/layouts"
+)
+
+templ Dashboard(csrfToken string, trips []*domain.Trip) {
+	@layouts.Base("Trips", csrfToken) {
+		<div class="page-header">
+			<h1 class="page-title">My Trips</h1>
+			<a href="/trips/new" class="btn btn-primary">
+				<sl-icon name="plus-lg"></sl-icon> New trip
+			</a>
+		</div>
+		if len(trips) == 0 {
+			<div class="empty-state">
+				<sl-icon name="map" class="empty-icon"></sl-icon>
+				<h2>No trips yet</h2>
+				<p>Start by creating your first itinerary.</p>
+				<a href="/trips/new" class="btn btn-primary">Plan a trip</a>
+			</div>
+		} else {
+			<div class="trip-grid">
+				for _, trip := range trips {
+					@TripCard(trip)
+				}
+			</div>
+		}
+	}
+}
+
+templ TripCard(trip *domain.Trip) {
+	<div class="trip-card" style={ tripAccentStyle(trip.CoverColor) } id={ "trip-" + trip.ID.String() }>
+		<div class="trip-card-accent"></div>
+		<div class="trip-card-body">
+			<div class="trip-card-header">
+				<h3 class="trip-card-title">
+					<a href={ templ.SafeURL("/trips/" + trip.ID.String()) }>{ trip.Title }</a>
+				</h3>
+				if trip.IsActive() {
+					<span class="badge badge-active">Today</span>
+				}
+			</div>
+			<div class="trip-card-meta">
+				<span class="trip-dates">
+					<sl-icon name="calendar3"></sl-icon>
+					{ trip.StartDate.Format("Jan 2, 2006") } — { trip.EndDate.Format("Jan 2, 2006") }
+				</span>
+				if trip.HomeLocation != "" {
+					<span class="trip-home">
+						<sl-icon name="house"></sl-icon>
+						{ trip.HomeLocation }
+					</span>
+				}
+				<span class="trip-legs">
+					<sl-icon name="geo-alt"></sl-icon>
+					{ fmt.Sprintf("%d leg(s)", len(trip.Data.Legs)) }
+				</span>
+			</div>
+			<div class="trip-card-actions">
+				<a href={ templ.SafeURL("/trips/" + trip.ID.String()) } class="btn btn-sm">View</a>
+				<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/edit") } class="btn btn-sm btn-ghost">Edit</a>
+				<button
+					class="btn btn-sm btn-danger"
+					hx-delete={ "/trips/" + trip.ID.String() }
+					hx-confirm="Delete this trip? This cannot be undone."
+					hx-target={ "#trip-" + trip.ID.String() }
+					hx-swap="outerHTML"
+				>Delete</button>
+			</div>
+		</div>
+	</div>
+}
+
+func tripAccentStyle(color string) string {
+	if color == "" {
+		return "--trip-accent: #6366f1;"
+	}
+	return "--trip-accent: " + color + ";"
+}

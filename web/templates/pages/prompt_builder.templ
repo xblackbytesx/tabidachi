@@ -1,0 +1,164 @@
+package pages
+
+import "github.com/hakken/hakken/web/templates/layouts"
+
+templ PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[string]string) {
+	@layouts.Base("LLM Prompt Wizard", csrfToken) {
+		<div class="page-header">
+			<a href="/trips/new" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> Back</a>
+			<h1 class="page-title">LLM Prompt Wizard</h1>
+		</div>
+		<div class="wizard-steps">
+			<div class={ "wizard-step", templ.KV("active", step == 1), templ.KV("done", step > 1) }>
+				<span class="step-num">1</span>
+				<span class="step-label">Your itinerary</span>
+			</div>
+			<div class="wizard-step-divider"></div>
+			<div class={ "wizard-step", templ.KV("active", step == 2), templ.KV("done", step > 2) }>
+				<span class="step-num">2</span>
+				<span class="step-label">What to include</span>
+			</div>
+			<div class="wizard-step-divider"></div>
+			<div class={ "wizard-step", templ.KV("active", step == 3) }>
+				<span class="step-num">3</span>
+				<span class="step-label">Your prompt</span>
+			</div>
+		</div>
+		<div id="wizard-content">
+			if step == 1 {
+				@promptStep1(csrfToken, data)
+			} else if step == 2 {
+				@promptStep2(csrfToken, data)
+			} else {
+				@promptStep3(csrfToken, generatedPrompt)
+			}
+		</div>
+	}
+}
+
+templ promptStep1(csrfToken string, data map[string]string) {
+	<div class="form-card">
+		<h2 class="form-section-title">Step 1 — Paste your itinerary</h2>
+		<p class="form-help">Paste your existing itinerary text below — booking confirmations, travel agent docs, copy-pasted emails, anything. The AI will extract the logistics.</p>
+		<form
+			method="POST"
+			action="/trips/new/prompt"
+			hx-post="/trips/new/prompt"
+			hx-target="#wizard-content"
+			hx-swap="outerHTML"
+			hx-select="#wizard-content"
+			class="form-stack"
+		>
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<input type="hidden" name="step" value="1"/>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label" for="from_date">From date (optional)</label>
+					<input class="field-input" type="date" id="from_date" name="from_date" value={ dataVal(data, "from_date") }/>
+				</div>
+				<div class="field">
+					<label class="field-label" for="to_date">To date (optional)</label>
+					<input class="field-input" type="date" id="to_date" name="to_date" value={ dataVal(data, "to_date") }/>
+				</div>
+			</div>
+			<div class="field">
+				<label class="field-label" for="itinerary_text">Itinerary text <span class="required">*</span></label>
+				<textarea
+					class="field-textarea field-textarea-xl"
+					id="itinerary_text"
+					name="itinerary_text"
+					required
+					placeholder="Paste your full itinerary here — flights, trains, hotels, activities..."
+				>{ dataVal(data, "itinerary_text") }</textarea>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">Next <sl-icon name="arrow-right"></sl-icon></button>
+			</div>
+		</form>
+	</div>
+}
+
+templ promptStep2(csrfToken string, data map[string]string) {
+	<div class="form-card">
+		<h2 class="form-section-title">Step 2 — What's in your itinerary?</h2>
+		<p class="form-help">Check everything that your source text contains. This helps the AI focus on the right details.</p>
+		<form
+			method="POST"
+			action="/trips/new/prompt"
+			hx-post="/trips/new/prompt"
+			hx-target="#wizard-content"
+			hx-swap="outerHTML"
+			hx-select="#wizard-content"
+			class="form-stack"
+		>
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<input type="hidden" name="step" value="2"/>
+			<input type="hidden" name="itinerary_text" value={ dataVal(data, "itinerary_text") }/>
+			<input type="hidden" name="from_date" value={ dataVal(data, "from_date") }/>
+			<input type="hidden" name="to_date" value={ dataVal(data, "to_date") }/>
+			<div class="checkbox-grid">
+				<label class="checkbox-item">
+					<input type="checkbox" name="flights" checked/> Flights
+				</label>
+				<label class="checkbox-item">
+					<input type="checkbox" name="trains" checked/> Trains &amp; bullet trains
+				</label>
+				<label class="checkbox-item">
+					<input type="checkbox" name="local_transit" checked/> Local transit (subway, bus, tram)
+				</label>
+				<label class="checkbox-item">
+					<input type="checkbox" name="accommodations" checked/> Accommodations
+				</label>
+				<label class="checkbox-item">
+					<input type="checkbox" name="activities" checked/> Scheduled activities
+				</label>
+				<label class="checkbox-item">
+					<input type="checkbox" name="booking_refs" checked/> Booking references
+				</label>
+				<label class="checkbox-item">
+					<input type="checkbox" name="timings" checked/> Departure &amp; arrival times
+				</label>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">Generate prompt <sl-icon name="stars"></sl-icon></button>
+			</div>
+		</form>
+	</div>
+}
+
+templ promptStep3(csrfToken string, prompt string) {
+	<div class="form-card">
+		<h2 class="form-section-title">Step 3 — Your AI prompt</h2>
+		<div class="prompt-instructions">
+			<ol class="instruction-steps">
+				<li>Copy the prompt below and paste it into your preferred AI (ChatGPT, Claude, Gemini, etc.)</li>
+				<li>Answer any clarification questions the AI asks</li>
+				<li>Confirm the summary table the AI shows you</li>
+				<li>Copy the JSON the AI outputs</li>
+				<li>Click <strong>Import the result</strong> below and paste the JSON</li>
+			</ol>
+		</div>
+		<div class="prompt-box-wrapper">
+			<div class="prompt-box-header">
+				<span class="prompt-box-label">Prompt to copy</span>
+				<button class="btn btn-sm btn-ghost" onclick="copyPrompt()" id="copy-btn">
+					<sl-icon name="clipboard"></sl-icon> Copy prompt
+				</button>
+			</div>
+			<pre class="prompt-box" id="prompt-text">{ prompt }</pre>
+		</div>
+		<div class="form-actions">
+			<a href="/trips/new/prompt" class="btn btn-ghost">Start over</a>
+			<a href="/trips/new/import" class="btn btn-primary">
+				<sl-icon name="file-earmark-arrow-down"></sl-icon> Import the result
+			</a>
+		</div>
+	</div>
+}
+
+func dataVal(data map[string]string, key string) string {
+	if data == nil {
+		return ""
+	}
+	return data[key]
+}

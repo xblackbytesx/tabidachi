@@ -1,0 +1,447 @@
+package pages
+
+import (
+	"fmt"
+	"strconv"
+	"github.com/hakken/hakken/internal/domain"
+	"github.com/hakken/hakken/web/templates/layouts"
+)
+
+templ TripEdit(csrfToken string, trip *domain.Trip) {
+	@layouts.Base("Edit "+trip.Title, csrfToken) {
+		<div class="page-header">
+			<a href={ templ.SafeURL("/trips/" + trip.ID.String()) } class="btn btn-ghost btn-sm">
+				<sl-icon name="arrow-left"></sl-icon> View timeline
+			</a>
+			<h1 class="page-title">Edit: { trip.Title }</h1>
+		</div>
+		<!-- Metadata form -->
+		<div class="form-card">
+			<h2 class="form-section-title">Trip details</h2>
+			<form method="POST" action={ templ.SafeURL("/trips/" + trip.ID.String()) } class="form-stack">
+				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+				<div class="field">
+					<label class="field-label" for="title">Title <span class="required">*</span></label>
+					<input class="field-input" type="text" id="title" name="title" required value={ trip.Title }/>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label" for="start_date">Start date <span class="required">*</span></label>
+						<input class="field-input" type="date" id="start_date" name="start_date" required value={ trip.StartDate.Format("2006-01-02") }/>
+					</div>
+					<div class="field">
+						<label class="field-label" for="end_date">End date <span class="required">*</span></label>
+						<input class="field-input" type="date" id="end_date" name="end_date" required value={ trip.EndDate.Format("2006-01-02") }/>
+					</div>
+				</div>
+				<div class="field">
+					<label class="field-label" for="home_location">Home location</label>
+					<input class="field-input" type="text" id="home_location" name="home_location" value={ trip.HomeLocation }/>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label" for="timezone">Timezone</label>
+						<input class="field-input" type="text" id="timezone" name="timezone" value={ trip.Timezone }/>
+					</div>
+					<div class="field">
+						<label class="field-label" for="cover_color">Accent colour</label>
+						<input class="field-color" type="color" id="cover_color" name="cover_color" value={ colorOrDefault(trip.CoverColor) }/>
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary">Save changes</button>
+				</div>
+			</form>
+		</div>
+		<!-- Legs builder -->
+		<div class="form-card">
+			<div class="form-section-header">
+				<h2 class="form-section-title">Legs &amp; days</h2>
+				<button class="btn btn-sm btn-primary" data-dialog="add-leg-dialog" onclick="openDataDialog(this); return false;">
+					<sl-icon name="plus-lg"></sl-icon> Add leg
+				</button>
+			</div>
+			if len(trip.Data.Legs) == 0 {
+				<div class="empty-state-sm">No legs yet. Click "Add leg" to start building your itinerary.</div>
+			}
+			<div class="legs-list">
+				for legIdx, leg := range trip.Data.Legs {
+					@legSection(csrfToken, trip.ID.String(), leg, legIdx)
+				}
+			</div>
+		</div>
+		<!-- Add Leg Dialog -->
+		<sl-dialog label="Add Leg" id="add-leg-dialog">
+			<form method="POST" action={ templ.SafeURL("/trips/" + trip.ID.String() + "/legs") } class="form-stack">
+				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+				<div class="field">
+					<label class="field-label">Destination <span class="required">*</span></label>
+					<input class="field-input" type="text" name="destination" required placeholder="e.g. Osaka"/>
+				</div>
+				<div class="field">
+					<label class="field-label">Region</label>
+					<input class="field-input" type="text" name="region" placeholder="e.g. Kansai"/>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">Start date <span class="required">*</span></label>
+						<input class="field-input" type="date" name="start_date" required/>
+					</div>
+					<div class="field">
+						<label class="field-label">End date <span class="required">*</span></label>
+						<input class="field-input" type="date" name="end_date" required/>
+					</div>
+				</div>
+				<div class="field">
+					<label class="field-label">Logistics notes</label>
+					<textarea class="field-textarea" name="notes" placeholder="Actionable notes (e.g. JR Pass covers this leg)"></textarea>
+				</div>
+				<div slot="footer" class="dialog-footer">
+					<sl-button variant="neutral" data-dialog="add-leg-dialog" onclick="closeDataDialog(this)">Cancel</sl-button>
+					<button type="submit" class="btn btn-primary">Add leg</button>
+				</div>
+			</form>
+		</sl-dialog>
+	}
+}
+
+templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
+	<sl-details class="leg-builder-section">
+		<div slot="summary" class="leg-summary">
+			<span class="leg-num-badge">{ fmt.Sprintf("%d", leg.Sequence) }</span>
+			<span class="leg-summary-title">{ leg.Destination }</span>
+			if leg.Region != "" {
+				<span class="leg-summary-region">{ leg.Region }</span>
+			}
+			<span class="leg-summary-dates">{ leg.StartDate } — { leg.EndDate }</span>
+		</div>
+		<div class="leg-builder-content">
+			<div class="leg-actions">
+				<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/delete") } style="display:inline">
+					<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+					<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this leg and all its days?')">
+						<sl-icon name="trash"></sl-icon> Delete leg
+					</button>
+				</form>
+				<button
+					class="btn btn-sm btn-ghost"
+					data-dialog={ fmt.Sprintf("accomm-dialog-%d", legIdx) }
+					onclick="openDataDialog(this); return false;"
+				>
+					<sl-icon name="building"></sl-icon>
+					if leg.Accommodation != nil {
+						Edit accommodation
+					} else {
+						Add accommodation
+					}
+				</button>
+			</div>
+			if leg.Accommodation != nil {
+				<div class="accomm-preview">
+					<sl-icon name="building"></sl-icon>
+					<strong>{ leg.Accommodation.Name }</strong>
+					if leg.Accommodation.Neighborhood != "" {
+						<span>{ leg.Accommodation.Neighborhood }</span>
+					}
+					<span>{ leg.Accommodation.CheckIn } → { leg.Accommodation.CheckOut }</span>
+				</div>
+			}
+			<div class="days-list">
+				for dayIdx, day := range leg.Days {
+					@dayBuilder(csrfToken, tripID, leg, legIdx, day, dayIdx)
+				}
+			</div>
+			<button
+				class="btn btn-sm btn-ghost add-day-btn"
+				data-dialog={ fmt.Sprintf("add-day-dialog-%d", legIdx) }
+				onclick="openDataDialog(this); return false;"
+			>
+				<sl-icon name="plus-circle"></sl-icon> Add day
+			</button>
+		</div>
+	</sl-details>
+	<!-- Accommodation dialog -->
+	<sl-dialog label="Accommodation" id={ fmt.Sprintf("accomm-dialog-%d", legIdx) }>
+		<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/accommodation") } class="form-stack">
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<div class="field">
+				<label class="field-label">Hotel / accommodation name</label>
+				<input class="field-input" type="text" name="name" value={ accommodationVal(leg.Accommodation, "name") } placeholder="Leave blank to remove"/>
+			</div>
+			<div class="field">
+				<label class="field-label">Neighbourhood</label>
+				<input class="field-input" type="text" name="neighborhood" value={ accommodationVal(leg.Accommodation, "neighborhood") }/>
+			</div>
+			<div class="field">
+				<label class="field-label">Address</label>
+				<input class="field-input" type="text" name="address" value={ accommodationVal(leg.Accommodation, "address") }/>
+			</div>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label">Check-in</label>
+					<input class="field-input" type="text" name="check_in" value={ accommodationVal(leg.Accommodation, "checkin") } placeholder="e.g. 2025-04-17T15:00"/>
+				</div>
+				<div class="field">
+					<label class="field-label">Check-out</label>
+					<input class="field-input" type="text" name="check_out" value={ accommodationVal(leg.Accommodation, "checkout") } placeholder="e.g. 2025-04-21T11:00"/>
+				</div>
+			</div>
+			<div class="field">
+				<label class="field-label">Booking reference</label>
+				<input class="field-input" type="text" name="booking_reference" value={ accommodationVal(leg.Accommodation, "ref") }/>
+			</div>
+			<div slot="footer" class="dialog-footer">
+				<sl-button variant="neutral" data-dialog={ fmt.Sprintf("accomm-dialog-%d", legIdx) } onclick="closeDataDialog(this)">Cancel</sl-button>
+				<button type="submit" class="btn btn-primary">Save</button>
+			</div>
+		</form>
+	</sl-dialog>
+	<!-- Add Day dialog -->
+	<sl-dialog label="Add Day" id={ fmt.Sprintf("add-day-dialog-%d", legIdx) }>
+		<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days") } class="form-stack">
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label">Date <span class="required">*</span></label>
+					<input class="field-input" type="date" name="date" required/>
+				</div>
+				<div class="field">
+					<label class="field-label">Day type</label>
+					<select class="field-input" name="type">
+						<option value="normal">Normal</option>
+						<option value="arrival">Arrival</option>
+						<option value="departure">Departure</option>
+						<option value="travel">Travel</option>
+						<option value="rest">Rest</option>
+						<option value="flexible">Flexible</option>
+					</select>
+				</div>
+			</div>
+			<div class="field">
+				<label class="field-label">Label</label>
+				<input class="field-input" type="text" name="label" placeholder="e.g. Osaka Castle &amp; Shinsekai"/>
+			</div>
+			<div class="field">
+				<label class="field-label">Notes</label>
+				<textarea class="field-textarea" name="notes" placeholder="Actionable logistics notes"></textarea>
+			</div>
+			<div slot="footer" class="dialog-footer">
+				<sl-button variant="neutral" data-dialog={ fmt.Sprintf("add-day-dialog-%d", legIdx) } onclick="closeDataDialog(this)">Cancel</sl-button>
+				<button type="submit" class="btn btn-primary">Add day</button>
+			</div>
+		</form>
+	</sl-dialog>
+}
+
+templ dayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day domain.Day, dayIdx int) {
+	<div class="day-builder">
+		<div class="day-builder-header">
+			<div class="day-builder-info">
+				<span class="day-builder-date">{ day.Date }</span>
+				if day.Label != "" {
+					<span class="day-builder-label">{ day.Label }</span>
+				}
+				if day.Type != "" && day.Type != "normal" {
+					<span class={ "badge badge-sm badge-" + day.Type }>{ domain.DayTypeLabel(day.Type) }</span>
+				}
+			</div>
+			<div class="day-builder-actions">
+				<button
+					class="btn btn-xs btn-ghost"
+					data-dialog={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) }
+					onclick="openDataDialog(this); return false;"
+				>
+					<sl-icon name="plus-lg"></sl-icon> Event
+				</button>
+				<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/delete") } style="display:inline">
+					<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+					<button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Delete this day?')">
+						<sl-icon name="trash"></sl-icon>
+					</button>
+				</form>
+			</div>
+		</div>
+		<div class="day-events-preview">
+			for evtIdx, event := range day.Events {
+				<div class="event-preview-row">
+					<span class={ "event-preview-type", templ.KV("event-preview-transit", event.Type == "transit"), templ.KV("event-preview-accommodation", event.Type == "accommodation") }>
+						if event.Type == "transit" {
+							<sl-icon name={ domain.TransportIcon(event.TransportMode) }></sl-icon>
+						} else if event.Type == "accommodation" {
+							<sl-icon name="building"></sl-icon>
+						} else {
+							<sl-icon name="geo-alt"></sl-icon>
+						}
+					</span>
+					<span class="event-preview-title">{ event.Title }</span>
+					if event.StartTime != "" {
+						<span class="event-preview-time">{ event.StartTime }</span>
+					}
+					<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
+						<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+						<button type="submit" class="btn btn-xs btn-ghost" title="Delete event">×</button>
+					</form>
+				</div>
+			}
+		</div>
+	</div>
+	<!-- Add Event dialog -->
+	<sl-dialog label="Add Event" id={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) }>
+		<form
+			method="POST"
+			action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events") }
+			class="form-stack"
+			id={ fmt.Sprintf("event-form-%d-%d", legIdx, dayIdx) }
+		>
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label">Event type <span class="required">*</span></label>
+					<select
+						class="field-input"
+						name="event_type"
+						data-event-form={ fmt.Sprintf("event-form-%d-%d", legIdx, dayIdx) }
+						onchange="onEventTypeChangeByAttr(this)"
+						required
+					>
+						<option value="activity">Activity</option>
+						<option value="transit">Transit</option>
+						<option value="accommodation">Accommodation</option>
+					</select>
+				</div>
+				<div class="field">
+					<label class="field-label">Title <span class="required">*</span></label>
+					<input class="field-input" type="text" name="title" required placeholder="e.g. Fushimi Inari"/>
+				</div>
+			</div>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label">Start time</label>
+					<input class="field-input" type="text" name="start_time" placeholder="HH:MM"/>
+				</div>
+				<div class="field">
+					<label class="field-label">End time</label>
+					<input class="field-input" type="text" name="end_time" placeholder="HH:MM"/>
+				</div>
+			</div>
+			<!-- Activity fields -->
+			<div class="event-type-fields" data-type="activity">
+				<div class="field">
+					<label class="field-label">Location</label>
+					<input class="field-input" type="text" name="location"/>
+				</div>
+				<div class="field">
+					<label class="field-label">Booking reference</label>
+					<input class="field-input" type="text" name="booking_reference"/>
+				</div>
+				<label class="checkbox-item">
+					<input type="checkbox" name="ticket_required"/> Ticket required
+				</label>
+			</div>
+			<!-- Transit fields -->
+			<div class="event-type-fields" data-type="transit" style="display:none">
+				<div class="field">
+					<label class="field-label">Transport mode</label>
+					<select class="field-input" name="transport_mode">
+						<option value="flight">Flight</option>
+						<option value="shinkansen">Shinkansen</option>
+						<option value="train">Train</option>
+						<option value="subway">Subway</option>
+						<option value="bus">Bus</option>
+						<option value="tram">Tram</option>
+						<option value="ferry">Ferry</option>
+						<option value="taxi">Taxi</option>
+						<option value="car">Car</option>
+						<option value="walk">Walk</option>
+					</select>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">From</label>
+						<input class="field-input" type="text" name="departure_location" placeholder="City or station"/>
+					</div>
+					<div class="field">
+						<label class="field-label">From code</label>
+						<input class="field-input" type="text" name="departure_code" placeholder="e.g. KIX"/>
+					</div>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">To</label>
+						<input class="field-input" type="text" name="arrival_location" placeholder="City or station"/>
+					</div>
+					<div class="field">
+						<label class="field-label">To code</label>
+						<input class="field-input" type="text" name="arrival_code" placeholder="e.g. NRT"/>
+					</div>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">Carrier</label>
+						<input class="field-input" type="text" name="carrier" placeholder="e.g. JAL"/>
+					</div>
+					<div class="field">
+						<label class="field-label">Flight / train no.</label>
+						<input class="field-input" type="text" name="flight_number" placeholder="e.g. JL123"/>
+					</div>
+				</div>
+				<div class="field">
+					<label class="field-label">Duration (ISO8601)</label>
+					<input class="field-input" type="text" name="duration" placeholder="e.g. PT2H30M"/>
+				</div>
+			</div>
+			<!-- Accommodation event fields -->
+			<div class="event-type-fields" data-type="accommodation" style="display:none">
+				<label class="checkbox-item">
+					<input type="checkbox" name="check_in"/> Check-in
+				</label>
+				<label class="checkbox-item">
+					<input type="checkbox" name="check_out"/> Check-out
+				</label>
+			</div>
+			<div class="field">
+				<label class="field-label">Notes</label>
+				<textarea class="field-textarea" name="notes"></textarea>
+			</div>
+			<label class="checkbox-item">
+				<input type="checkbox" name="optional"/> Optional event
+			</label>
+			<div slot="footer" class="dialog-footer">
+				<sl-button
+					variant="neutral"
+					data-dialog={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) }
+					onclick="closeDataDialog(this)"
+				>Cancel</sl-button>
+				<button type="submit" class="btn btn-primary">Add event</button>
+			</div>
+		</form>
+	</sl-dialog>
+}
+
+func colorOrDefault(color string) string {
+	if color == "" {
+		return "#6366f1"
+	}
+	return color
+}
+
+func accommodationVal(a *domain.Accommodation, field string) string {
+	if a == nil {
+		return ""
+	}
+	switch field {
+	case "name":
+		return a.Name
+	case "neighborhood":
+		return a.Neighborhood
+	case "address":
+		return a.Address
+	case "checkin":
+		return a.CheckIn
+	case "checkout":
+		return a.CheckOut
+	case "ref":
+		return a.BookingReference
+	}
+	return ""
+}

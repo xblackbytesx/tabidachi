@@ -1,0 +1,35 @@
+package pages
+
+import "github.com/hakken/hakken/web/templates/layouts"
+
+templ Register(csrfToken string, flash string) {
+	@layouts.Auth("Create account", csrfToken) {
+		<div class="auth-card">
+			<div class="auth-header">
+				<span class="auth-logo">✈</span>
+				<h1 class="auth-title">Hakken</h1>
+				<p class="auth-subtitle">Create your account</p>
+			</div>
+			if flash != "" {
+				<div class="alert alert-error">{ flash }</div>
+			}
+			<form method="POST" action="/register" class="auth-form">
+				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+				<div class="field">
+					<label class="field-label" for="display_name">Display name</label>
+					<input class="field-input" type="text" id="display_name" name="display_name" required placeholder="Your name"/>
+				</div>
+				<div class="field">
+					<label class="field-label" for="email">Email</label>
+					<input class="field-input" type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com"/>
+				</div>
+				<div class="field">
+					<label class="field-label" for="password">Password</label>
+					<input class="field-input" type="password" id="password" name="password" required autocomplete="new-password" placeholder="Min 8 characters"/>
+				</div>
+				<button type="submit" class="btn btn-primary btn-full">Create account</button>
+			</form>
+			<p class="auth-switch">Already have an account? <a href="/login">Sign in</a></p>
+		</div>
+	}
+}

@@ -1,0 +1,64 @@
+name: hakken
+
+networks:
+  proxy:
+    name: proxy
+    external: true
+  internal:
+    internal: true
+
+volumes:
+  hakken-database:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DOCKER_ROOT}/hakken/database
+
+services:
+  hakken-db:
+    image: postgres:17-alpine
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - internal
+    labels:
+      - "traefik.enable=false"
+    environment:
+      POSTGRES_USER: hakken
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: hakken
+    volumes:
+      - hakken-database:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  hakken-app:
+    container_name: hakken-app
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - internal
+      - proxy
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://hakken:${DB_PASSWORD}@hakken-db:5432/hakken?sslmode=disable
+      SESSION_SECRET: ${SESSION_SECRET}
+      CSRF_AUTH_KEY: ${CSRF_AUTH_KEY}
+      APP_BASE_URL: ${APP_BASE_URL:-http://localhost:8080}
+      PORT: "8080"
+      SECURE_COOKIES: ${SECURE_COOKIES:-true}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      hakken-db:
+        condition: service_healthy
+    restart: unless-stopped

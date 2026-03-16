@@ -1,0 +1,73 @@
+package layouts
+
+templ Base(title string, csrfToken string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title } — Hakken</title>
+			<meta name="csrf-token" content={ csrfToken }/>
+			<link rel="stylesheet" href="/static/css/app.css"/>
+			<link rel="stylesheet" href="/static/vendor/shoelace/themes/dark.css"/>
+			<script type="module" src="/static/vendor/shoelace/shoelace-autoloader.js"></script>
+			<script src="/static/vendor/htmx.min.js" defer></script>
+		</head>
+		<body
+			class="sl-theme-dark"
+			hx-headers={ `{"X-CSRF-Token":"` + csrfToken + `"}` }
+			hx-boost="true"
+			hx-select="#main-content"
+			hx-target="#main-content"
+			hx-swap="outerHTML show:window:top"
+		>
+			<div class="app-layout">
+				@Sidebar(csrfToken)
+				<main id="main-content" class="app-main">
+					{ children... }
+				</main>
+			</div>
+			<script src="/static/js/app.js"></script>
+		</body>
+	</html>
+}
+
+templ Sidebar(csrfToken string) {
+	<nav class="app-sidebar">
+		<div class="sidebar-logo">
+			<span class="logo-icon">✈</span>
+			<span class="logo-text">Hakken</span>
+		</div>
+		<ul class="sidebar-nav">
+			<li><a href="/" class="nav-item"><sl-icon name="house"></sl-icon> Trips</a></li>
+			<li><a href="/trips/new" class="nav-item"><sl-icon name="plus-circle"></sl-icon> New Trip</a></li>
+		</ul>
+		<div class="sidebar-footer">
+			<form method="POST" action="/logout" hx-boost="false">
+				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+				<button type="submit" class="nav-item nav-btn">
+					<sl-icon name="box-arrow-left"></sl-icon> Sign out
+				</button>
+			</form>
+		</div>
+	</nav>
+}
+
+templ Auth(title string, csrfToken string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title } — Hakken</title>
+			<link rel="stylesheet" href="/static/css/app.css"/>
+			<link rel="stylesheet" href="/static/vendor/shoelace/themes/dark.css"/>
+			<script type="module" src="/static/vendor/shoelace/shoelace-autoloader.js"></script>
+		</head>
+		<body class="sl-theme-dark auth-body">
+			<div class="auth-container">
+				{ children... }
+			</div>
+		</body>
+	</html>
+}

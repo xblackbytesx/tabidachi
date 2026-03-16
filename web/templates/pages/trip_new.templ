@@ -1,0 +1,31 @@
+package pages
+
+import "github.com/hakken/hakken/web/templates/layouts"
+
+templ TripNew(csrfToken string) {
+	@layouts.Base("New Trip", csrfToken) {
+		<div class="page-header">
+			<a href="/" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> Back</a>
+			<h1 class="page-title">New Trip</h1>
+		</div>
+		<p class="page-subtitle">How would you like to create your itinerary?</p>
+		<div class="method-grid">
+			<a href="/trips/new/scratch" class="method-card">
+				<sl-icon name="pencil-square" class="method-icon"></sl-icon>
+				<h2 class="method-title">Build manually</h2>
+				<p class="method-desc">Create your trip step by step — add legs, days, and events by hand.</p>
+			</a>
+			<a href="/trips/new/import" class="method-card">
+				<sl-icon name="file-earmark-code" class="method-icon"></sl-icon>
+				<h2 class="method-title">Import JSON</h2>
+				<p class="method-desc">Paste or upload a JSON itinerary following the Hakken schema.</p>
+			</a>
+			<a href="/trips/new/prompt" class="method-card method-card-featured">
+				<sl-icon name="stars" class="method-icon"></sl-icon>
+				<h2 class="method-title">Use LLM wizard</h2>
+				<p class="method-desc">Paste your existing itinerary text. We'll generate an AI prompt to convert it — no API key needed.</p>
+				<span class="method-badge">Recommended</span>
+			</a>
+		</div>
+	}
+}
