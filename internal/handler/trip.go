@@ -1,9 +1,13 @@
 package handler
 
 import (
+	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
+	"unicode"
 
 	"github.com/google/uuid"
 	"github.com/hakken/hakken/internal/domain"
@@ -183,6 +187,44 @@ func (h *TripHandler) Update(c echo.Context) error {
 	}
 
 	return redirect(c, "/trips/"+trip.ID.String()+"/edit")
+}
+
+func (h *TripHandler) Export(c echo.Context) error {
+	uid, err := uuid.Parse(c.Get("userID").(string))
+	if err != nil {
+		return redirect(c, "/login")
+	}
+
+	tripID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+
+	trip, err := h.trips.GetByID(c.Request().Context(), tripID, uid)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+
+	out, err := json.MarshalIndent(trip.Data, "", "  ")
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "export failed")
+	}
+
+	filename := fmt.Sprintf("%s.json", slugify(trip.Title))
+	c.Response().Header().Set("Content-Disposition", "attachment; filename=\""+filename+"\"")
+	return c.Blob(http.StatusOK, "application/json", out)
+}
+
+func slugify(s string) string {
+	var b strings.Builder
+	for _, r := range strings.ToLower(s) {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			b.WriteRune(r)
+		} else if unicode.IsSpace(r) || r == '-' {
+			b.WriteRune('-')
+		}
+	}
+	return strings.Trim(b.String(), "-")
 }
 
 func (h *TripHandler) Delete(c echo.Context) error {

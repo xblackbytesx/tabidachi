@@ -14,6 +14,9 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 				<sl-icon name="arrow-left"></sl-icon> View timeline
 			</a>
 			<h1 class="page-title">Edit: { trip.Title }</h1>
+			<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/export") } class="btn btn-ghost btn-sm" hx-boost="false">
+				<sl-icon name="download"></sl-icon> Export JSON
+			</a>
 		</div>
 		<!-- Metadata form -->
 		<div class="form-card">

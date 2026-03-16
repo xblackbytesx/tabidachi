@@ -129,6 +129,7 @@ func main() {
 	protected.POST("/trips/new/prompt", promptHandler.StepPost)
 
 	protected.GET("/trips/:id", tripHandler.View)
+	protected.GET("/trips/:id/export", tripHandler.Export)
 	protected.GET("/trips/:id/edit", tripHandler.Edit)
 	protected.POST("/trips/:id", tripHandler.Update)
 	protected.DELETE("/trips/:id", tripHandler.Delete)

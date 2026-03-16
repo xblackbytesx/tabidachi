@@ -32,6 +32,9 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 					if trip.IsActive() {
 						<span class="badge badge-active badge-lg">Active now</span>
 					}
+					<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/export") } class="btn btn-ghost btn-sm" hx-boost="false">
+						<sl-icon name="download"></sl-icon> Export
+					</a>
 					<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/edit") } class="btn btn-ghost btn-sm">
 						<sl-icon name="pencil"></sl-icon> Edit
 					</a>
@@ -146,14 +149,6 @@ templ daySection(trip *domain.Trip, day domain.Day) {
 
 templ eventCard(event domain.Event) {
 	<div class={ "event-card", "event-" + event.Type }>
-		<div class="event-time">
-			if event.StartTime != "" {
-				<span class="time-start">{ event.StartTime }</span>
-			}
-			if event.EndTime != "" {
-				<span class="time-end">{ event.EndTime }</span>
-			}
-		</div>
 		<div class="event-body">
 			<div class="event-header">
 				<span class="event-icon">
@@ -166,6 +161,14 @@ templ eventCard(event domain.Event) {
 				<span class="event-title">{ event.Title }</span>
 				if event.Optional {
 					<span class="badge badge-optional">Optional</span>
+				}
+				if event.StartTime != "" {
+					<span class="event-time">
+						{ event.StartTime }
+						if event.EndTime != "" {
+							<span class="event-time-sep">→</span>{ event.EndTime }
+						}
+					</span>
 				}
 			</div>
 			if event.Location != "" {
