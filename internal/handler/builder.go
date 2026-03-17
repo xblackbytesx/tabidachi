@@ -21,7 +21,7 @@ func NewBuilderHandler(trips *repository.TripStore) *BuilderHandler {
 }
 
 func (h *BuilderHandler) loadTrip(c echo.Context) (*domain.Trip, uuid.UUID, error) {
-	uid, err := uuid.Parse(c.Get("userID").(string))
+	uid, err := parseUserID(c)
 	if err != nil {
 		return nil, uuid.Nil, err
 	}

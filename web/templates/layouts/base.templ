@@ -24,6 +24,7 @@ templ Base(title string, csrfToken string) {
 			<div class="app-layout">
 				@Sidebar(csrfToken)
 				<main id="main-content" class="app-main">
+					<input type="hidden" id="csrf-live" value={ csrfToken }/>
 					{ children... }
 				</main>
 			</div>

@@ -16,7 +16,15 @@ templ TripImport(csrfToken string, flash string) {
 				Paste a JSON itinerary following the <strong>Hakken schema v1.0</strong>.
 				Use the <a href="/trips/new/prompt">LLM wizard</a> to generate this JSON from existing itinerary text.
 			</p>
-			<form method="POST" action="/trips/import" class="form-stack">
+			<form
+				method="POST"
+				action="/trips/import"
+				hx-post="/trips/import"
+				hx-target="#main-content"
+				hx-swap="outerHTML show:window:top"
+				hx-select="#main-content"
+				class="form-stack"
+			>
 				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 				<div class="field">
 					<label class="field-label" for="json_data">JSON itinerary</label>

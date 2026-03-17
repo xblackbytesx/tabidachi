@@ -1,11 +1,23 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/a-h/templ"
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
+
+// parseUserID safely extracts and parses the authenticated user's UUID from
+// the echo context. Returns an error if the value is absent or malformed.
+func parseUserID(c echo.Context) (uuid.UUID, error) {
+	s, ok := c.Get("userID").(string)
+	if !ok || s == "" {
+		return uuid.Nil, errors.New("not authenticated")
+	}
+	return uuid.Parse(s)
+}
 
 func csrfToken(c echo.Context) string {
 	v := c.Get("csrf")
@@ -28,6 +40,7 @@ func isHTMX(c echo.Context) bool {
 
 func render(c echo.Context, status int, t templ.Component) error {
 	c.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
+	c.Response().Header().Set("Cache-Control", "no-store")
 	c.Response().WriteHeader(status)
 	return t.Render(c.Request().Context(), c.Response().Writer)
 }

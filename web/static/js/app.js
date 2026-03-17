@@ -65,6 +65,32 @@ function onEventTypeChangeByAttr(select) {
 // HTMX hooks
 // ============================================================
 document.addEventListener('DOMContentLoaded', function () {
+  // Inject the freshest CSRF token from #csrf-live into every HTMX request.
+  // Listen on document (not body) so the event is always caught regardless
+  // of which element triggers the request. Guard against empty values so we
+  // don't send an empty header that causes gorilla/csrf to fall through to
+  // the (potentially stale) form-field path.
+  document.addEventListener('htmx:configRequest', function (evt) {
+    var el = document.getElementById('csrf-live');
+    if (el && el.value) {
+      evt.detail.headers['X-CSRF-Token'] = el.value;
+    }
+  });
+
+  // Belt-and-suspenders for non-HTMX form submissions: sync the hidden CSRF
+  // field with csrf-live just before the form data is sent so the submitted
+  // token always matches the current cookie.
+  document.addEventListener('submit', function (evt) {
+    var form = evt.target;
+    if (!form || form.tagName !== 'FORM') return;
+    var csrfEl = document.getElementById('csrf-live');
+    if (!csrfEl || !csrfEl.value) return;
+    var hiddenInput = form.querySelector('input[name="gorilla.csrf.Token"]');
+    if (hiddenInput) {
+      hiddenInput.value = csrfEl.value;
+    }
+  });
+
   document.body.addEventListener('htmx:afterSwap', function () {
     if (document.getElementById('timeline')) {
       scrollToToday();

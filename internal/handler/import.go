@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/hakken/hakken/internal/domain"
 	"github.com/hakken/hakken/internal/images"
 	"github.com/hakken/hakken/internal/repository"
@@ -28,7 +27,7 @@ func (h *ImportHandler) Get(c echo.Context) error {
 }
 
 func (h *ImportHandler) Post(c echo.Context) error {
-	uid, err := uuid.Parse(c.Get("userID").(string))
+	uid, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}
@@ -66,18 +65,13 @@ func (h *ImportHandler) Post(c echo.Context) error {
 		data.Timezone = "UTC"
 	}
 
-	timezone := data.Timezone
-	if timezone == "" {
-		timezone = "UTC"
-	}
-
 	trip := &domain.Trip{
 		UserID:       uid,
 		Title:        data.Title,
 		StartDate:    startDate,
 		EndDate:      endDate,
 		HomeLocation: data.HomeLocation,
-		Timezone:     timezone,
+		Timezone:     data.Timezone,
 		Data:         data,
 	}
 
@@ -89,5 +83,9 @@ func (h *ImportHandler) Post(c echo.Context) error {
 
 	go images.AutoFetch(h.trips, h.imageSvc, created.ID, created.UserID)
 
+	if isHTMX(c) {
+		c.Response().Header().Set("HX-Redirect", "/trips/"+created.ID.String())
+		return c.NoContent(http.StatusNoContent)
+	}
 	return redirect(c, "/trips/"+created.ID.String())
 }

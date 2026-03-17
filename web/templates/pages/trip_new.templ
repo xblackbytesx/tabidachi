@@ -20,10 +20,15 @@ templ TripNew(csrfToken string) {
 				<h2 class="method-title">Import JSON</h2>
 				<p class="method-desc">Paste or upload a JSON itinerary following the Hakken schema.</p>
 			</a>
-			<a href="/trips/new/prompt" class="method-card method-card-featured">
+			<a href="/trips/new/convert" class="method-card">
+				<sl-icon name="arrow-repeat" class="method-icon"></sl-icon>
+				<h2 class="method-title">Convert existing itinerary</h2>
+				<p class="method-desc">Have a booking doc, email, or spreadsheet? We'll generate an AI prompt to convert it to Hakken JSON.</p>
+			</a>
+			<a href="/trips/new/plan" class="method-card method-card-featured">
 				<sl-icon name="stars" class="method-icon"></sl-icon>
-				<h2 class="method-title">Use LLM wizard</h2>
-				<p class="method-desc">Paste your existing itinerary text. We'll generate an AI prompt to convert it — no API key needed.</p>
+				<h2 class="method-title">Plan with AI</h2>
+				<p class="method-desc">Describe where you want to go — AI builds a personalised itinerary prompt for you.</p>
 				<span class="method-badge">Recommended</span>
 			</a>
 		</div>

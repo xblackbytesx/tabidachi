@@ -4,7 +4,6 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/hakken/hakken/internal/repository"
 	"github.com/hakken/hakken/web/templates/pages"
 	"github.com/labstack/echo/v4"
@@ -19,7 +18,7 @@ func NewDashboardHandler(trips *repository.TripStore) *DashboardHandler {
 }
 
 func (h *DashboardHandler) Get(c echo.Context) error {
-	uid, err := uuid.Parse(c.Get("userID").(string))
+	uid, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}

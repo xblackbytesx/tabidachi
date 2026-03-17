@@ -43,7 +43,7 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><sl-icon name=\"arrow-left\"></sl-icon> Back</a><h1 class=\"page-title\">LLM Prompt Wizard</h1></div><div class=\"wizard-steps\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><sl-icon name=\"arrow-left\"></sl-icon> Back</a><h1 class=\"page-title\">Convert Existing Itinerary</h1></div><div class=\"wizard-steps\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -135,7 +135,7 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = layouts.Base("LLM Prompt Wizard", csrfToken).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layouts.Base("Convert Existing Itinerary", csrfToken).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -164,7 +164,7 @@ func promptStep1(csrfToken string, data map[string]string) templ.Component {
 			templ_7745c5c3_Var9 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 1 — Paste your itinerary</h2><p class=\"form-help\">Paste your existing itinerary text below — booking confirmations, travel agent docs, copy-pasted emails, anything. The AI will extract the logistics.</p><form method=\"POST\" action=\"/trips/new/prompt\" hx-post=\"/trips/new/prompt\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 1 — Paste your itinerary</h2><p class=\"form-help\">Paste your existing itinerary text below — booking confirmations, travel agent docs, copy-pasted emails, anything. The AI will extract the logistics.</p><form method=\"POST\" action=\"/trips/new/convert\" hx-post=\"/trips/new/convert\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -245,7 +245,7 @@ func promptStep2(csrfToken string, data map[string]string) templ.Component {
 			templ_7745c5c3_Var14 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 2 — What's in your itinerary?</h2><p class=\"form-help\">Check everything that your source text contains. This helps the AI focus on the right details.</p><form method=\"POST\" action=\"/trips/new/prompt\" hx-post=\"/trips/new/prompt\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 2 — What's in your itinerary?</h2><p class=\"form-help\">Check everything that your source text contains. This helps the AI focus on the right details.</p><form method=\"POST\" action=\"/trips/new/convert\" hx-post=\"/trips/new/convert\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -339,7 +339,7 @@ func promptStep3(csrfToken string, prompt string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</pre></div><div class=\"form-actions\"><a href=\"/trips/new/prompt\" class=\"btn btn-ghost\">Start over</a> <a href=\"/trips/new/import\" class=\"btn btn-primary\"><sl-icon name=\"file-earmark-arrow-down\"></sl-icon> Import the result</a></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</pre></div><div class=\"form-actions\"><a href=\"/trips/new/convert\" class=\"btn btn-ghost\">Start over</a> <a href=\"/trips/new/import\" class=\"btn btn-primary\"><sl-icon name=\"file-earmark-arrow-down\"></sl-icon> Import the result</a></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

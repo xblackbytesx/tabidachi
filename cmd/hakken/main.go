@@ -90,13 +90,29 @@ func main() {
 		[]byte(cfg.CSRFAuthKey),
 		csrf.Secure(cfg.SecureCookies),
 		csrf.RequestHeader("X-CSRF-Token"),
-		csrf.CookieName("csrf"),
+		csrf.CookieName("hakken-csrf"),
 		csrf.TrustedOrigins([]string{appURL.Host}),
+		csrf.ErrorHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			slog.Error("CSRF validation failed",
+				"reason", csrf.FailureReason(r),
+				"path", r.URL.Path,
+				"method", r.Method,
+			)
+			// Redirect to login — covers both stale-session and genuine CSRF failures.
+			// HTMX requests get an HX-Redirect header so the SPA navigates correctly.
+			if r.Header.Get("HX-Request") == "true" {
+				w.Header().Set("HX-Redirect", "/login")
+				w.WriteHeader(http.StatusForbidden)
+				return
+			}
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+		})),
 	)
 	e.Use(echo.WrapMiddleware(csrfMiddleware))
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			c.Set("csrf", csrf.Token(c.Request()))
+			token := csrf.Token(c.Request())
+			c.Set("csrf", token)
 			return next(c)
 		}
 	})
@@ -125,6 +141,12 @@ func main() {
 	protected.POST("/trips", tripHandler.Create)
 	protected.GET("/trips/new/import", importHandler.Get)
 	protected.POST("/trips/import", importHandler.Post)
+	protected.GET("/trips/new/convert", promptHandler.ConvertStep1Get)
+	protected.POST("/trips/new/convert", promptHandler.ConvertStepPost)
+	protected.GET("/trips/new/plan", promptHandler.PlanStep1Get)
+	protected.POST("/trips/new/plan", promptHandler.PlanStepPost)
+	protected.GET("/trips/new/plan/field", promptHandler.PlanFieldGet)
+	// Legacy alias — keep /trips/new/prompt working so existing bookmarks don't 404
 	protected.GET("/trips/new/prompt", promptHandler.Step1Get)
 	protected.POST("/trips/new/prompt", promptHandler.StepPost)
 

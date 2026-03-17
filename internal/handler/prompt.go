@@ -1,94 +1,15 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/hakken/hakken/web/templates/pages"
 	"github.com/labstack/echo/v4"
 )
 
-type PromptHandler struct{}
-
-func NewPromptHandler() *PromptHandler {
-	return &PromptHandler{}
-}
-
-func (h *PromptHandler) Step1Get(c echo.Context) error {
-	return render(c, http.StatusOK, pages.PromptBuilder(csrfToken(c), 1, "", nil))
-}
-
-func (h *PromptHandler) StepPost(c echo.Context) error {
-	step := c.FormValue("step")
-
-	switch step {
-	case "1":
-		// Moving from step 1 → step 2
-		itinerary := c.FormValue("itinerary_text")
-		fromDate := c.FormValue("from_date")
-		toDate := c.FormValue("to_date")
-		data := map[string]string{
-			"itinerary_text": itinerary,
-			"from_date":      fromDate,
-			"to_date":        toDate,
-		}
-		return render(c, http.StatusOK, pages.PromptBuilder(csrfToken(c), 2, "", data))
-
-	case "2":
-		// Moving from step 2 → step 3: generate the prompt
-		itinerary := c.FormValue("itinerary_text")
-		fromDate := c.FormValue("from_date")
-		toDate := c.FormValue("to_date")
-
-		// Build what's included list
-		included := []string{}
-		checkboxes := []string{
-			"flights", "trains", "local_transit", "accommodations",
-			"activities", "booking_refs", "timings",
-		}
-		labels := map[string]string{
-			"flights":       "flights",
-			"trains":        "trains and bullet trains",
-			"local_transit": "local transit (subway, bus, tram)",
-			"accommodations": "accommodations (check-in/out, booking refs)",
-			"activities":    "scheduled activities (time, location, ticket info)",
-			"booking_refs":  "booking references and confirmation numbers",
-			"timings":       "departure/arrival times and durations",
-		}
-		for _, key := range checkboxes {
-			if c.FormValue(key) == "on" {
-				included = append(included, labels[key])
-			}
-		}
-
-		prompt := buildPrompt(itinerary, fromDate, toDate, included)
-		data := map[string]string{
-			"prompt": prompt,
-		}
-		return render(c, http.StatusOK, pages.PromptBuilder(csrfToken(c), 3, prompt, data))
-	}
-
-	return c.String(http.StatusBadRequest, "invalid step")
-}
-
-func buildPrompt(itinerary, fromDate, toDate string, included []string) string {
-	dateHint := ""
-	if fromDate != "" && toDate != "" {
-		dateHint = "\nTrip dates: " + fromDate + " to " + toDate
-	}
-
-	includedList := ""
-	if len(included) > 0 {
-		includedList = "\nFocus specifically on extracting: "
-		for i, item := range included {
-			if i > 0 {
-				includedList += ", "
-			}
-			includedList += item
-		}
-		includedList += "."
-	}
-
-	const schema = `{
+const hakkenSchema = `{
   "schemaVersion": "1.0",
   "title": "string (required)",
   "startDate": "YYYY-MM-DD (required)",
@@ -148,6 +69,146 @@ func buildPrompt(itinerary, fromDate, toDate string, included []string) string {
   ]
 }`
 
+type PromptHandler struct{}
+
+func NewPromptHandler() *PromptHandler {
+	return &PromptHandler{}
+}
+
+// ConvertStep1Get serves the convert-existing-itinerary wizard (step 1).
+func (h *PromptHandler) ConvertStep1Get(c echo.Context) error {
+	return render(c, http.StatusOK, pages.PromptBuilder(csrfToken(c), 1, "", nil))
+}
+
+// ConvertStepPost handles form submissions for the convert wizard.
+func (h *PromptHandler) ConvertStepPost(c echo.Context) error {
+	step := c.FormValue("step")
+
+	switch step {
+	case "1":
+		itinerary := c.FormValue("itinerary_text")
+		fromDate := c.FormValue("from_date")
+		toDate := c.FormValue("to_date")
+		data := map[string]string{
+			"itinerary_text": itinerary,
+			"from_date":      fromDate,
+			"to_date":        toDate,
+		}
+		return render(c, http.StatusOK, pages.PromptBuilder(csrfToken(c), 2, "", data))
+
+	case "2":
+		itinerary := c.FormValue("itinerary_text")
+		fromDate := c.FormValue("from_date")
+		toDate := c.FormValue("to_date")
+
+		included := []string{}
+		checkboxes := []string{
+			"flights", "trains", "local_transit", "accommodations",
+			"activities", "booking_refs", "timings",
+		}
+		labels := map[string]string{
+			"flights":        "flights",
+			"trains":         "trains and bullet trains",
+			"local_transit":  "local transit (subway, bus, tram)",
+			"accommodations": "accommodations (check-in/out, booking refs)",
+			"activities":     "scheduled activities (time, location, ticket info)",
+			"booking_refs":   "booking references and confirmation numbers",
+			"timings":        "departure/arrival times and durations",
+		}
+		for _, key := range checkboxes {
+			if c.FormValue(key) == "on" {
+				included = append(included, labels[key])
+			}
+		}
+
+		prompt := buildPrompt(itinerary, fromDate, toDate, included)
+		data := map[string]string{
+			"prompt": prompt,
+		}
+		return render(c, http.StatusOK, pages.PromptBuilder(csrfToken(c), 3, prompt, data))
+	}
+
+	return c.String(http.StatusBadRequest, "invalid step")
+}
+
+// Step1Get and StepPost are legacy aliases kept for backward compatibility (/trips/new/prompt).
+func (h *PromptHandler) Step1Get(c echo.Context) error {
+	return h.ConvertStep1Get(c)
+}
+
+func (h *PromptHandler) StepPost(c echo.Context) error {
+	return h.ConvertStepPost(c)
+}
+
+// PlanStep1Get serves the plan-new-trip wizard (step 1).
+func (h *PromptHandler) PlanStep1Get(c echo.Context) error {
+	return render(c, http.StatusOK, pages.PlanBuilder(csrfToken(c), 1, "", nil))
+}
+
+// PlanStepPost handles form submissions for the plan wizard.
+func (h *PromptHandler) PlanStepPost(c echo.Context) error {
+	step := c.FormValue("step")
+
+	switch step {
+	case "1":
+		data := map[string]string{
+			"destinations":     c.FormValue("destinations"),
+			"start_date":       c.FormValue("start_date"),
+			"end_date":         c.FormValue("end_date"),
+			"home_city":        c.FormValue("home_city"),
+			"travellers_count": c.FormValue("travellers_count"),
+			"travellers_ages":  c.FormValue("travellers_ages"),
+			"intensity":        c.FormValue("intensity"),
+		}
+		return render(c, http.StatusOK, pages.PlanBuilder(csrfToken(c), 2, "", data))
+
+	case "2":
+		data := map[string]string{
+			"destinations":     c.FormValue("destinations"),
+			"start_date":       c.FormValue("start_date"),
+			"end_date":         c.FormValue("end_date"),
+			"home_city":        c.FormValue("home_city"),
+			"travellers_count": c.FormValue("travellers_count"),
+			"travellers_ages":  c.FormValue("travellers_ages"),
+			"intensity":        c.FormValue("intensity"),
+			"must_sees":        c.FormValue("must_sees"),
+			"nice_to_haves":    c.FormValue("nice_to_haves"),
+			"things_to_avoid":  c.FormValue("things_to_avoid"),
+			"max_travel_time":  c.FormValue("max_travel_time"),
+			"poi_interests":    c.FormValue("poi_interests"),
+		}
+		prompt := buildPlanningPrompt(data)
+		return render(c, http.StatusOK, pages.PlanBuilder(csrfToken(c), 3, prompt, data))
+	}
+
+	return c.String(http.StatusBadRequest, "invalid step")
+}
+
+// PlanFieldGet returns an optional field partial for HTMX toggle checkboxes.
+func (h *PromptHandler) PlanFieldGet(c echo.Context) error {
+	field := c.QueryParam("field")
+	show := c.QueryParam("show_"+field) == "on"
+	return render(c, http.StatusOK, pages.PlanOptionalField(field, show))
+}
+
+func buildPrompt(itinerary, fromDate, toDate string, included []string) string {
+	dateHint := ""
+	if fromDate != "" && toDate != "" {
+		dateHint = "\nTrip dates: " + fromDate + " to " + toDate
+	}
+
+	includedList := ""
+	if len(included) > 0 {
+		includedList = "\nFocus specifically on extracting: "
+		for i, item := range included {
+			if i > 0 {
+				includedList += ", "
+			}
+			includedList += item
+		}
+		includedList += "."
+	}
+
 	return `IMPORTANT RULES:
 1. Do NOT change, correct, or adjust any dates, times, or trip details from the source itinerary. Preserve all dates and times exactly as written, even if they seem unusual.
 2. If travel times between legs seem inconsistent or cannot be verified, note this as a flag but do NOT change the data.
@@ -166,8 +227,66 @@ For the optional "notes" field on legs and days: include a note ONLY if it conta
 		dateHint + includedList + `
 
 Output schema (schemaVersion 1.0):
-` + schema + `
+` + hakkenSchema + `
 
 Itinerary to convert:
 ` + itinerary
+}
+
+func buildPlanningPrompt(data map[string]string) string {
+	intensityLabels := map[string]string{
+		"maximize": "Maximize sightseeing — pack in as much as possible",
+		"balanced": "Balanced — good coverage while conserving energy",
+		"relaxed":  "Relaxed — prioritize rest, see what fits without pressure",
+	}
+	intensityLabel := intensityLabels[data["intensity"]]
+	if intensityLabel == "" {
+		intensityLabel = data["intensity"]
+	}
+
+	var params strings.Builder
+	fmt.Fprintf(&params, "Trip parameters:\n")
+	fmt.Fprintf(&params, "- Destinations: %s\n", data["destinations"])
+	fmt.Fprintf(&params, "- Dates: %s to %s\n", data["start_date"], data["end_date"])
+	if data["home_city"] != "" {
+		fmt.Fprintf(&params, "- Home city: %s\n", data["home_city"])
+	}
+	fmt.Fprintf(&params, "- Number of travellers: %s\n", data["travellers_count"])
+	if data["travellers_ages"] != "" {
+		fmt.Fprintf(&params, "- Ages of travellers: %s\n", data["travellers_ages"])
+	}
+	fmt.Fprintf(&params, "- Trip intensity: %s\n", intensityLabel)
+	fmt.Fprintf(&params, "- Must-sees: %s\n", data["must_sees"])
+	if data["nice_to_haves"] != "" {
+		fmt.Fprintf(&params, "- Nice-to-haves: %s\n", data["nice_to_haves"])
+	}
+	if data["things_to_avoid"] != "" {
+		fmt.Fprintf(&params, "- Things to avoid: %s\n", data["things_to_avoid"])
+	}
+	if data["max_travel_time"] != "" {
+		fmt.Fprintf(&params, "- Max comfortable travel time between stops: %s\n", data["max_travel_time"])
+	}
+	if data["poi_interests"] != "" {
+		fmt.Fprintf(&params, "- Points of interest / specific interests: %s\n", data["poi_interests"])
+	}
+
+	return `IMPORTANT RULES:
+1. Before planning anything, review the trip parameters and identify any missing information that would significantly affect the itinerary (e.g. preferred accommodation style, dietary requirements, mobility considerations, budget range, visa constraints). Ask these as numbered follow-up questions FIRST, before any planning.
+2. Once follow-up questions are answered (or if none are needed), show a day-by-day summary table: one row per day with date, destination, key activities, and transit segments. Ask "Does this look right? Any changes before I generate the JSON?"
+3. Only output the JSON after the user explicitly confirms the summary — but always offer: "Say 'generate JSON' when you're ready."
+4. Output a single JSON object matching the Hakken schema v1.0 exactly.
+
+---
+
+You are a travel planning assistant. Design a detailed day-by-day itinerary for the following trip, then output it as a single JSON object matching the schema below.
+
+` + params.String() + `
+Output schema (schemaVersion 1.0):
+` + hakkenSchema + `
+
+Important output rules:
+- Always populate startTime and endTime where you can make a reasonable estimate.
+- Always include transportMode, departure.location, arrival.location, and duration for transit events.
+- For the optional "notes" field on legs and days: include ONLY actionable logistics (e.g. "Book tickets in advance", "JR Pass valid for this segment"). No cultural tips or food suggestions.
+- Suggest realistic travel times between locations based on the destinations and transport modes.`
 }

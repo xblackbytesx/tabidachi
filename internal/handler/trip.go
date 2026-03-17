@@ -35,7 +35,7 @@ func (h *TripHandler) NewScratch(c echo.Context) error {
 }
 
 func (h *TripHandler) Create(c echo.Context) error {
-	uid, err := uuid.Parse(c.Get("userID").(string))
+	uid, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}
@@ -94,7 +94,7 @@ func (h *TripHandler) Create(c echo.Context) error {
 }
 
 func (h *TripHandler) View(c echo.Context) error {
-	uid, err := uuid.Parse(c.Get("userID").(string))
+	uid, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}
@@ -113,7 +113,7 @@ func (h *TripHandler) View(c echo.Context) error {
 }
 
 func (h *TripHandler) Edit(c echo.Context) error {
-	uid, err := uuid.Parse(c.Get("userID").(string))
+	uid, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}
@@ -132,7 +132,7 @@ func (h *TripHandler) Edit(c echo.Context) error {
 }
 
 func (h *TripHandler) Update(c echo.Context) error {
-	uid, err := uuid.Parse(c.Get("userID").(string))
+	uid, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}
@@ -190,7 +190,7 @@ func (h *TripHandler) Update(c echo.Context) error {
 }
 
 func (h *TripHandler) Export(c echo.Context) error {
-	uid, err := uuid.Parse(c.Get("userID").(string))
+	uid, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}
@@ -228,7 +228,7 @@ func slugify(s string) string {
 }
 
 func (h *TripHandler) Delete(c echo.Context) error {
-	uid, err := uuid.Parse(c.Get("userID").(string))
+	uid, err := parseUserID(c)
 	if err != nil {
 		return c.String(http.StatusUnauthorized, "unauthorized")
 	}

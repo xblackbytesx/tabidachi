@@ -25,10 +25,6 @@ func parseTripID(c echo.Context) (uuid.UUID, error) {
 	return uuid.Parse(c.Param("id"))
 }
 
-func userIDFromCtx(c echo.Context) (uuid.UUID, error) {
-	return uuid.Parse(c.Get("userID").(string))
-}
-
 // ImageSearch handles GET /trips/:id/image/search?q=
 func (h *ImageHandler) ImageSearch(c echo.Context) error {
 	query := c.QueryParam("q")
@@ -60,7 +56,7 @@ func (h *ImageHandler) LegImageSearch(c echo.Context) error {
 
 // SetTripImage handles POST /trips/:id/image
 func (h *ImageHandler) SetTripImage(c echo.Context) error {
-	userID, err := userIDFromCtx(c)
+	userID, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}
@@ -88,7 +84,7 @@ func (h *ImageHandler) SetTripImage(c echo.Context) error {
 
 // ClearTripImage handles DELETE /trips/:id/image  (also POST /trips/:id/image/clear)
 func (h *ImageHandler) ClearTripImage(c echo.Context) error {
-	userID, err := userIDFromCtx(c)
+	userID, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}
@@ -104,7 +100,7 @@ func (h *ImageHandler) ClearTripImage(c echo.Context) error {
 
 // SetLegImage handles POST /trips/:id/legs/:legIdx/image
 func (h *ImageHandler) SetLegImage(c echo.Context) error {
-	userID, err := userIDFromCtx(c)
+	userID, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}
@@ -137,7 +133,7 @@ func (h *ImageHandler) SetLegImage(c echo.Context) error {
 
 // ClearLegImage handles DELETE /trips/:id/legs/:legIdx/image
 func (h *ImageHandler) ClearLegImage(c echo.Context) error {
-	userID, err := userIDFromCtx(c)
+	userID, err := parseUserID(c)
 	if err != nil {
 		return redirect(c, "/login")
 	}

@@ -3,10 +3,10 @@ package pages
 import "github.com/hakken/hakken/web/templates/layouts"
 
 templ PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[string]string) {
-	@layouts.Base("LLM Prompt Wizard", csrfToken) {
+	@layouts.Base("Convert Existing Itinerary", csrfToken) {
 		<div class="page-header">
 			<a href="/trips/new" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> Back</a>
-			<h1 class="page-title">LLM Prompt Wizard</h1>
+			<h1 class="page-title">Convert Existing Itinerary</h1>
 		</div>
 		<div class="wizard-steps">
 			<div class={ "wizard-step", templ.KV("active", step == 1), templ.KV("done", step > 1) }>
@@ -42,8 +42,8 @@ templ promptStep1(csrfToken string, data map[string]string) {
 		<p class="form-help">Paste your existing itinerary text below — booking confirmations, travel agent docs, copy-pasted emails, anything. The AI will extract the logistics.</p>
 		<form
 			method="POST"
-			action="/trips/new/prompt"
-			hx-post="/trips/new/prompt"
+			action="/trips/new/convert"
+			hx-post="/trips/new/convert"
 			hx-target="#wizard-content"
 			hx-swap="outerHTML"
 			hx-select="#wizard-content"
@@ -84,8 +84,8 @@ templ promptStep2(csrfToken string, data map[string]string) {
 		<p class="form-help">Check everything that your source text contains. This helps the AI focus on the right details.</p>
 		<form
 			method="POST"
-			action="/trips/new/prompt"
-			hx-post="/trips/new/prompt"
+			action="/trips/new/convert"
+			hx-post="/trips/new/convert"
 			hx-target="#wizard-content"
 			hx-swap="outerHTML"
 			hx-select="#wizard-content"
@@ -148,7 +148,7 @@ templ promptStep3(csrfToken string, prompt string) {
 			<pre class="prompt-box" id="prompt-text">{ prompt }</pre>
 		</div>
 		<div class="form-actions">
-			<a href="/trips/new/prompt" class="btn btn-ghost">Start over</a>
+			<a href="/trips/new/convert" class="btn btn-ghost">Start over</a>
 			<a href="/trips/new/import" class="btn btn-primary">
 				<sl-icon name="file-earmark-arrow-down"></sl-icon> Import the result
 			</a>

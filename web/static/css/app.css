@@ -312,7 +312,6 @@ a:hover { color: var(--color-accent-hover); text-decoration: underline; }
 .badge-flexible  { background: rgba(245,158,11,0.12); color: #fcd34d; }
 .badge-checkin   { background: rgba(34,197,94,0.12); color: #4ade80; }
 .badge-checkout  { background: rgba(239,68,68,0.12); color: #f87171; }
-.badge-day-type  { }
 
 /* ============================================================
    Page header
@@ -365,7 +364,7 @@ a:hover { color: var(--color-accent-hover); text-decoration: underline; }
   display: flex;
   flex-direction: column;
 }
-.trip-card:hover { border-color: var(--color-border-light); transform: translateY(-1px); }
+.trip-card:hover { border-color: var(--color-border-light); box-shadow: 0 4px 16px rgba(0,0,0,0.35); }
 .trip-card-accent {
   height: 4px;
   background: var(--trip-accent, var(--color-accent));
@@ -404,7 +403,7 @@ a:hover { color: var(--color-accent-hover); text-decoration: underline; }
 
 .method-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
 }
 .method-card {
@@ -422,7 +421,6 @@ a:hover { color: var(--color-accent-hover); text-decoration: underline; }
   border-color: var(--color-accent);
   background: var(--color-surface-2);
   text-decoration: none;
-  color: var(--color-text);
 }
 .method-card-featured { border-color: var(--color-accent); }
 .method-icon { font-size: 28px; display: block; margin-bottom: 16px; color: var(--color-accent); }
@@ -586,7 +584,7 @@ a:hover { color: var(--color-accent-hover); text-decoration: underline; }
 sl-details.leg-notes,
 sl-details.day-notes {
   margin-bottom: 14px;
-  --color: var(--color-text-muted);
+  color: var(--color-text-muted);
 }
 .notes-text { font-size: 14px; color: var(--color-text-muted); line-height: 1.65; }
 
@@ -622,7 +620,7 @@ sl-details.day-notes {
 .day-has-notes { color: var(--color-text-faint); font-size: 13px; }
 
 /* Events list */
-.events-list { display: flex; flex-direction: column; gap: 0; }
+.events-list { display: flex; flex-direction: column; }
 
 /* Event cards */
 .event-card {
@@ -674,7 +672,6 @@ sl-details.day-notes {
 /* Transit connectors */
 .transit-connector {
   display: flex;
-  gap: 0;
   margin-bottom: 10px;
   position: relative;
 }
@@ -990,12 +987,16 @@ sl-details.day-notes {
   .app-main { margin-left: 0; padding: 24px 18px; }
   .trip-grid { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
-  .method-grid { grid-template-columns: 1fr; }
+  .method-grid { grid-template-columns: repeat(2, 1fr); }
   .trip-view-header { flex-direction: column; }
   .trip-view { max-width: 100%; }
   .day-date { font-size: 16px; }
   .trip-view-title { font-size: 26px; }
   .leg-title { font-size: 20px; }
+}
+
+@media (max-width: 480px) {
+  .method-grid { grid-template-columns: 1fr; }
 }
 
 @media (min-width: 1400px) {
