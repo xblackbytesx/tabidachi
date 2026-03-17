@@ -52,6 +52,7 @@ func main() {
 
 	userStore := repository.NewUserStore(pool)
 	tripStore := repository.NewTripStore(pool)
+	tokenStore := repository.NewTokenStore(pool)
 	imageSvc := images.NewService(cfg.PexelsAPIKey, cfg.UnsplashKey, cfg.UploadsDir)
 
 	authHandler := handler.NewAuthHandler(userStore)
@@ -61,6 +62,8 @@ func main() {
 	promptHandler := handler.NewPromptHandler()
 	builderHandler := handler.NewBuilderHandler(tripStore)
 	imageHandler := handler.NewImageHandler(tripStore, imageSvc)
+	settingsHandler := handler.NewSettingsHandler(tokenStore)
+	apiHandler := handler.NewAPIHandler(tripStore, cfg.AppBaseURL)
 
 	e := echo.New()
 	e.HideBanner = true
@@ -166,6 +169,16 @@ func main() {
 	protected.POST("/trips/:id/legs/:legIdx/image", imageHandler.SetLegImage)
 	protected.DELETE("/trips/:id/legs/:legIdx/image", imageHandler.ClearLegImage)
 	protected.POST("/trips/:id/legs/:legIdx/image/clear", imageHandler.ClearLegImage)
+
+	// Settings & token management
+	protected.GET("/settings", settingsHandler.Get)
+	protected.POST("/settings/tokens", settingsHandler.GenerateToken)
+	protected.POST("/settings/tokens/:id/revoke", settingsHandler.RevokeToken)
+
+	// JSON API — Bearer token auth; GET-only so gorilla/csrf does not apply.
+	api := e.Group("/api/v1", appmiddleware.RequireAPIToken(tokenStore))
+	api.GET("/trips", apiHandler.ListTrips)
+	api.GET("/trips/:id", apiHandler.GetTrip)
 
 	// Manual builder mutation endpoints
 	protected.POST("/trips/:id/legs", builderHandler.AddLeg)

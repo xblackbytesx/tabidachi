@@ -113,6 +113,16 @@ type TransitPoint struct {
 	Code     string `json:"code,omitempty"`
 }
 
+// APIToken represents a personal access token for API authentication.
+type APIToken struct {
+	ID          uuid.UUID
+	UserID      uuid.UUID
+	Name        string
+	TokenHash   string
+	CreatedAt   time.Time
+	LastUsedAt  *time.Time
+}
+
 // TransportIcon maps a transport mode string to a Shoelace icon name.
 func TransportIcon(mode string) string {
 	icons := map[string]string{

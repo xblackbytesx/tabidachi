@@ -78,7 +78,9 @@ a:hover { color: var(--color-accent-hover); text-decoration: underline; }
   align-items: center;
   gap: 10px;
   border-bottom: 1px solid var(--color-border);
+  text-decoration: none;
 }
+.sidebar-logo:hover { text-decoration: none; }
 .logo-icon { font-size: 22px; }
 .logo-text {
   font-size: 18px;
@@ -1002,4 +1004,106 @@ sl-details.day-notes {
 @media (min-width: 1400px) {
   .app-main { padding: 48px 64px; }
   .trip-view { max-width: 960px; }
+}
+
+/* ============================================================
+   Settings page
+   ============================================================ */
+
+.settings-section {
+  max-width: 700px;
+}
+
+.settings-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.settings-section-desc {
+  color: var(--color-text-muted);
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.token-form {
+  margin-bottom: 28px;
+}
+
+.token-form-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.token-name-input {
+  flex: 1;
+}
+
+.token-submit-btn {
+  flex-shrink: 0;
+}
+
+.token-reveal {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-success);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 28px;
+}
+
+.token-reveal-warning {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--color-success);
+}
+
+.token-reveal-value {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.token-reveal-value code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--color-surface-3);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  word-break: break-all;
+  flex: 1;
+}
+
+.token-reveal-value sl-copy-button {
+  flex-shrink: 0;
+}
+
+.token-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.token-table th {
+  text-align: left;
+  padding: 8px 12px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.token-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.token-table tr:last-child td {
+  border-bottom: none;
+}
+
+.token-empty {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  margin-top: 8px;
 }

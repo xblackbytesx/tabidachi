@@ -1,0 +1,145 @@
+package pages
+
+import (
+	"github.com/hakken/hakken/internal/domain"
+	"github.com/hakken/hakken/web/templates/layouts"
+)
+
+templ Settings(csrfToken string, tokens []*domain.APIToken, errMsg string) {
+	@layouts.Base("Settings", csrfToken) {
+		<div class="page-header">
+			<h1 class="page-title">Settings</h1>
+		</div>
+		<section class="settings-section">
+			<h2 class="settings-section-title">Personal Access Tokens</h2>
+			<p class="settings-section-desc">
+				Tokens allow the Hakken mobile app and other API clients to read your trips.
+				Each token has full read access to your account — treat it like a password.
+			</p>
+			if errMsg != "" {
+				<p class="form-error">{ errMsg }</p>
+			}
+			<form
+				method="POST"
+				action="/settings/tokens"
+				class="token-form"
+				hx-post="/settings/tokens"
+				hx-target="#main-content"
+				hx-swap="outerHTML show:window:top"
+			>
+				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+				<div class="token-form-row">
+					<sl-input
+						name="name"
+						label="Token name"
+						placeholder="e.g. Android phone"
+						autocomplete="off"
+						clearable
+						required
+						class="token-name-input"
+					></sl-input>
+					<sl-button type="submit" variant="primary" class="token-submit-btn">
+						<sl-icon slot="prefix" name="key"></sl-icon>
+						Generate token
+					</sl-button>
+				</div>
+			</form>
+			@tokenList(csrfToken, tokens)
+		</section>
+	}
+}
+
+templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken string) {
+	@layouts.Base("Settings", csrfToken) {
+		<div class="page-header">
+			<h1 class="page-title">Settings</h1>
+		</div>
+		<section class="settings-section">
+			<h2 class="settings-section-title">Personal Access Tokens</h2>
+			<p class="settings-section-desc">
+				Tokens allow the Hakken mobile app and other API clients to read your trips.
+				Each token has full read access to your account — treat it like a password.
+			</p>
+			<div class="token-reveal">
+				<p class="token-reveal-warning">
+					<strong>Copy this token now.</strong> It will not be shown again.
+				</p>
+				<div class="token-reveal-value">
+					<code id="new-token-value">{ rawToken }</code>
+					<sl-copy-button from="new-token-value" copy-label="Copy token" success-label="Copied!"></sl-copy-button>
+				</div>
+			</div>
+			<form
+				method="POST"
+				action="/settings/tokens"
+				class="token-form"
+				hx-post="/settings/tokens"
+				hx-target="#main-content"
+				hx-swap="outerHTML show:window:top"
+			>
+				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+				<div class="token-form-row">
+					<sl-input
+						name="name"
+						label="Token name"
+						placeholder="e.g. Android phone"
+						autocomplete="off"
+						clearable
+						required
+						class="token-name-input"
+					></sl-input>
+					<sl-button type="submit" variant="primary" class="token-submit-btn">
+						<sl-icon slot="prefix" name="key"></sl-icon>
+						Generate token
+					</sl-button>
+				</div>
+			</form>
+			@tokenList(csrfToken, tokens)
+		</section>
+	}
+}
+
+templ tokenList(csrfToken string, tokens []*domain.APIToken) {
+	if len(tokens) == 0 {
+		<p class="token-empty">No tokens yet.</p>
+	} else {
+		<table class="token-table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Created</th>
+					<th>Last used</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				for _, t := range tokens {
+					<tr>
+						<td>{ t.Name }</td>
+						<td>{ t.CreatedAt.Format("Jan 2, 2006") }</td>
+						<td>
+							if t.LastUsedAt == nil {
+								<span class="text-muted">Never</span>
+							} else {
+								{ t.LastUsedAt.Format("Jan 2, 2006") }
+							}
+						</td>
+						<td>
+							<form
+								method="POST"
+								action={ templ.SafeURL("/settings/tokens/" + t.ID.String() + "/revoke") }
+								hx-post={ "/settings/tokens/" + t.ID.String() + "/revoke" }
+								hx-target="#main-content"
+								hx-swap="outerHTML show:window:top"
+								hx-confirm="Revoke this token? Any app using it will lose access."
+							>
+								<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+								<button type="submit" class="btn btn-sm btn-danger">Revoke</button>
+							</form>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+}

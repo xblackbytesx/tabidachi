@@ -126,14 +126,14 @@ func Sidebar(csrfToken string) templ.Component {
 			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<nav class=\"app-sidebar\"><div class=\"sidebar-logo\"><span class=\"logo-icon\">✈</span> <span class=\"logo-text\">Hakken</span></div><ul class=\"sidebar-nav\"><li><a href=\"/\" class=\"nav-item\"><sl-icon name=\"house\"></sl-icon> Trips</a></li><li><a href=\"/trips/new\" class=\"nav-item\"><sl-icon name=\"plus-circle\"></sl-icon> New Trip</a></li></ul><div class=\"sidebar-footer\"><form method=\"POST\" action=\"/logout\" hx-boost=\"false\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<nav class=\"app-sidebar\"><a href=\"/\" class=\"sidebar-logo\"><span class=\"logo-icon\">✈</span> <span class=\"logo-text\">Hakken</span></a><ul class=\"sidebar-nav\"><li><a href=\"/\" class=\"nav-item\"><sl-icon name=\"house\"></sl-icon> Trips</a></li><li><a href=\"/trips/new\" class=\"nav-item\"><sl-icon name=\"plus-circle\"></sl-icon> New Trip</a></li><li><a href=\"/settings\" class=\"nav-item\"><sl-icon name=\"gear\"></sl-icon> Settings</a></li></ul><div class=\"sidebar-footer\"><form method=\"POST\" action=\"/logout\" hx-boost=\"false\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 48, Col: 68}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 49, Col: 68}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -175,7 +175,7 @@ func Auth(title string, csrfToken string) templ.Component {
 		var templ_7745c5c3_Var9 string
 		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 63, Col: 17}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 64, Col: 17}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
