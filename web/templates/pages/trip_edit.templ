@@ -157,7 +157,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 			}
 			<div class="days-list">
 				for dayIdx, day := range leg.Days {
-					@dayBuilder(csrfToken, tripID, leg, legIdx, day, dayIdx)
+					@DayBuilder(csrfToken, tripID, leg, legIdx, day, dayIdx)
 				}
 			</div>
 			<button
@@ -243,7 +243,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 	</sl-dialog>
 }
 
-templ dayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day domain.Day, dayIdx int) {
+templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day domain.Day, dayIdx int) {
 	<div class="day-builder">
 		<div class="day-builder-header">
 			<div class="day-builder-info">
@@ -258,6 +258,11 @@ templ dayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 			<div class="day-builder-actions">
 				<button
 					class="btn btn-xs btn-ghost"
+					onclick="toggleDayEdit(this); return false;"
+					title="Edit day"
+				><sl-icon name="pencil"></sl-icon></button>
+				<button
+					class="btn btn-xs btn-ghost"
 					data-dialog={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) }
 					onclick="openDataDialog(this); return false;"
 				>
@@ -270,6 +275,44 @@ templ dayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 					</button>
 				</form>
 			</div>
+		</div>
+		<div class="day-edit-form" style="display:none">
+			<form
+				method="POST"
+				action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx)) }
+				class="form-stack"
+				hx-post={ "/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) }
+				hx-target="closest .day-builder"
+				hx-swap="outerHTML"
+				hx-select="unset"
+			>
+				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">Label</label>
+						<input class="field-input" type="text" name="label" value={ day.Label } placeholder="e.g. Bamboo Grove &amp; Arashiyama"/>
+					</div>
+					<div class="field">
+						<label class="field-label">Day type</label>
+						<select class="field-input" name="type">
+							<option value="normal" selected?={ day.Type == "normal" || day.Type == "" }>Normal</option>
+							<option value="arrival" selected?={ day.Type == "arrival" }>Arrival</option>
+							<option value="departure" selected?={ day.Type == "departure" }>Departure</option>
+							<option value="travel" selected?={ day.Type == "travel" }>Travel</option>
+							<option value="rest" selected?={ day.Type == "rest" }>Rest</option>
+							<option value="flexible" selected?={ day.Type == "flexible" }>Flexible</option>
+						</select>
+					</div>
+				</div>
+				<div class="field">
+					<label class="field-label">Notes</label>
+					<textarea class="field-textarea" name="notes" placeholder="Actionable logistics notes">{ day.Notes }</textarea>
+				</div>
+				<div class="day-edit-actions">
+					<button type="button" class="btn btn-xs btn-ghost" onclick="toggleDayEdit(this); return false;">Cancel</button>
+					<button type="submit" class="btn btn-xs btn-primary">Save</button>
+				</div>
+			</form>
 		</div>
 		<div class="day-events-preview">
 			for evtIdx, event := range day.Events {

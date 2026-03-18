@@ -194,6 +194,7 @@ func main() {
 	protected.POST("/trips/:id/legs/:legIdx/delete", builderHandler.DeleteLeg)
 	protected.POST("/trips/:id/legs/:legIdx/accommodation", builderHandler.UpdateAccommodation)
 	protected.POST("/trips/:id/legs/:legIdx/days", builderHandler.AddDay)
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx", builderHandler.UpdateDay)
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/delete", builderHandler.DeleteDay)
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events", builderHandler.AddEvent)
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/delete", builderHandler.DeleteEvent)

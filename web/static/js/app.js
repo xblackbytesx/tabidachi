@@ -62,6 +62,15 @@ function closeDataDialog(el) {
 }
 
 // ============================================================
+// Builder: inline day edit toggle
+// ============================================================
+function toggleDayEdit(btn) {
+  const dayBuilder = btn.closest('.day-builder');
+  const form = dayBuilder.querySelector('.day-edit-form');
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+// ============================================================
 // Builder: event type field switching
 // ============================================================
 function onEventTypeChangeByAttr(select) {

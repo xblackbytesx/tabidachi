@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/xblackbytesx/tabidachi/internal/domain"
 	"github.com/xblackbytesx/tabidachi/internal/repository"
+	"github.com/xblackbytesx/tabidachi/web/templates/pages"
 	"github.com/labstack/echo/v4"
 )
 
@@ -243,6 +244,49 @@ func (h *BuilderHandler) AddEvent(c echo.Context) error {
 
 	day.Events = append(day.Events, event)
 	return h.saveAndRedirect(c, trip)
+}
+
+// UpdateDay updates a day's label, type, and notes.
+func (h *BuilderHandler) UpdateDay(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+
+	dayType := c.FormValue("type")
+	if dayType == "" {
+		dayType = "normal"
+	}
+
+	trip.Data.Legs[legIdx].Days[dayIdx].Label = c.FormValue("label")
+	trip.Data.Legs[legIdx].Days[dayIdx].Type = dayType
+	trip.Data.Legs[legIdx].Days[dayIdx].Notes = c.FormValue("notes")
+
+	if err := h.trips.Update(c.Request().Context(), trip); err != nil {
+		slog.Error("builder: update day", "err", err)
+		return c.String(http.StatusInternalServerError, "error saving trip")
+	}
+
+	if isHTMX(c) {
+		return render(c, http.StatusOK, pages.DayBuilder(
+			csrfToken(c),
+			trip.ID.String(),
+			trip.Data.Legs[legIdx],
+			legIdx,
+			trip.Data.Legs[legIdx].Days[dayIdx],
+			dayIdx,
+		))
+	}
+	return redirect(c, "/trips/"+trip.ID.String()+"/edit")
 }
 
 // DeleteEvent removes an event from a day.
