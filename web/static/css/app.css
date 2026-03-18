@@ -27,6 +27,21 @@
   --font-mono: 'JetBrains Mono', 'Fira Mono', 'Cascadia Code', monospace;
 }
 
+/* Light mode palette — overrides applied when body has sl-theme-light */
+body.sl-theme-light {
+  --color-bg: #f5f5f5;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f0f0;
+  --color-surface-3: #e6e6e6;
+  --color-border: #e2e2e2;
+  --color-border-light: #cccccc;
+  --color-text: #111111;
+  --color-text-muted: #6b6b6b;
+  --color-text-faint: #aaaaaa;
+  --color-accent: #6366f1;
+  --color-accent-hover: #4f52d4;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -1004,6 +1019,63 @@ sl-details.day-notes {
 @media (min-width: 1400px) {
   .app-main { padding: 48px 64px; }
   .trip-view { max-width: 960px; }
+}
+
+/* ============================================================
+   Theme toggle button
+   ============================================================ */
+
+/* In dark mode: show sun icon + "Light mode" label */
+body.sl-theme-dark .theme-icon-dark,
+body.sl-theme-dark .theme-label-dark { display: none; }
+
+/* In light mode: show moon icon + "Dark mode" label */
+body.sl-theme-light .theme-icon-light,
+body.sl-theme-light .theme-label-light { display: none; }
+
+/* ============================================================
+   Light mode overrides for hardcoded dark-palette colors
+   ============================================================ */
+
+/* Trip card hover shadow — lighter on a light background */
+body.sl-theme-light .trip-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+/* Badges — swap light text colors for darker accessible equivalents */
+body.sl-theme-light .badge-active {
+  background: rgba(22,163,74,0.12);
+  color: #16a34a;
+  border-color: rgba(22,163,74,0.3);
+}
+body.sl-theme-light .badge-today {
+  background: rgba(99,102,241,0.12);
+  color: #4f46e5;
+  border-color: rgba(99,102,241,0.35);
+}
+body.sl-theme-light .badge-optional { color: #6b7280; }
+body.sl-theme-light .badge-arrival  { background: rgba(22,163,74,0.10);  color: #16a34a; }
+body.sl-theme-light .badge-departure{ background: rgba(220,38,38,0.10);  color: #dc2626; }
+body.sl-theme-light .badge-travel   { background: rgba(37,99,235,0.10);   color: #2563eb; }
+body.sl-theme-light .badge-rest     { background: rgba(147,51,234,0.10);  color: #9333ea; }
+body.sl-theme-light .badge-flexible { background: rgba(217,119,6,0.10);   color: #d97706; }
+body.sl-theme-light .badge-checkin  { background: rgba(22,163,74,0.10);  color: #16a34a; }
+body.sl-theme-light .badge-checkout { background: rgba(220,38,38,0.10);  color: #dc2626; }
+
+/* Alert / error text */
+body.sl-theme-light .alert-error { color: #dc2626; }
+body.sl-theme-light .image-error {
+  color: #dc2626;
+  background: rgba(220,38,38,0.08);
+  border-color: rgba(220,38,38,0.25);
+}
+body.sl-theme-light .form-error { color: #dc2626; }
+
+/* Wizard step "done" circle */
+body.sl-theme-light .wizard-step.done .step-num {
+  background: rgba(22,163,74,0.12);
+  border-color: rgba(22,163,74,0.35);
+  color: #16a34a;
 }
 
 /* ============================================================
