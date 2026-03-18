@@ -169,6 +169,10 @@ func main() {
 	protected.POST("/trips/:id/legs/:legIdx/image", imageHandler.SetLegImage)
 	protected.DELETE("/trips/:id/legs/:legIdx/image", imageHandler.ClearLegImage)
 	protected.POST("/trips/:id/legs/:legIdx/image/clear", imageHandler.ClearLegImage)
+	protected.GET("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/image/search", imageHandler.EventImageSearch)
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/image", imageHandler.SetEventImage)
+	protected.DELETE("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/image", imageHandler.ClearEventImage)
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/image/clear", imageHandler.ClearEventImage)
 
 	// Settings & token management
 	protected.GET("/settings", settingsHandler.Get)

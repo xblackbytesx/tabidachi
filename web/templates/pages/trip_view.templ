@@ -127,10 +127,20 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 				}
 			</div>
 		</div>
+		<dialog id="event-lightbox" class="event-lightbox-dialog">
+			<button class="event-lightbox-close" onclick="document.getElementById('event-lightbox').close()">
+				<sl-icon name="x-lg"></sl-icon>
+			</button>
+			<img id="event-lightbox-img" src="" alt="" class="event-lightbox-img"/>
+		</dialog>
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
 				scrollToToday();
 			});
+			function openEventLightbox(btn) {
+				document.getElementById('event-lightbox-img').src = btn.dataset.fullUrl;
+				document.getElementById('event-lightbox').showModal();
+			}
 		</script>
 	}
 }
@@ -181,47 +191,54 @@ templ daySection(trip *domain.Trip, day domain.Day) {
 
 templ eventCard(event domain.Event) {
 	<div class={ "event-card", "event-" + event.Type }>
-		<div class="event-body">
-			<div class="event-header">
-				<span class="event-icon">
-					if event.Type == "accommodation" {
-						<sl-icon name="building"></sl-icon>
-					} else {
-						<sl-icon name="geo-alt"></sl-icon>
-					}
-				</span>
-				<span class="event-title">{ event.Title }</span>
-				if event.Optional {
-					<span class="badge badge-optional">Optional</span>
-				}
-				if event.StartTime != "" {
-					<span class="event-time">
-						{ event.StartTime }
-						if event.EndTime != "" {
-							<span class="event-time-sep">→</span>{ event.EndTime }
+		<div class="event-card-inner">
+			if event.Type == "activity" && event.ImageThumbURL != "" {
+				<button class="event-thumb-btn" onclick="openEventLightbox(this)" data-full-url={ event.ImageURL }>
+					<img src={ event.ImageThumbURL } alt={ event.Title } class="event-thumb" loading="lazy"/>
+				</button>
+			}
+			<div class="event-body">
+				<div class="event-header">
+					<span class="event-icon">
+						if event.Type == "accommodation" {
+							<sl-icon name="building"></sl-icon>
+						} else {
+							<sl-icon name="geo-alt"></sl-icon>
 						}
 					</span>
-				}
-			</div>
-			if event.Location != "" {
-				<div class="event-location"><sl-icon name="pin-map"></sl-icon> { event.Location }</div>
-			}
-			if event.Type == "accommodation" {
-				<div class="event-accomm-type">
-					if event.CheckIn {
-						<span class="badge badge-checkin">Check-in</span>
+					<span class="event-title">{ event.Title }</span>
+					if event.Optional {
+						<span class="badge badge-optional">Optional</span>
 					}
-					if event.CheckOut {
-						<span class="badge badge-checkout">Check-out</span>
+					if event.StartTime != "" {
+						<span class="event-time">
+							{ event.StartTime }
+							if event.EndTime != "" {
+								<span class="event-time-sep">→</span>{ event.EndTime }
+							}
+						</span>
 					}
 				</div>
-			}
-			if event.BookingReference != "" {
-				<div class="event-ref"><sl-icon name="ticket"></sl-icon> Ref: { event.BookingReference }</div>
-			}
-			if event.Notes != "" {
-				<div class="event-notes">{ event.Notes }</div>
-			}
+				if event.Location != "" {
+					<div class="event-location"><sl-icon name="pin-map"></sl-icon> { event.Location }</div>
+				}
+				if event.Type == "accommodation" {
+					<div class="event-accomm-type">
+						if event.CheckIn {
+							<span class="badge badge-checkin">Check-in</span>
+						}
+						if event.CheckOut {
+							<span class="badge badge-checkout">Check-out</span>
+						}
+					</div>
+				}
+				if event.BookingReference != "" {
+					<div class="event-ref"><sl-icon name="ticket"></sl-icon> Ref: { event.BookingReference }</div>
+				}
+				if event.Notes != "" {
+					<div class="event-notes">{ event.Notes }</div>
+				}
+			</div>
 		</div>
 	</div>
 }

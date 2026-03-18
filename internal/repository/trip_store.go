@@ -158,6 +158,27 @@ func (s *TripStore) UpdateLegImage(ctx context.Context, id, userID uuid.UUID, le
 	return s.Update(ctx, trip)
 }
 
+// UpdateEventImage updates the image fields on a specific event in the JSONB data.
+func (s *TripStore) UpdateEventImage(ctx context.Context, id, userID uuid.UUID, legIdx, dayIdx, eventIdx int, imageURL, thumbURL, credit string) error {
+	trip, err := s.GetByID(ctx, id, userID)
+	if err != nil {
+		return fmt.Errorf("update event image: %w", err)
+	}
+	if legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return fmt.Errorf("update event image: leg index %d out of range", legIdx)
+	}
+	if dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return fmt.Errorf("update event image: day index %d out of range", dayIdx)
+	}
+	if eventIdx < 0 || eventIdx >= len(trip.Data.Legs[legIdx].Days[dayIdx].Events) {
+		return fmt.Errorf("update event image: event index %d out of range", eventIdx)
+	}
+	trip.Data.Legs[legIdx].Days[dayIdx].Events[eventIdx].ImageURL = imageURL
+	trip.Data.Legs[legIdx].Days[dayIdx].Events[eventIdx].ImageThumbURL = thumbURL
+	trip.Data.Legs[legIdx].Days[dayIdx].Events[eventIdx].ImageCredit = credit
+	return s.Update(ctx, trip)
+}
+
 // nullableString returns nil for empty strings so PostgreSQL stores NULL.
 func nullableString(s string) interface{} {
 	if s == "" {

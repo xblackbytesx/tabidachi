@@ -292,6 +292,9 @@ templ dayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 						<button type="submit" class="btn btn-xs btn-ghost" title="Delete event">×</button>
 					</form>
 				</div>
+				if event.Type == "activity" {
+					@EventImageSection(csrfToken, tripID, strconv.Itoa(legIdx), strconv.Itoa(dayIdx), strconv.Itoa(evtIdx), event.ImageURL, event.ImageCredit, "")
+				}
 			}
 		</div>
 	</div>

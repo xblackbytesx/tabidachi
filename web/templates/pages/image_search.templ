@@ -32,7 +32,7 @@ templ imageThumb(csrfToken, postTarget, sectionID string, r images.ImageResult) 
 			type="button"
 			class="image-thumb-btn"
 			hx-post={ postTarget }
-			hx-vals={ `{"imageURL":"` + r.URL + `","credit":"` + r.Credit + `"}` }
+			hx-vals={ `{"imageURL":"` + r.URL + `","thumbURL":"` + r.ThumbURL + `","credit":"` + r.Credit + `"}` }
 			hx-headers={ `{"X-CSRF-Token":"` + csrfToken + `"}` }
 			hx-target={ "#" + sectionID }
 			hx-select={ "#" + sectionID }
@@ -103,6 +103,61 @@ templ LegImagePreview(csrfToken, tripID, legIdx, imageURL, credit string) {
 
 templ LegImagePreviewError(csrfToken, tripID, legIdx, imageURL, credit, errMsg string) {
 	@legImageSection(csrfToken, tripID, legIdx, imageURL, credit, errMsg)
+}
+
+// EventImageSearchResults renders the HTMX partial for event image search results.
+templ EventImageSearchResults(csrfToken, tripID, legIdx, dayIdx, eventIdx string, results []images.ImageResult) {
+	<div id={ "event-image-results-" + legIdx + "-" + dayIdx + "-" + eventIdx } class="image-results-grid">
+		for _, r := range results {
+			@imageThumb(csrfToken, "/trips/"+tripID+"/legs/"+legIdx+"/days/"+dayIdx+"/events/"+eventIdx+"/image", "event-image-section-"+legIdx+"-"+dayIdx+"-"+eventIdx, r)
+		}
+		if len(results) == 0 {
+			<p class="search-empty">No results found.</p>
+		}
+	</div>
+}
+
+// EventImageSection renders the image picker panel for an activity event in the trip editor.
+templ EventImageSection(csrfToken, tripID, legIdx, dayIdx, eventIdx, imageURL, credit, errMsg string) {
+	<div class="image-section event-image-section" id={ "event-image-section-" + legIdx + "-" + dayIdx + "-" + eventIdx }>
+		<h4 class="image-section-title">Event photo</h4>
+		if errMsg != "" {
+			<p class="image-error">{ errMsg }</p>
+		}
+		if imageURL != "" {
+			<div class="image-preview">
+				<img src={ imageURL } alt={ credit } class="image-preview-img" referrerpolicy="no-referrer"/>
+				if credit != "" {
+					<p class="image-credit">{ credit }</p>
+				}
+				<button
+					type="button"
+					class="btn btn-sm btn-danger"
+					hx-delete={ "/trips/" + tripID + "/legs/" + legIdx + "/days/" + dayIdx + "/events/" + eventIdx + "/image" }
+					hx-headers={ `{"X-CSRF-Token":"` + csrfToken + `"}` }
+					hx-target={ "#event-image-section-" + legIdx + "-" + dayIdx + "-" + eventIdx }
+					hx-select={ "#event-image-section-" + legIdx + "-" + dayIdx + "-" + eventIdx }
+					hx-swap="outerHTML"
+				>Remove photo</button>
+			</div>
+		} else {
+			<p class="image-placeholder">No photo set.</p>
+		}
+		<div class="image-search-form">
+			<input
+				type="text"
+				class="field-input"
+				placeholder="Search for a photo (e.g. Fushimi Inari)..."
+				hx-get={ "/trips/" + tripID + "/legs/" + legIdx + "/days/" + dayIdx + "/events/" + eventIdx + "/image/search" }
+				hx-trigger="input changed delay:500ms"
+				hx-target={ "#event-image-results-" + legIdx + "-" + dayIdx + "-" + eventIdx }
+				hx-select={ "#event-image-results-" + legIdx + "-" + dayIdx + "-" + eventIdx }
+				hx-swap="outerHTML"
+				name="q"
+			/>
+		</div>
+		<div id={ "event-image-results-" + legIdx + "-" + dayIdx + "-" + eventIdx }></div>
+	</div>
 }
 
 templ legImageSection(csrfToken, tripID, legIdx, imageURL, credit, errMsg string) {

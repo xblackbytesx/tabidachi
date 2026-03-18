@@ -107,6 +107,11 @@ type Event struct {
 	// accommodation event fields
 	CheckIn  bool `json:"checkIn,omitempty"`
 	CheckOut bool `json:"checkOut,omitempty"`
+
+	// image fields (activity events only)
+	ImageURL      string `json:"imageURL,omitempty"`
+	ImageThumbURL string `json:"imageThumbURL,omitempty"`
+	ImageCredit   string `json:"imageCredit,omitempty"`
 }
 
 type TransitPoint struct {

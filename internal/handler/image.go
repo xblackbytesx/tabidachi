@@ -151,3 +151,103 @@ func (h *ImageHandler) ClearLegImage(c echo.Context) error {
 	}
 	return render(c, http.StatusOK, pages.LegImagePreview(csrfToken(c), tripID.String(), legIdxStr, "", ""))
 }
+
+// EventImageSearch handles GET /trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/image/search?q=
+func (h *ImageHandler) EventImageSearch(c echo.Context) error {
+	legIdx := c.Param("legIdx")
+	dayIdx := c.Param("dayIdx")
+	eventIdx := c.Param("eventIdx")
+	query := c.QueryParam("q")
+	if query == "" {
+		return c.HTML(http.StatusOK, `<div id="event-image-results-`+legIdx+`-`+dayIdx+`-`+eventIdx+`"></div>`)
+	}
+	results, err := h.imageSvc.Search(c.Request().Context(), query)
+	if err != nil {
+		slog.Warn("event image search", "query", query, "err", err)
+		return c.HTML(http.StatusOK, `<div id="event-image-results-`+legIdx+`-`+dayIdx+`-`+eventIdx+`"><p class="search-error">Search failed — try a different query.</p></div>`)
+	}
+	return render(c, http.StatusOK, pages.EventImageSearchResults(csrfToken(c), c.Param("id"), legIdx, dayIdx, eventIdx, results))
+}
+
+// SetEventImage handles POST /trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/image
+func (h *ImageHandler) SetEventImage(c echo.Context) error {
+	userID, err := parseUserID(c)
+	if err != nil {
+		return redirect(c, "/login")
+	}
+	tripID, err := parseTripID(c)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid trip id")
+	}
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid day index")
+	}
+	eventIdx, err := strconv.Atoi(c.Param("eventIdx"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid event index")
+	}
+	legIdxStr := strconv.Itoa(legIdx)
+	dayIdxStr := strconv.Itoa(dayIdx)
+	eventIdxStr := strconv.Itoa(eventIdx)
+
+	remoteURL := c.FormValue("imageURL")
+	thumbRemoteURL := c.FormValue("thumbURL")
+	credit := c.FormValue("credit")
+
+	if remoteURL == "" {
+		return render(c, http.StatusOK, pages.EventImageSection(csrfToken(c), tripID.String(), legIdxStr, dayIdxStr, eventIdxStr, "", "", "No image URL provided."))
+	}
+	localPath, err := images.Download(c.Request().Context(), remoteURL, h.imageSvc.UploadsDir())
+	if err != nil {
+		slog.Error("set event image download", "url", remoteURL, "err", err)
+		return render(c, http.StatusOK, pages.EventImageSection(csrfToken(c), tripID.String(), legIdxStr, dayIdxStr, eventIdxStr, "", "", "Failed to download image — please try another."))
+	}
+	localFull := "/" + localPath
+	localThumb := localFull
+	if thumbRemoteURL != "" && thumbRemoteURL != remoteURL {
+		if thumbPath, err := images.Download(c.Request().Context(), thumbRemoteURL, h.imageSvc.UploadsDir()); err == nil {
+			localThumb = "/" + thumbPath
+		}
+	}
+	if err := h.trips.UpdateEventImage(c.Request().Context(), tripID, userID, legIdx, dayIdx, eventIdx, localFull, localThumb, credit); err != nil {
+		slog.Error("set event image update", "err", err)
+		return render(c, http.StatusOK, pages.EventImageSection(csrfToken(c), tripID.String(), legIdxStr, dayIdxStr, eventIdxStr, "", "", "Failed to save image — please try again."))
+	}
+	return render(c, http.StatusOK, pages.EventImageSection(csrfToken(c), tripID.String(), legIdxStr, dayIdxStr, eventIdxStr, localFull, credit, ""))
+}
+
+// ClearEventImage handles DELETE /trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/image
+func (h *ImageHandler) ClearEventImage(c echo.Context) error {
+	userID, err := parseUserID(c)
+	if err != nil {
+		return redirect(c, "/login")
+	}
+	tripID, err := parseTripID(c)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid trip id")
+	}
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid day index")
+	}
+	eventIdx, err := strconv.Atoi(c.Param("eventIdx"))
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid event index")
+	}
+	legIdxStr := strconv.Itoa(legIdx)
+	dayIdxStr := strconv.Itoa(dayIdx)
+	eventIdxStr := strconv.Itoa(eventIdx)
+	if err := h.trips.UpdateEventImage(c.Request().Context(), tripID, userID, legIdx, dayIdx, eventIdx, "", "", ""); err != nil {
+		slog.Error("clear event image", "err", err)
+	}
+	return render(c, http.StatusOK, pages.EventImageSection(csrfToken(c), tripID.String(), legIdxStr, dayIdxStr, eventIdxStr, "", "", ""))
+}
