@@ -11,7 +11,7 @@
   --color-border-light: #333333;
   --color-text: #e8e8e8;
   --color-text-muted: #9a9a9a;
-  --color-text-faint: #686868;
+  --color-text-faint: #7a7a7a;
   --color-accent: #6366f1;
   --color-accent-hover: #7c7ff4;
   --color-transit: #3b82f6;
@@ -37,7 +37,7 @@ body.sl-theme-light {
   --color-border-light: #cccccc;
   --color-text: #111111;
   --color-text-muted: #6b6b6b;
-  --color-text-faint: #909090;
+  --color-text-faint: #767676;
   --color-accent: #6366f1;
   --color-accent-hover: #4f52d4;
 }
@@ -62,6 +62,26 @@ body {
 
 a { color: var(--color-accent); text-decoration: none; }
 a:hover { color: var(--color-accent-hover); text-decoration: underline; }
+
+/* Skip to content — hidden until focused via keyboard */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 999;
+  padding: 8px 16px;
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip-to-content:focus {
+  top: 12px;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
 
 /* ============================================================
    Layout

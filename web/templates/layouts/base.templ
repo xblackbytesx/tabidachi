@@ -23,6 +23,7 @@ templ Base(title string, csrfToken string) {
 			hx-swap="outerHTML show:window:top"
 		>
 			<script>if(localStorage.getItem('tabidachi-theme')==='light'){document.body.classList.replace('sl-theme-dark','sl-theme-light');}</script>
+			<a href="#main-content" class="skip-to-content">Skip to content</a>
 			<div class="app-layout">
 				@Sidebar(csrfToken)
 				<main id="main-content" class="app-main">
@@ -36,7 +37,7 @@ templ Base(title string, csrfToken string) {
 }
 
 templ Sidebar(csrfToken string) {
-	<nav class="app-sidebar">
+	<nav class="app-sidebar" aria-label="Main navigation">
 		<a href="/" class="sidebar-logo">
 			<span class="logo-icon">✈</span>
 			<span class="logo-text">Tabidachi</span>

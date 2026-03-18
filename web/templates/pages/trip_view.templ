@@ -128,18 +128,20 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 				}
 			</div>
 		</div>
-		<dialog id="event-lightbox" class="event-lightbox-dialog">
-			<button class="event-lightbox-close" onclick="document.getElementById('event-lightbox').close()">
+		<dialog id="event-lightbox" class="event-lightbox-dialog" aria-label="Event photo viewer">
+			<button class="event-lightbox-close" onclick="document.getElementById('event-lightbox').close()" aria-label="Close lightbox">
 				<sl-icon name="x-lg"></sl-icon>
 			</button>
-			<img id="event-lightbox-img" src="" alt="" class="event-lightbox-img"/>
+			<img id="event-lightbox-img" src="" alt="Event photo" class="event-lightbox-img"/>
 		</dialog>
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
 				scrollToToday();
 			});
 			function openEventLightbox(btn) {
-				document.getElementById('event-lightbox-img').src = btn.dataset.fullUrl;
+				var img = document.getElementById('event-lightbox-img');
+				img.src = btn.dataset.fullUrl;
+				img.alt = btn.getAttribute('aria-label') || 'Event photo';
 				document.getElementById('event-lightbox').showModal();
 			}
 		</script>
@@ -194,7 +196,7 @@ templ eventCard(event domain.Event) {
 	<div class={ "event-card", "event-" + event.Type }>
 		<div class="event-card-inner">
 			if event.Type == "activity" && event.ImageThumbURL != "" {
-				<button class="event-thumb-btn" onclick="openEventLightbox(this)" data-full-url={ event.ImageURL }>
+				<button class="event-thumb-btn" onclick="openEventLightbox(this)" data-full-url={ event.ImageURL } aria-label={ "View photo of " + event.Title }>
 					<img src={ event.ImageThumbURL } alt={ event.Title } class="event-thumb" loading="lazy"/>
 				</button>
 			}

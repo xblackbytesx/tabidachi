@@ -41,6 +41,7 @@ templ imageThumb(csrfToken, postTarget, sectionID string, r images.ImageResult) 
 			hx-select={ "#" + sectionID }
 			hx-swap="outerHTML"
 			hx-disabled-elt="this"
+			aria-label={ "Select image: " + r.Credit }
 		>
 			<img src={ r.DisplayURL() } alt={ r.Credit } class="image-thumb" loading="lazy" referrerpolicy="no-referrer"/>
 			<div class="image-thumb-credit">{ r.Credit }</div>
@@ -98,6 +99,7 @@ templ tripImageSection(csrfToken, tripID, imageURL, credit, errMsg string) {
 				type="text"
 				class="field-input"
 				placeholder="Search for an image (e.g. Tokyo)..."
+				aria-label="Search for a cover image"
 				hx-get={ "/trips/" + tripID + "/image/search" }
 				hx-trigger="input changed delay:500ms"
 				hx-target="#image-results"
@@ -162,6 +164,7 @@ templ EventImageSection(csrfToken, tripID, legIdx, dayIdx, eventIdx, imageURL, c
 				type="text"
 				class="field-input"
 				placeholder="Search for a photo (e.g. Fushimi Inari)..."
+				aria-label="Search for an event photo"
 				hx-get={ "/trips/" + tripID + "/legs/" + legIdx + "/days/" + dayIdx + "/events/" + eventIdx + "/image/search" }
 				hx-trigger="input changed delay:500ms"
 				hx-target={ "#event-image-results-" + legIdx + "-" + dayIdx + "-" + eventIdx }
@@ -202,6 +205,7 @@ templ legImageSection(csrfToken, tripID, legIdx, imageURL, credit, errMsg string
 				type="text"
 				class="field-input"
 				placeholder="Search for an image (e.g. Osaka)..."
+				aria-label="Search for a leg cover image"
 				hx-get={ "/trips/" + tripID + "/legs/" + legIdx + "/image/search" }
 				hx-trigger="input changed delay:500ms"
 				hx-target={ "#leg-image-results-" + legIdx }

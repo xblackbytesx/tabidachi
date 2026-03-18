@@ -260,6 +260,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 					class="btn btn-xs btn-ghost"
 					onclick="toggleDayEdit(this); return false;"
 					title="Edit day"
+					aria-label="Edit day"
 				><sl-icon name="pencil"></sl-icon></button>
 				<button
 					class="btn btn-xs btn-ghost"
@@ -270,7 +271,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 				</button>
 				<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/delete") } style="display:inline">
 					<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
-					<button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Delete this day?')">
+					<button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Delete this day?')" aria-label="Delete day">
 						<sl-icon name="trash"></sl-icon>
 					</button>
 				</form>
@@ -328,7 +329,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 							}
 							<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
 								<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
-								<button type="submit" class="btn btn-xs btn-ghost" title="Delete event">×</button>
+								<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event">×</button>
 							</form>
 						</div>
 						@EventImageSection(csrfToken, tripID, strconv.Itoa(legIdx), strconv.Itoa(dayIdx), strconv.Itoa(evtIdx), event.ImageURL, event.ImageCredit, "")
@@ -348,7 +349,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 						}
 						<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
 							<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
-							<button type="submit" class="btn btn-xs btn-ghost" title="Delete event">×</button>
+							<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event">×</button>
 						</form>
 					</div>
 				}

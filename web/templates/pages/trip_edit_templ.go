@@ -797,14 +797,14 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "</div><div class=\"day-builder-actions\"><button class=\"btn btn-xs btn-ghost\" onclick=\"toggleDayEdit(this); return false;\" title=\"Edit day\"><sl-icon name=\"pencil\"></sl-icon></button> <button class=\"btn btn-xs btn-ghost\" data-dialog=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "</div><div class=\"day-builder-actions\"><button class=\"btn btn-xs btn-ghost\" onclick=\"toggleDayEdit(this); return false;\" title=\"Edit day\" aria-label=\"Edit day\"><sl-icon name=\"pencil\"></sl-icon></button> <button class=\"btn btn-xs btn-ghost\" data-dialog=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var50 string
 		templ_7745c5c3_Var50, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 266, Col: 72}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 267, Col: 72}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var50))
 		if templ_7745c5c3_Err != nil {
@@ -817,7 +817,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var51 templ.SafeURL
 		templ_7745c5c3_Var51, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/delete"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 271, Col: 146}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 272, Col: 146}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var51))
 		if templ_7745c5c3_Err != nil {
@@ -830,20 +830,20 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var52 string
 		templ_7745c5c3_Var52, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 272, Col: 69}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 273, Col: 69}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var52))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, "\"> <button type=\"submit\" class=\"btn btn-xs btn-danger\" onclick=\"return confirm('Delete this day?')\"><sl-icon name=\"trash\"></sl-icon></button></form></div></div><div class=\"day-edit-form\" style=\"display:none\"><form method=\"POST\" action=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, "\"> <button type=\"submit\" class=\"btn btn-xs btn-danger\" onclick=\"return confirm('Delete this day?')\" aria-label=\"Delete day\"><sl-icon name=\"trash\"></sl-icon></button></form></div></div><div class=\"day-edit-form\" style=\"display:none\"><form method=\"POST\" action=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var53 templ.SafeURL
 		templ_7745c5c3_Var53, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 282, Col: 114}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 283, Col: 114}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var53))
 		if templ_7745c5c3_Err != nil {
@@ -856,7 +856,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var54 string
 		templ_7745c5c3_Var54, templ_7745c5c3_Err = templ.JoinStringErrs("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 284, Col: 100}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 285, Col: 100}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var54))
 		if templ_7745c5c3_Err != nil {
@@ -869,7 +869,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var55 string
 		templ_7745c5c3_Var55, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 289, Col: 68}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 290, Col: 68}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var55))
 		if templ_7745c5c3_Err != nil {
@@ -882,7 +882,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var56 string
 		templ_7745c5c3_Var56, templ_7745c5c3_Err = templ.JoinStringErrs(day.Label)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 293, Col: 75}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 294, Col: 75}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var56))
 		if templ_7745c5c3_Err != nil {
@@ -955,7 +955,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var57 string
 		templ_7745c5c3_Var57, templ_7745c5c3_Err = templ.JoinStringErrs(day.Notes)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 309, Col: 103}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 310, Col: 103}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var57))
 		if templ_7745c5c3_Err != nil {
@@ -974,7 +974,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				var templ_7745c5c3_Var58 string
 				templ_7745c5c3_Var58, templ_7745c5c3_Err = templ.JoinStringErrs(event.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 325, Col: 54}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 326, Col: 54}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var58))
 				if templ_7745c5c3_Err != nil {
@@ -992,7 +992,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 					var templ_7745c5c3_Var59 string
 					templ_7745c5c3_Var59, templ_7745c5c3_Err = templ.JoinStringErrs(event.StartTime)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 327, Col: 58}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 328, Col: 58}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var59))
 					if templ_7745c5c3_Err != nil {
@@ -1010,7 +1010,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				var templ_7745c5c3_Var60 templ.SafeURL
 				templ_7745c5c3_Var60, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete"))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 329, Col: 185}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 330, Col: 185}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var60))
 				if templ_7745c5c3_Err != nil {
@@ -1023,13 +1023,13 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				var templ_7745c5c3_Var61 string
 				templ_7745c5c3_Var61, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 330, Col: 72}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 331, Col: 72}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var61))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 92, "\"> <button type=\"submit\" class=\"btn btn-xs btn-ghost\" title=\"Delete event\">×</button></form></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 92, "\"> <button type=\"submit\" class=\"btn btn-xs btn-ghost\" title=\"Delete event\" aria-label=\"Delete event\">×</button></form></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1076,7 +1076,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 					var templ_7745c5c3_Var64 string
 					templ_7745c5c3_Var64, templ_7745c5c3_Err = templ.JoinStringErrs(domain.TransportIcon(event.TransportMode))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 340, Col: 65}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 341, Col: 65}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var64))
 					if templ_7745c5c3_Err != nil {
@@ -1099,7 +1099,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				var templ_7745c5c3_Var65 string
 				templ_7745c5c3_Var65, templ_7745c5c3_Err = templ.JoinStringErrs(event.Title)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 345, Col: 53}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 346, Col: 53}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var65))
 				if templ_7745c5c3_Err != nil {
@@ -1117,7 +1117,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 					var templ_7745c5c3_Var66 string
 					templ_7745c5c3_Var66, templ_7745c5c3_Err = templ.JoinStringErrs(event.StartTime)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 347, Col: 57}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 348, Col: 57}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var66))
 					if templ_7745c5c3_Err != nil {
@@ -1135,7 +1135,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				var templ_7745c5c3_Var67 templ.SafeURL
 				templ_7745c5c3_Var67, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete"))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 349, Col: 184}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 350, Col: 184}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var67))
 				if templ_7745c5c3_Err != nil {
@@ -1148,13 +1148,13 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				var templ_7745c5c3_Var68 string
 				templ_7745c5c3_Var68, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 350, Col: 71}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 351, Col: 71}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var68))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 106, "\"> <button type=\"submit\" class=\"btn btn-xs btn-ghost\" title=\"Delete event\">×</button></form></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 106, "\"> <button type=\"submit\" class=\"btn btn-xs btn-ghost\" title=\"Delete event\" aria-label=\"Delete event\">×</button></form></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1167,7 +1167,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var69 string
 		templ_7745c5c3_Var69, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 359, Col: 88}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 360, Col: 88}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var69))
 		if templ_7745c5c3_Err != nil {
@@ -1180,7 +1180,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var70 templ.SafeURL
 		templ_7745c5c3_Var70, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 362, Col: 125}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 363, Col: 125}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var70))
 		if templ_7745c5c3_Err != nil {
@@ -1193,7 +1193,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var71 string
 		templ_7745c5c3_Var71, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("event-form-%d-%d", legIdx, dayIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 364, Col: 55}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 365, Col: 55}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var71))
 		if templ_7745c5c3_Err != nil {
@@ -1206,7 +1206,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var72 string
 		templ_7745c5c3_Var72, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 366, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 367, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var72))
 		if templ_7745c5c3_Err != nil {
@@ -1219,7 +1219,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var73 string
 		templ_7745c5c3_Var73, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("event-form-%d-%d", legIdx, dayIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 373, Col: 71}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 374, Col: 71}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var73))
 		if templ_7745c5c3_Err != nil {
@@ -1232,7 +1232,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		var templ_7745c5c3_Var74 string
 		templ_7745c5c3_Var74, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 482, Col: 72}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 483, Col: 72}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var74))
 		if templ_7745c5c3_Err != nil {
