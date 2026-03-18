@@ -1,9 +1,9 @@
 package pages
 
 import (
-	"github.com/hakken/hakken/internal/domain"
-	"github.com/hakken/hakken/internal/format"
-	"github.com/hakken/hakken/web/templates/layouts"
+	"github.com/xblackbytesx/tabidachi/internal/domain"
+	"github.com/xblackbytesx/tabidachi/internal/format"
+	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
 )
 
 templ Settings(csrfToken string, tokens []*domain.APIToken, errMsg string, dateFormat string) {
@@ -25,7 +25,7 @@ templ Settings(csrfToken string, tokens []*domain.APIToken, errMsg string, dateF
 				<section class="settings-section">
 					<h2 class="settings-section-title">Personal Access Tokens</h2>
 					<p class="settings-section-desc">
-						Tokens allow the Hakken mobile app and other API clients to read your trips.
+						Tokens allow the Tabidachi mobile app and other API clients to read your trips.
 						Each token has full read access to your account — treat it like a password.
 					</p>
 					if errMsg != "" {
@@ -82,7 +82,7 @@ templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken
 				<section class="settings-section">
 					<h2 class="settings-section-title">Personal Access Tokens</h2>
 					<p class="settings-section-desc">
-						Tokens allow the Hakken mobile app and other API clients to read your trips.
+						Tokens allow the Tabidachi mobile app and other API clients to read your trips.
 						Each token has full read access to your account — treat it like a password.
 					</p>
 					<div class="token-reveal">
@@ -129,7 +129,7 @@ templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken
 templ dateFormatSection(csrfToken string, dateFormat string) {
 	<section class="settings-section">
 		<h2 class="settings-section-title">Date format</h2>
-		<p class="settings-section-desc">Choose how dates appear throughout Hakken.</p>
+		<p class="settings-section-desc">Choose how dates appear throughout Tabidachi.</p>
 		<form
 			method="POST"
 			action="/settings/date-format"

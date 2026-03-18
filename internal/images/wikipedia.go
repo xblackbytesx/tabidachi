@@ -37,7 +37,7 @@ func (p *WikipediaProvider) fetchSummary(ctx context.Context, title string) (*wi
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "Hakken/1.0 (itinerary manager)")
+	req.Header.Set("User-Agent", "Tabidachi/1.0 (itinerary manager)")
 	resp, err := p.client.Do(req)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (p *WikipediaProvider) search(ctx context.Context, query string, n int) ([]
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "Hakken/1.0 (itinerary manager)")
+	req.Header.Set("User-Agent", "Tabidachi/1.0 (itinerary manager)")
 	resp, err := p.client.Do(req)
 	if err != nil {
 		return nil, err

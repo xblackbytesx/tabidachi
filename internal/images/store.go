@@ -18,7 +18,7 @@ func Download(ctx context.Context, remoteURL, uploadsDir string) (string, error)
 	if err != nil {
 		return "", fmt.Errorf("download image request: %w", err)
 	}
-	req.Header.Set("User-Agent", "Hakken/1.0 (itinerary manager)")
+	req.Header.Set("User-Agent", "Tabidachi/1.0 (itinerary manager)")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("download image: %w", err)

@@ -11,13 +11,13 @@ import (
 	"time"
 
 	"github.com/gorilla/csrf"
-	"github.com/hakken/hakken/internal/auth"
-	"github.com/hakken/hakken/internal/config"
-	appdb "github.com/hakken/hakken/internal/db"
-	"github.com/hakken/hakken/internal/handler"
-	"github.com/hakken/hakken/internal/images"
-	appmiddleware "github.com/hakken/hakken/internal/middleware"
-	"github.com/hakken/hakken/internal/repository"
+	"github.com/xblackbytesx/tabidachi/internal/auth"
+	"github.com/xblackbytesx/tabidachi/internal/config"
+	appdb "github.com/xblackbytesx/tabidachi/internal/db"
+	"github.com/xblackbytesx/tabidachi/internal/handler"
+	"github.com/xblackbytesx/tabidachi/internal/images"
+	appmiddleware "github.com/xblackbytesx/tabidachi/internal/middleware"
+	"github.com/xblackbytesx/tabidachi/internal/repository"
 	"github.com/labstack/echo/v4"
 	echomiddleware "github.com/labstack/echo/v4/middleware"
 )
@@ -93,7 +93,7 @@ func main() {
 		[]byte(cfg.CSRFAuthKey),
 		csrf.Secure(cfg.SecureCookies),
 		csrf.RequestHeader("X-CSRF-Token"),
-		csrf.CookieName("hakken-csrf"),
+		csrf.CookieName("tabidachi-csrf"),
 		csrf.TrustedOrigins([]string{appURL.Host}),
 		csrf.ErrorHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			slog.Error("CSRF validation failed",

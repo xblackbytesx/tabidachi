@@ -1,4 +1,4 @@
-// Hakken — app.js
+// Tabidachi — app.js
 
 // ============================================================
 // Theme toggle (light / dark)
@@ -7,10 +7,10 @@ function toggleTheme() {
   var isDark = document.body.classList.contains('sl-theme-dark');
   if (isDark) {
     document.body.classList.replace('sl-theme-dark', 'sl-theme-light');
-    localStorage.setItem('hakken-theme', 'light');
+    localStorage.setItem('tabidachi-theme', 'light');
   } else {
     document.body.classList.replace('sl-theme-light', 'sl-theme-dark');
-    localStorage.removeItem('hakken-theme');
+    localStorage.removeItem('tabidachi-theme');
   }
 }
 

@@ -1,4 +1,4 @@
-name: hakken
+name: tabidachi
 
 networks:
   proxy:
@@ -8,21 +8,21 @@ networks:
     internal: true
 
 volumes:
-  hakken-database:
+  tabidachi-database:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ${DOCKER_ROOT}/hakken/database
-  hakken-uploads:
+      device: ${DOCKER_ROOT}/tabidachi/database
+  tabidachi-uploads:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ${DOCKER_ROOT}/hakken/uploads
+      device: ${DOCKER_ROOT}/tabidachi/uploads
 
 services:
-  hakken-db:
+  tabidachi-db:
     image: postgres:17-alpine
     security_opt:
       - no-new-privileges:true
@@ -31,20 +31,20 @@ services:
     labels:
       - "traefik.enable=false"
     environment:
-      POSTGRES_USER: hakken
+      POSTGRES_USER: tabidachi
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: hakken
+      POSTGRES_DB: tabidachi
     volumes:
-      - hakken-database:/var/lib/postgresql/data
+      - tabidachi-database:/var/lib/postgresql/data
       - /etc/localtime:/etc/localtime:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U hakken"]
+      test: ["CMD-SHELL", "pg_isready -U tabidachi"]
       interval: 5s
       timeout: 5s
       retries: 10
 
-  hakken-app:
-    container_name: hakken-app
+  tabidachi-app:
+    container_name: tabidachi-app
     build:
       context: ..
       dockerfile: docker/Dockerfile
@@ -56,7 +56,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DATABASE_URL: postgres://hakken:${DB_PASSWORD}@hakken-db:5432/hakken?sslmode=disable
+      DATABASE_URL: postgres://tabidachi:${DB_PASSWORD}@tabidachi-db:5432/tabidachi?sslmode=disable
       SESSION_SECRET: ${SESSION_SECRET}
       CSRF_AUTH_KEY: ${CSRF_AUTH_KEY}
       APP_BASE_URL: ${APP_BASE_URL:-http://localhost:8080}
@@ -67,8 +67,8 @@ services:
       UPLOADS_DIR: data/uploads
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - hakken-uploads:/app/data/uploads
+      - tabidachi-uploads:/app/data/uploads
     depends_on:
-      hakken-db:
+      tabidachi-db:
         condition: service_healthy
     restart: unless-stopped

@@ -26,23 +26,23 @@ RUN go install github.com/a-h/templ/cmd/templ@v0.3.857 && \
 # Tidy ensures go.sum is complete
 RUN go mod tidy
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o hakken ./cmd/hakken
+RUN CGO_ENABLED=0 GOOS=linux go build -o tabidachi ./cmd/tabidachi
 
 FROM alpine:3.20
 
 RUN apk add --no-cache ca-certificates tzdata && \
-    addgroup -g 1000 hakken && \
-    adduser -u 1000 -G hakken -D -H hakken
+    addgroup -g 1000 tabidachi && \
+    adduser -u 1000 -G tabidachi -D -H tabidachi
 
 WORKDIR /app
 
-COPY --from=builder /app/hakken .
+COPY --from=builder /app/tabidachi .
 COPY --from=builder /app/web/static ./web/static
 
-RUN chown -R hakken:hakken /app
+RUN chown -R tabidachi:tabidachi /app
 
-USER hakken
+USER tabidachi
 
 EXPOSE 8080
 
-CMD ["./hakken"]
+CMD ["./tabidachi"]

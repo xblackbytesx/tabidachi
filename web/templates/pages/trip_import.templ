@@ -1,6 +1,6 @@
 package pages
 
-import "github.com/hakken/hakken/web/templates/layouts"
+import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
 
 templ TripImport(csrfToken string, flash string) {
 	@layouts.Base("Import Trip", csrfToken) {
@@ -13,7 +13,7 @@ templ TripImport(csrfToken string, flash string) {
 				<div class="alert alert-error">{ flash }</div>
 			}
 			<p class="form-help">
-				Paste a JSON itinerary following the <strong>Hakken schema v1.0</strong>.
+				Paste a JSON itinerary following the <strong>Tabidachi schema v1.0</strong>.
 				Use the <a href="/trips/new/prompt">LLM wizard</a> to generate this JSON from existing itinerary text.
 			</p>
 			<form

@@ -24,7 +24,7 @@ build:
 
 ## Follow logs (dev)
 logs:
-	docker compose -f docker/docker-compose-dev.yml logs -f hakken-app
+	docker compose -f docker/docker-compose-dev.yml logs -f tabidachi-app
 
 ## Generate templ files locally (requires templ installed)
 generate:

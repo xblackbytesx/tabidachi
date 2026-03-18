@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/hakken/hakken/web/templates/pages"
+	"github.com/xblackbytesx/tabidachi/web/templates/pages"
 	"github.com/labstack/echo/v4"
 )
 
-const hakkenSchema = `{
+const tabidachiSchema = `{
   "schemaVersion": "1.0",
   "title": "string (required)",
   "startDate": "YYYY-MM-DD (required)",
@@ -227,7 +227,7 @@ For the optional "notes" field on legs and days: include a note ONLY if it conta
 		dateHint + includedList + `
 
 Output schema (schemaVersion 1.0):
-` + hakkenSchema + `
+` + tabidachiSchema + `
 
 Itinerary to convert:
 ` + itinerary
@@ -274,7 +274,7 @@ func buildPlanningPrompt(data map[string]string) string {
 1. Before planning anything, review the trip parameters and identify any missing information that would significantly affect the itinerary (e.g. preferred accommodation style, dietary requirements, mobility considerations, budget range, visa constraints). Ask these as numbered follow-up questions FIRST, before any planning.
 2. Once follow-up questions are answered (or if none are needed), show a day-by-day summary table: one row per day with date, destination, key activities, and transit segments. Ask "Does this look right? Any changes before I generate the JSON?"
 3. Only output the JSON after the user explicitly confirms the summary — but always offer: "Say 'generate JSON' when you're ready."
-4. Output a single JSON object matching the Hakken schema v1.0 exactly.
+4. Output a single JSON object matching the Tabidachi schema v1.0 exactly.
 
 ---
 
@@ -282,7 +282,7 @@ You are a travel planning assistant. Design a detailed day-by-day itinerary for 
 
 ` + params.String() + `
 Output schema (schemaVersion 1.0):
-` + hakkenSchema + `
+` + tabidachiSchema + `
 
 Important output rules:
 - Always populate startTime and endTime where you can make a reasonable estimate.

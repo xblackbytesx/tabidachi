@@ -6,7 +6,7 @@ on:
       - "v*.*.*"
 
 env:
-  GHCR_IMAGE: ghcr.io/${{ github.repository_owner }}/hakken
+  GHCR_IMAGE: ghcr.io/${{ github.repository_owner }}/tabidachi
 
 jobs:
   build-push:
@@ -34,7 +34,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # Optional: uncomment + add DOCKERHUB_USERNAME / DOCKERHUB_TOKEN secrets
-      # to also push to Docker Hub under <DOCKERHUB_USERNAME>/hakken
+      # to also push to Docker Hub under <DOCKERHUB_USERNAME>/tabidachi
       # - name: Log in to Docker Hub
       #   uses: docker/login-action@v3
       #   with:
@@ -47,7 +47,7 @@ jobs:
         with:
           images: |
             ${{ env.GHCR_IMAGE }}
-            # ${{ secrets.DOCKERHUB_USERNAME }}/hakken   # uncomment for Docker Hub
+            # ${{ secrets.DOCKERHUB_USERNAME }}/tabidachi   # uncomment for Docker Hub
           tags: |
             # Full semver tag: v1.2.3
             type=semver,pattern={{version}}

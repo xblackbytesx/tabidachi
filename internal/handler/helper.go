@@ -6,7 +6,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
-	"github.com/hakken/hakken/internal/format"
+	"github.com/xblackbytesx/tabidachi/internal/format"
 	"github.com/labstack/echo/v4"
 )
 

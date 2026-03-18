@@ -8,7 +8,7 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/hakken/hakken/internal/images"
+import "github.com/xblackbytesx/tabidachi/internal/images"
 
 // ImageSearchResults renders the HTMX partial for image search results.
 // legIdx is empty string for trip-level searches, a number string for leg searches.

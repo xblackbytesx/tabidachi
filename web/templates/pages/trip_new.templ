@@ -1,6 +1,6 @@
 package pages
 
-import "github.com/hakken/hakken/web/templates/layouts"
+import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
 
 templ TripNew(csrfToken string) {
 	@layouts.Base("New Trip", csrfToken) {
@@ -18,12 +18,12 @@ templ TripNew(csrfToken string) {
 			<a href="/trips/new/import" class="method-card">
 				<sl-icon name="file-earmark-code" class="method-icon"></sl-icon>
 				<h2 class="method-title">Import JSON</h2>
-				<p class="method-desc">Paste or upload a JSON itinerary following the Hakken schema.</p>
+				<p class="method-desc">Paste or upload a JSON itinerary following the Tabidachi schema.</p>
 			</a>
 			<a href="/trips/new/convert" class="method-card">
 				<sl-icon name="arrow-repeat" class="method-icon"></sl-icon>
 				<h2 class="method-title">Convert existing itinerary</h2>
-				<p class="method-desc">Have a booking doc, email, or spreadsheet? We'll generate an AI prompt to convert it to Hakken JSON.</p>
+				<p class="method-desc">Have a booking doc, email, or spreadsheet? We'll generate an AI prompt to convert it to Tabidachi JSON.</p>
 			</a>
 			<a href="/trips/new/plan" class="method-card method-card-featured">
 				<sl-icon name="stars" class="method-icon"></sl-icon>

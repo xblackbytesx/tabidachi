@@ -10,9 +10,9 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
-	"github.com/hakken/hakken/internal/domain"
-	"github.com/hakken/hakken/internal/format"
-	"github.com/hakken/hakken/web/templates/layouts"
+	"github.com/xblackbytesx/tabidachi/internal/domain"
+	"github.com/xblackbytesx/tabidachi/internal/format"
+	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
 	"time"
 )
 

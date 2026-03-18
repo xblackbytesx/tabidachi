@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/hakken/hakken/internal/auth"
-	"github.com/hakken/hakken/internal/repository"
-	"github.com/hakken/hakken/web/templates/pages"
+	"github.com/xblackbytesx/tabidachi/internal/auth"
+	"github.com/xblackbytesx/tabidachi/internal/repository"
+	"github.com/xblackbytesx/tabidachi/web/templates/pages"
 	"github.com/labstack/echo/v4"
 )
 

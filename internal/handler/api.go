@@ -5,15 +5,15 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/hakken/hakken/internal/domain"
-	"github.com/hakken/hakken/internal/repository"
+	"github.com/xblackbytesx/tabidachi/internal/domain"
+	"github.com/xblackbytesx/tabidachi/internal/repository"
 	"github.com/labstack/echo/v4"
 )
 
 // APIHandler serves the JSON API used by external clients (e.g. Android app).
 type APIHandler struct {
 	trips   *repository.TripStore
-	baseURL string // e.g. "https://hakken.example.com" — used to make image URLs absolute
+	baseURL string // e.g. "https://tabidachi.example.com" — used to make image URLs absolute
 }
 
 func NewAPIHandler(trips *repository.TripStore, baseURL string) *APIHandler {

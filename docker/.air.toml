@@ -1,7 +1,7 @@
 [build]
-  cmd = "templ generate && go build -mod=mod -buildvcs=false -o ./tmp/hakken ./cmd/hakken"
-  bin = "./tmp/hakken"
-  full_bin = "./tmp/hakken"
+  cmd = "templ generate && go build -mod=mod -buildvcs=false -o ./tmp/tabidachi ./cmd/tabidachi"
+  bin = "./tmp/tabidachi"
+  full_bin = "./tmp/tabidachi"
   include_ext = ["go", "templ"]
   exclude_dir = ["tmp", "vendor"]
   exclude_regex = ["_templ\\.go$"]

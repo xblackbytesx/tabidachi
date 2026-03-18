@@ -9,9 +9,9 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"github.com/hakken/hakken/internal/domain"
-	"github.com/hakken/hakken/internal/format"
-	"github.com/hakken/hakken/web/templates/layouts"
+	"github.com/xblackbytesx/tabidachi/internal/domain"
+	"github.com/xblackbytesx/tabidachi/internal/format"
+	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
 )
 
 func Settings(csrfToken string, tokens []*domain.APIToken, errMsg string, dateFormat string) templ.Component {
@@ -55,7 +55,7 @@ func Settings(csrfToken string, tokens []*domain.APIToken, errMsg string, dateFo
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"settings-group\"><div class=\"settings-group-header\"><span class=\"settings-group-label\">Integrations</span></div><section class=\"settings-section\"><h2 class=\"settings-section-title\">Personal Access Tokens</h2><p class=\"settings-section-desc\">Tokens allow the Hakken mobile app and other API clients to read your trips. Each token has full read access to your account — treat it like a password.</p>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"settings-group\"><div class=\"settings-group-header\"><span class=\"settings-group-label\">Integrations</span></div><section class=\"settings-section\"><h2 class=\"settings-section-title\">Personal Access Tokens</h2><p class=\"settings-section-desc\">Tokens allow the Tabidachi mobile app and other API clients to read your trips. Each token has full read access to your account — treat it like a password.</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -154,7 +154,7 @@ func SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"settings-group\"><div class=\"settings-group-header\"><span class=\"settings-group-label\">Integrations</span></div><section class=\"settings-section\"><h2 class=\"settings-section-title\">Personal Access Tokens</h2><p class=\"settings-section-desc\">Tokens allow the Hakken mobile app and other API clients to read your trips. Each token has full read access to your account — treat it like a password.</p><div class=\"token-reveal\"><p class=\"token-reveal-warning\"><strong>Copy this token now.</strong> It will not be shown again.</p><div class=\"token-reveal-value\"><code id=\"new-token-value\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"settings-group\"><div class=\"settings-group-header\"><span class=\"settings-group-label\">Integrations</span></div><section class=\"settings-section\"><h2 class=\"settings-section-title\">Personal Access Tokens</h2><p class=\"settings-section-desc\">Tokens allow the Tabidachi mobile app and other API clients to read your trips. Each token has full read access to your account — treat it like a password.</p><div class=\"token-reveal\"><p class=\"token-reveal-warning\"><strong>Copy this token now.</strong> It will not be shown again.</p><div class=\"token-reveal-value\"><code id=\"new-token-value\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -223,7 +223,7 @@ func dateFormatSection(csrfToken string, dateFormat string) templ.Component {
 			templ_7745c5c3_Var9 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<section class=\"settings-section\"><h2 class=\"settings-section-title\">Date format</h2><p class=\"settings-section-desc\">Choose how dates appear throughout Hakken.</p><form method=\"POST\" action=\"/settings/date-format\" hx-post=\"/settings/date-format\" hx-target=\"#main-content\" hx-swap=\"outerHTML show:window:top\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<section class=\"settings-section\"><h2 class=\"settings-section-title\">Date format</h2><p class=\"settings-section-desc\">Choose how dates appear throughout Tabidachi.</p><form method=\"POST\" action=\"/settings/date-format\" hx-post=\"/settings/date-format\" hx-target=\"#main-content\" hx-swap=\"outerHTML show:window:top\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

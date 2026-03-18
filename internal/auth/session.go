@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	sessionName   = "hakken_session"
+	sessionName   = "tabidachi_session"
 	keyUserID     = "user_id"
 	keyFlash      = "flash"
 	keyDateFormat = "date_format"

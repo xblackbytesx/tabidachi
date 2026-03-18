@@ -6,7 +6,7 @@ templ Base(title string, csrfToken string) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<title>{ title } — Hakken</title>
+			<title>{ title } — Tabidachi</title>
 			<meta name="csrf-token" content={ csrfToken }/>
 			<link rel="stylesheet" href="/static/css/app.css"/>
 			<link rel="stylesheet" href="/static/vendor/shoelace/themes/dark.css"/>
@@ -22,7 +22,7 @@ templ Base(title string, csrfToken string) {
 			hx-target="#main-content"
 			hx-swap="outerHTML show:window:top"
 		>
-			<script>if(localStorage.getItem('hakken-theme')==='light'){document.body.classList.replace('sl-theme-dark','sl-theme-light');}</script>
+			<script>if(localStorage.getItem('tabidachi-theme')==='light'){document.body.classList.replace('sl-theme-dark','sl-theme-light');}</script>
 			<div class="app-layout">
 				@Sidebar(csrfToken)
 				<main id="main-content" class="app-main">
@@ -39,7 +39,7 @@ templ Sidebar(csrfToken string) {
 	<nav class="app-sidebar">
 		<a href="/" class="sidebar-logo">
 			<span class="logo-icon">✈</span>
-			<span class="logo-text">Hakken</span>
+			<span class="logo-text">Tabidachi</span>
 		</a>
 		<ul class="sidebar-nav">
 			<li><a href="/" class="nav-item"><sl-icon name="house"></sl-icon> Trips</a></li>
@@ -69,14 +69,14 @@ templ Auth(title string, csrfToken string) {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<title>{ title } — Hakken</title>
+			<title>{ title } — Tabidachi</title>
 			<link rel="stylesheet" href="/static/css/app.css"/>
 			<link rel="stylesheet" href="/static/vendor/shoelace/themes/dark.css"/>
 			<link rel="stylesheet" href="/static/vendor/shoelace/themes/light.css"/>
 			<script type="module" src="/static/vendor/shoelace/shoelace-autoloader.js"></script>
 		</head>
 		<body class="sl-theme-dark auth-body">
-			<script>if(localStorage.getItem('hakken-theme')==='light'){document.body.classList.replace('sl-theme-dark','sl-theme-light');}</script>
+			<script>if(localStorage.getItem('tabidachi-theme')==='light'){document.body.classList.replace('sl-theme-dark','sl-theme-light');}</script>
 			<div class="auth-container">
 				{ children... }
 			</div>

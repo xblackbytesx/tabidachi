@@ -1,5 +1,5 @@
 services:
-  hakken-app:
+  tabidachi-app:
     build:
       context: ..
       dockerfile: docker/Dockerfile.dev
@@ -9,7 +9,7 @@ services:
       - path: ../.env.dev
         required: false
     environment:
-      DATABASE_URL: postgres://hakken:hakken@hakken-db:5432/hakken?sslmode=disable
+      DATABASE_URL: postgres://tabidachi:tabidachi@tabidachi-db:5432/tabidachi?sslmode=disable
       SESSION_SECRET: dev-session-secret-32-chars-min!!
       CSRF_AUTH_KEY: dev-csrf-key-32-chars-minimum!!!
       APP_BASE_URL: http://localhost:8080
@@ -22,27 +22,27 @@ services:
       # the Shoelace + HTMX files baked into the image during `docker build`
       # are never overwritten by the host bind-mount.
       - /app/web/static/vendor
-      - hakken_uploads_dev:/app/data/uploads
+      - tabidachi_uploads_dev:/app/data/uploads
     depends_on:
-      hakken-db:
+      tabidachi-db:
         condition: service_healthy
 
-  hakken-db:
+  tabidachi-db:
     image: postgres:17-alpine
     environment:
-      POSTGRES_USER: hakken
-      POSTGRES_PASSWORD: hakken
-      POSTGRES_DB: hakken
+      POSTGRES_USER: tabidachi
+      POSTGRES_PASSWORD: tabidachi
+      POSTGRES_DB: tabidachi
     ports:
       - "5432:5432"
     volumes:
-      - hakken_pgdata_dev:/var/lib/postgresql/data
+      - tabidachi_pgdata_dev:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U hakken"]
+      test: ["CMD-SHELL", "pg_isready -U tabidachi"]
       interval: 5s
       timeout: 5s
       retries: 10
 
 volumes:
-  hakken_pgdata_dev:
-  hakken_uploads_dev:
+  tabidachi_pgdata_dev:
+  tabidachi_uploads_dev:

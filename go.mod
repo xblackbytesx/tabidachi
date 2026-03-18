@@ -1,4 +1,4 @@
-module github.com/hakken/hakken
+module github.com/xblackbytesx/tabidachi
 
 go 1.24
 

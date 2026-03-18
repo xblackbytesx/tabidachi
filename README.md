@@ -1,6 +1,17 @@
-# Hakken ✈
+# Tabidachi 旅立ち
 
-Hakken is a self-hosted travel itinerary manager. Build and organise trips with legs, days, and events; add cover photos; export/import JSON; and generate AI-assisted itinerary prompts. A JSON API with personal access tokens lets external clients (e.g. a native mobile app) read your trips.
+**tab·i·da·chi** | /tɑːbɪˈdɑːtʃi/ | *noun* | Japanese
+
+**1.** The act of setting off on a journey; departure for a trip.
+   *"the quiet thrill of tabidachi as the platform slips away behind you"*
+
+**2.** (figurative) A fresh start; the moment one commits to going somewhere new.
+
+— from **旅** (*tabi*, journey, travel) + **立ち** (*tachi*, rising up, setting forth)
+
+---
+
+Tabidachi is a self-hosted travel itinerary manager. Build and organise trips with legs, days, and events; add cover photos; export/import JSON; and generate AI-assisted itinerary prompts. A JSON API with personal access tokens lets external clients (e.g. a native mobile app) read your trips.
 
 ---
 
@@ -8,7 +19,7 @@ Hakken is a self-hosted travel itinerary manager. Build and organise trips with 
 
 - **Trip builder** — structured legs → days → events (activities, transit, accommodation)
 - **Cover images** — auto-fetched from Pexels / Unsplash / Wikipedia, or set manually
-- **AI prompt wizards** — convert existing booking docs into Hakken JSON, or plan a new trip from scratch
+- **AI prompt wizards** — convert existing booking docs into Tabidachi JSON, or plan a new trip from scratch
 - **Import / Export** — round-trip via a documented JSON schema
 - **JSON API** — read-only `/api/v1/` endpoints secured with personal access tokens (PATs)
 - **Single-user or multi-account** — each account only sees its own trips
@@ -37,8 +48,8 @@ The development stack uses [air](https://github.com/air-verse/air) for live relo
 **Prerequisites:** Docker (with Compose support).
 
 ```bash
-git clone https://github.com/xblackbytesx/hakken.git
-cd hakken
+git clone https://github.com/xblackbytesx/tabidachi.git
+cd tabidachi
 make dev
 ```
 
@@ -48,7 +59,7 @@ The first build pulls base images, installs npm dependencies (Shoelace + HTMX), 
 http://localhost:8080
 ```
 
-Register an account and you're in. The database persists in a named Docker volume (`hakken_pgdata_dev`) between restarts.
+Register an account and you're in. The database persists in a named Docker volume (`tabidachi_pgdata_dev`) between restarts.
 
 ### Development environment variables
 
@@ -56,7 +67,7 @@ All dev values are hard-coded in `docker/docker-compose-dev.yml` — nothing to 
 
 | Variable | Dev value |
 |---|---|
-| `DATABASE_URL` | `postgres://hakken:hakken@hakken-db:5432/hakken` |
+| `DATABASE_URL` | `postgres://tabidachi:tabidachi@tabidachi-db:5432/tabidachi` |
 | `SESSION_SECRET` | `dev-session-secret-32-chars-min!!` |
 | `CSRF_AUTH_KEY` | `dev-csrf-key-32-chars-minimum!!!` |
 | `APP_BASE_URL` | `http://localhost:8080` |
@@ -92,8 +103,8 @@ The production Compose file (`docker/docker-compose.yml`) joins an **external** 
 
 ```bash
 # Adjust the base path to wherever you keep Docker data
-mkdir -p /opt/docker/hakken/database
-mkdir -p /opt/docker/hakken/uploads
+mkdir -p /opt/docker/tabidachi/database
+mkdir -p /opt/docker/tabidachi/uploads
 ```
 
 ### 3. Create the environment file
@@ -115,8 +126,8 @@ SESSION_SECRET=change-me-session-secret-min-32-chars
 # CSRF signing key — minimum 32 characters, random, different from SESSION_SECRET
 CSRF_AUTH_KEY=change-me-csrf-key-min-32-chars-here
 
-# Public URL of your Hakken instance (no trailing slash)
-APP_BASE_URL=https://hakken.example.com
+# Public URL of your Tabidachi instance (no trailing slash)
+APP_BASE_URL=https://tabidachi.example.com
 
 # Set to "true" when serving over HTTPS (enables Secure cookie flag + HSTS)
 SECURE_COOKIES=true
@@ -144,25 +155,25 @@ The app container builds from source on first run, runs database migrations auto
 
 ### 5. Configure your reverse proxy
 
-Point your proxy at the `hakken-app` container on port `8080`. Below are minimal examples for the two most common setups.
+Point your proxy at the `tabidachi-app` container on port `8080`. Below are minimal examples for the two most common setups.
 
 **Traefik (labels on the app container)**
 
-Add these labels to the `hakken-app` service in `docker/docker-compose.yml`:
+Add these labels to the `tabidachi-app` service in `docker/docker-compose.yml`:
 
 ```yaml
 labels:
   - "traefik.enable=true"
-  - "traefik.http.routers.hakken.rule=Host(`hakken.example.com`)"
-  - "traefik.http.routers.hakken.entrypoints=websecure"
-  - "traefik.http.routers.hakken.tls.certresolver=letsencrypt"
-  - "traefik.http.services.hakken.loadbalancer.server.port=8080"
+  - "traefik.http.routers.tabidachi.rule=Host(`tabidachi.example.com`)"
+  - "traefik.http.routers.tabidachi.entrypoints=websecure"
+  - "traefik.http.routers.tabidachi.tls.certresolver=letsencrypt"
+  - "traefik.http.services.tabidachi.loadbalancer.server.port=8080"
 ```
 
 **Caddy**
 
 ```caddy
-hakken.example.com {
+tabidachi.example.com {
     reverse_proxy localhost:8080
 }
 ```
@@ -172,7 +183,7 @@ hakken.example.com {
 ```nginx
 server {
     listen 443 ssl;
-    server_name hakken.example.com;
+    server_name tabidachi.example.com;
 
     # SSL config omitted — use certbot or similar
 
@@ -189,7 +200,7 @@ server {
 ### 6. Verify
 
 ```bash
-curl https://hakken.example.com/health
+curl https://tabidachi.example.com/health
 # {"status":"ok"}
 ```
 
@@ -208,7 +219,7 @@ The app runs database migrations automatically on every startup, so schema upgra
 
 ## Cover images
 
-Hakken automatically fetches a cover photo for each trip and leg on creation. It tries providers in order until one succeeds:
+Tabidachi automatically fetches a cover photo for each trip and leg on creation. It tries providers in order until one succeeds:
 
 1. **Pexels** — set `PEXELS_API_KEY` (free tier is sufficient)
 2. **Unsplash** — set `UNSPLASH_ACCESS_KEY` (free tier is sufficient)
@@ -216,7 +227,7 @@ Hakken automatically fetches a cover photo for each trip and leg on creation. It
 
 Cover images will always be found for any destination. Configuring Pexels or Unsplash simply gives higher-quality results from curated photo libraries.
 
-Images are downloaded once and stored locally under `data/uploads/` inside the container (mapped to `DOCKER_ROOT/hakken/uploads` on the host). They are served directly by the app at `/uploads/`.
+Images are downloaded once and stored locally under `data/uploads/` inside the container (mapped to `DOCKER_ROOT/tabidachi/uploads` on the host). They are served directly by the app at `/uploads/`.
 
 You can also set cover images manually from the trip editor — search results are proxied through the same download-and-store pipeline so the app never exposes external URLs directly to browsers.
 
@@ -224,7 +235,7 @@ You can also set cover images manually from the trip editor — search results a
 
 ## JSON API
 
-Hakken exposes a small read-only REST API intended for external clients such as a native mobile app.
+Tabidachi exposes a small read-only REST API intended for external clients such as a native mobile app.
 
 ### Authentication
 
@@ -247,7 +258,7 @@ Tokens are generated in **Settings → Personal Access Tokens**. The raw token i
 
 ```bash
 curl -H "Authorization: Bearer hkn_yourtoken" \
-     https://hakken.example.com/api/v1/trips
+     https://tabidachi.example.com/api/v1/trips
 ```
 
 The `coverImageUrl` field in responses is always an absolute URL, safe to use directly in a mobile app.
@@ -256,7 +267,7 @@ The `coverImageUrl` field in responses is always an absolute URL, safe to use di
 
 ## Data model overview
 
-Trips are stored as a PostgreSQL row with a JSONB `data` column. The schema is versioned (`schemaVersion: "1.0"`). The top-level structure:
+Trips are stored as a PostgreSQL row with a JSONB `data` column. The Tabidachi schema is versioned (`schemaVersion: "1.0"`). The top-level structure:
 
 ```
 Trip
@@ -288,8 +299,8 @@ You can export any trip to its raw JSON from the trip view page and re-import it
 ## Project structure
 
 ```
-hakken/
-├── cmd/hakken/        # main entry point, route registration
+tabidachi/
+├── cmd/tabidachi/     # main entry point, route registration
 ├── docker/            # Dockerfiles, Compose files, air config
 ├── internal/
 │   ├── auth/          # session management, password hashing

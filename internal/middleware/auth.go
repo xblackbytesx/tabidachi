@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/hakken/hakken/internal/auth"
+	"github.com/xblackbytesx/tabidachi/internal/auth"
 	"github.com/labstack/echo/v4"
 )
 

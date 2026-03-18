@@ -8,7 +8,7 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/hakken/hakken/web/templates/layouts"
+import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
 
 func Login(csrfToken string, flash string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -43,7 +43,7 @@ func Login(csrfToken string, flash string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"auth-card\"><div class=\"auth-header\"><span class=\"auth-logo\">✈</span><h1 class=\"auth-title\">Hakken</h1><p class=\"auth-subtitle\">Your travel itinerary manager</p></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"auth-card\"><div class=\"auth-header\"><span class=\"auth-logo\">✈</span><h1 class=\"auth-title\">Tabidachi</h1><p class=\"auth-subtitle\">Your travel itinerary manager</p></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

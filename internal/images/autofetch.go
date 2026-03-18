@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/hakken/hakken/internal/domain"
+	"github.com/xblackbytesx/tabidachi/internal/domain"
 )
 
 // TripStorer is the subset of repository.TripStore used by AutoFetch.

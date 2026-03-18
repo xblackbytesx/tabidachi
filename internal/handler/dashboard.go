@@ -4,8 +4,8 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/hakken/hakken/internal/repository"
-	"github.com/hakken/hakken/web/templates/pages"
+	"github.com/xblackbytesx/tabidachi/internal/repository"
+	"github.com/xblackbytesx/tabidachi/web/templates/pages"
 	"github.com/labstack/echo/v4"
 )
 

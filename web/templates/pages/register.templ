@@ -1,13 +1,13 @@
 package pages
 
-import "github.com/hakken/hakken/web/templates/layouts"
+import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
 
 templ Register(csrfToken string, flash string) {
 	@layouts.Auth("Create account", csrfToken) {
 		<div class="auth-card">
 			<div class="auth-header">
 				<span class="auth-logo">✈</span>
-				<h1 class="auth-title">Hakken</h1>
+				<h1 class="auth-title">Tabidachi</h1>
 				<p class="auth-subtitle">Create your account</p>
 			</div>
 			if flash != "" {

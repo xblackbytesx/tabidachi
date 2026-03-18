@@ -10,10 +10,10 @@ import (
 	"unicode"
 
 	"github.com/google/uuid"
-	"github.com/hakken/hakken/internal/domain"
-	"github.com/hakken/hakken/internal/images"
-	"github.com/hakken/hakken/internal/repository"
-	"github.com/hakken/hakken/web/templates/pages"
+	"github.com/xblackbytesx/tabidachi/internal/domain"
+	"github.com/xblackbytesx/tabidachi/internal/images"
+	"github.com/xblackbytesx/tabidachi/internal/repository"
+	"github.com/xblackbytesx/tabidachi/web/templates/pages"
 	"github.com/labstack/echo/v4"
 )
 

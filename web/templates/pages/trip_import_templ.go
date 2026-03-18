@@ -8,7 +8,7 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/hakken/hakken/web/templates/layouts"
+import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
 
 func TripImport(csrfToken string, flash string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -66,7 +66,7 @@ func TripImport(csrfToken string, flash string) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<p class=\"form-help\">Paste a JSON itinerary following the <strong>Hakken schema v1.0</strong>. Use the <a href=\"/trips/new/prompt\">LLM wizard</a> to generate this JSON from existing itinerary text.</p><form method=\"POST\" action=\"/trips/import\" hx-post=\"/trips/import\" hx-target=\"#main-content\" hx-swap=\"outerHTML show:window:top\" hx-select=\"#main-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<p class=\"form-help\">Paste a JSON itinerary following the <strong>Tabidachi schema v1.0</strong>. Use the <a href=\"/trips/new/prompt\">LLM wizard</a> to generate this JSON from existing itinerary text.</p><form method=\"POST\" action=\"/trips/import\" hx-post=\"/trips/import\" hx-target=\"#main-content\" hx-swap=\"outerHTML show:window:top\" hx-select=\"#main-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
