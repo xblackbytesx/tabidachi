@@ -61,21 +61,7 @@ http://localhost:8080
 
 Register an account and you're in. The database persists in a named Docker volume (`tabidachi_pgdata_dev`) between restarts.
 
-### Development environment variables
-
-All dev values are hard-coded in `docker/docker-compose-dev.yml` — nothing to configure. Key defaults:
-
-| Variable | Dev value |
-|---|---|
-| `DATABASE_URL` | `postgres://tabidachi:tabidachi@tabidachi-db:5432/tabidachi` |
-| `SESSION_SECRET` | `dev-session-secret-32-chars-min!!` |
-| `CSRF_AUTH_KEY` | `dev-csrf-key-32-chars-minimum!!!` |
-| `APP_BASE_URL` | `http://localhost:8080` |
-| `SECURE_COOKIES` | `false` |
-| `PEXELS_API_KEY` | *(empty — Wikipedia fallback used)* |
-| `UNSPLASH_ACCESS_KEY` | *(empty — Wikipedia fallback used)* |
-
-To get higher-quality cover images during development, set `PEXELS_API_KEY` and/or `UNSPLASH_ACCESS_KEY` in `docker/docker-compose-dev.yml`.
+All dev values are hard-coded in `docker/docker-compose-dev.yml` — nothing to configure. To get higher-quality cover images, optionally set `PEXELS_API_KEY` and/or `UNSPLASH_ACCESS_KEY` in that file.
 
 ### Useful commands
 
@@ -84,7 +70,6 @@ make dev      # start (or restart) the dev stack
 make down     # stop all containers
 make reset    # full teardown + clean restart (wipes the dev database)
 make logs     # follow app logs
-make generate # re-run templ code generation (requires templ installed locally)
 ```
 
 ---
@@ -109,37 +94,11 @@ mkdir -p /opt/docker/tabidachi/uploads
 
 ### 3. Create the environment file
 
-Create a `.env` file next to the Compose file (or export the variables in your shell). The production Compose file reads these at startup:
+Copy `.env.example` to `.env` next to the Compose file and fill in real values. At minimum you need `DOCKER_ROOT`, `DB_PASSWORD`, `SESSION_SECRET`, `CSRF_AUTH_KEY`, and `APP_BASE_URL`. See the [environment variable reference](#environment-variable-reference) below for the full list.
 
 ```bash
-# .env  (keep this file out of version control)
-
-# Path on the host where database and uploads are stored
-DOCKER_ROOT=/opt/docker
-
-# PostgreSQL password — use a strong random string
-DB_PASSWORD=change-me-strong-password
-
-# Session encryption key — minimum 32 characters, random
-SESSION_SECRET=change-me-session-secret-min-32-chars
-
-# CSRF signing key — minimum 32 characters, random, different from SESSION_SECRET
-CSRF_AUTH_KEY=change-me-csrf-key-min-32-chars-here
-
-# Public URL of your Tabidachi instance (no trailing slash)
-APP_BASE_URL=https://tabidachi.example.com
-
-# Set to "true" when serving over HTTPS (enables Secure cookie flag + HSTS)
-SECURE_COOKIES=true
-
-# Optional: cover image API keys
-PEXELS_API_KEY=
-UNSPLASH_ACCESS_KEY=
-```
-
-Generate suitable secrets with:
-
-```bash
+cp .env.example .env
+# Generate secrets:
 openssl rand -base64 32   # run twice — once for SESSION_SECRET, once for CSRF_AUTH_KEY
 ```
 
@@ -151,53 +110,9 @@ make up
 docker compose -f docker/docker-compose.yml up --build -d
 ```
 
-The app container builds from source on first run, runs database migrations automatically, then listens on port `8080`. Your reverse proxy should forward traffic to it.
+The app container builds from source on first run, runs database migrations automatically, then listens on port `8080`. Point your reverse proxy at the `tabidachi-app` container on that port.
 
-### 5. Configure your reverse proxy
-
-Point your proxy at the `tabidachi-app` container on port `8080`. Below are minimal examples for the two most common setups.
-
-**Traefik (labels on the app container)**
-
-Add these labels to the `tabidachi-app` service in `docker/docker-compose.yml`:
-
-```yaml
-labels:
-  - "traefik.enable=true"
-  - "traefik.http.routers.tabidachi.rule=Host(`tabidachi.example.com`)"
-  - "traefik.http.routers.tabidachi.entrypoints=websecure"
-  - "traefik.http.routers.tabidachi.tls.certresolver=letsencrypt"
-  - "traefik.http.services.tabidachi.loadbalancer.server.port=8080"
-```
-
-**Caddy**
-
-```caddy
-tabidachi.example.com {
-    reverse_proxy localhost:8080
-}
-```
-
-**nginx**
-
-```nginx
-server {
-    listen 443 ssl;
-    server_name tabidachi.example.com;
-
-    # SSL config omitted — use certbot or similar
-
-    location / {
-        proxy_pass         http://127.0.0.1:8080;
-        proxy_set_header   Host $host;
-        proxy_set_header   X-Real-IP $remote_addr;
-        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header   X-Forwarded-Proto $scheme;
-    }
-}
-```
-
-### 6. Verify
+### 5. Verify
 
 ```bash
 curl https://tabidachi.example.com/health
