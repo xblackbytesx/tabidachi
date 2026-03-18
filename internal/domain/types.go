@@ -135,7 +135,7 @@ func TransportIcon(mode string) string {
 		"flight":     "airplane",
 		"train":      "train-front",
 		"shinkansen": "train-front",
-		"subway":     "subway",
+		"subway":     "train-lightrail-front",
 		"bus":        "bus-front",
 		"car":        "car-front",
 		"ferry":      "water",
