@@ -4,9 +4,18 @@ import "context"
 
 // ImageResult holds the outcome of a provider search.
 type ImageResult struct {
-	URL    string
-	Credit string
-	Query  string
+	URL      string // full-res URL — downloaded and stored locally
+	ThumbURL string // smaller URL for picker grid display only (optional; falls back to URL)
+	Credit   string
+	Query    string
+}
+
+// DisplayURL returns ThumbURL if set, otherwise URL. Used for picker thumbnails.
+func (r ImageResult) DisplayURL() string {
+	if r.ThumbURL != "" {
+		return r.ThumbURL
+	}
+	return r.URL
 }
 
 // Provider is implemented by each image source.

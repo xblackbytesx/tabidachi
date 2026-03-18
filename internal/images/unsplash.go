@@ -88,9 +88,10 @@ func (p *UnsplashProvider) Search(ctx context.Context, query string) ([]ImageRes
 	var out []ImageResult
 	for _, photo := range result.Results {
 		out = append(out, ImageResult{
-			URL:    photo.URLs.Small,
-			Credit: "Photo by " + photo.User.Name + " on Unsplash",
-			Query:  query,
+			URL:      photo.URLs.Regular, // stored at full display resolution
+			ThumbURL: photo.URLs.Small,   // shown in picker grid only
+			Credit:   "Photo by " + photo.User.Name + " on Unsplash",
+			Query:    query,
 		})
 	}
 	return out, nil

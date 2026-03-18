@@ -30,6 +30,8 @@ type pexelsResponse struct {
 	Photos []struct {
 		URL  string `json:"url"`
 		Src  struct {
+			Large2x   string `json:"large2x"`
+			Large     string `json:"large"`
 			Landscape string `json:"landscape"`
 			Medium    string `json:"medium"`
 		} `json:"src"`
@@ -69,7 +71,13 @@ func (p *PexelsProvider) Fetch(ctx context.Context, query string) (*ImageResult,
 		return nil, nil
 	}
 	ph := result.Photos[0]
-	imgURL := ph.Src.Landscape
+	imgURL := ph.Src.Large2x
+	if imgURL == "" {
+		imgURL = ph.Src.Large
+	}
+	if imgURL == "" {
+		imgURL = ph.Src.Landscape
+	}
 	if imgURL == "" {
 		imgURL = ph.URL
 	}
@@ -87,14 +95,25 @@ func (p *PexelsProvider) Search(ctx context.Context, query string) ([]ImageResul
 	}
 	var out []ImageResult
 	for _, ph := range result.Photos {
-		imgURL := ph.Src.Medium
-		if imgURL == "" {
-			imgURL = ph.Src.Landscape
+		fullURL := ph.Src.Large2x
+		if fullURL == "" {
+			fullURL = ph.Src.Large
+		}
+		if fullURL == "" {
+			fullURL = ph.Src.Landscape
+		}
+		if fullURL == "" {
+			fullURL = ph.URL
+		}
+		thumbURL := ph.Src.Medium
+		if thumbURL == "" {
+			thumbURL = ph.Src.Landscape
 		}
 		out = append(out, ImageResult{
-			URL:    imgURL,
-			Credit: "Photo by " + ph.Photographer + " on Pexels",
-			Query:  query,
+			URL:      fullURL,   // stored at full resolution
+			ThumbURL: thumbURL,  // shown in picker grid only
+			Credit:   "Photo by " + ph.Photographer + " on Pexels",
+			Query:    query,
 		})
 	}
 	return out, nil

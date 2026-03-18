@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -85,6 +86,19 @@ func (p *WikipediaProvider) search(ctx context.Context, query string, n int) ([]
 	return titles, nil
 }
 
+// wikiLargeURL rewrites a Wikipedia thumbnail URL to request a larger size.
+// Wikipedia thumb URLs contain /{n}px- which controls the rendered width.
+// e.g. .../320px-Image.jpg → .../1200px-Image.jpg
+func wikiLargeURL(thumbURL string, width int) string {
+	if i := strings.Index(thumbURL, "px-"); i > 0 {
+		j := strings.LastIndex(thumbURL[:i], "/")
+		if j >= 0 {
+			return thumbURL[:j+1] + strconv.Itoa(width) + "px-" + thumbURL[i+3:]
+		}
+	}
+	return thumbURL
+}
+
 // Fetch finds the best Wikipedia article for the query and returns its thumbnail.
 // First tries an exact title lookup; if that fails or has no image, falls back
 // to opensearch to find the closest article.
@@ -92,7 +106,7 @@ func (p *WikipediaProvider) Fetch(ctx context.Context, query string) (*ImageResu
 	// Try exact title first (fast path for city names like "Tokyo")
 	if summary, err := p.fetchSummary(ctx, query); err == nil && summary.Thumbnail.Source != "" {
 		return &ImageResult{
-			URL:    summary.Thumbnail.Source,
+			URL:    wikiLargeURL(summary.Thumbnail.Source, 1200),
 			Credit: "Image from Wikipedia — " + summary.Title,
 			Query:  query,
 		}, nil
@@ -109,7 +123,7 @@ func (p *WikipediaProvider) Fetch(ctx context.Context, query string) (*ImageResu
 			continue
 		}
 		return &ImageResult{
-			URL:    summary.Thumbnail.Source,
+			URL:    wikiLargeURL(summary.Thumbnail.Source, 1200),
 			Credit: "Image from Wikipedia — " + summary.Title,
 			Query:  query,
 		}, nil
@@ -134,9 +148,10 @@ func (p *WikipediaProvider) Search(ctx context.Context, query string) ([]ImageRe
 			continue
 		}
 		results = append(results, ImageResult{
-			URL:    summary.Thumbnail.Source,
-			Credit: "Image from Wikipedia — " + summary.Title,
-			Query:  query,
+			URL:      wikiLargeURL(summary.Thumbnail.Source, 1200),
+			ThumbURL: summary.Thumbnail.Source, // original small thumbnail for picker grid
+			Credit:   "Image from Wikipedia — " + summary.Title,
+			Query:    query,
 		})
 	}
 	return results, nil

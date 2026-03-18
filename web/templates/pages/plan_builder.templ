@@ -89,33 +89,12 @@ templ planStep1(csrfToken string, data map[string]string) {
 				<p class="field-hint">Helps AI suggest routing from your origin.</p>
 			</div>
 			<div class="field">
-				<label class="field-label">Trip intensity <span class="required">*</span></label>
-				<div class="radio-stack">
-					<label class="radio-item">
-						if dataVal(data, "intensity") == "maximize" || dataVal(data, "intensity") == "" {
-							<input type="radio" name="intensity" value="maximize" required checked/>
-						} else {
-							<input type="radio" name="intensity" value="maximize" required/>
-						}
-						<span class="radio-label"><strong>Maximize sightseeing</strong> — pack in as much as possible</span>
-					</label>
-					<label class="radio-item">
-						if dataVal(data, "intensity") == "balanced" {
-							<input type="radio" name="intensity" value="balanced" checked/>
-						} else {
-							<input type="radio" name="intensity" value="balanced"/>
-						}
-						<span class="radio-label"><strong>Balanced</strong> — good coverage while conserving energy</span>
-					</label>
-					<label class="radio-item">
-						if dataVal(data, "intensity") == "relaxed" {
-							<input type="radio" name="intensity" value="relaxed" checked/>
-						} else {
-							<input type="radio" name="intensity" value="relaxed"/>
-						}
-						<span class="radio-label"><strong>Relaxed</strong> — prioritize rest, see what fits without pressure</span>
-					</label>
-				</div>
+				<sl-radio-group name="intensity" label="Trip intensity" value={ intensityOrDefault(data) }>
+					<sl-radio-button value="maximize">Maximize sightseeing</sl-radio-button>
+					<sl-radio-button value="balanced">Balanced</sl-radio-button>
+					<sl-radio-button value="relaxed">Relaxed</sl-radio-button>
+				</sl-radio-group>
+				<p class="field-hint">Calibrates the number and pace of activities the AI plans per day.</p>
 			</div>
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary">Next <sl-icon name="arrow-right"></sl-icon></button>
@@ -292,4 +271,11 @@ templ planStep3(csrfToken string, prompt string) {
 			</a>
 		</div>
 	</div>
+}
+
+func intensityOrDefault(data map[string]string) string {
+	if v := data["intensity"]; v != "" {
+		return v
+	}
+	return "maximize"
 }

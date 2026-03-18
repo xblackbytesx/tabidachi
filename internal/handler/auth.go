@@ -47,6 +47,9 @@ func (h *AuthHandler) LoginPost(c echo.Context) error {
 		slog.Error("login: set session", "err", err)
 		return render(c, http.StatusOK, pages.Login(csrfToken(c), "An error occurred. Please try again."))
 	}
+	if err := auth.SetDateFormat(c.Response().Writer, c.Request(), user.DateFormat); err != nil {
+		slog.Error("login: set date format session", "err", err)
+	}
 
 	return redirect(c, "/")
 }
@@ -86,6 +89,9 @@ func (h *AuthHandler) RegisterPost(c echo.Context) error {
 	if err := auth.SetUserID(c.Response().Writer, c.Request(), user.ID.String()); err != nil {
 		slog.Error("register: set session", "err", err)
 		return redirect(c, "/login")
+	}
+	if err := auth.SetDateFormat(c.Response().Writer, c.Request(), user.DateFormat); err != nil {
+		slog.Error("register: set date format session", "err", err)
 	}
 
 	return redirect(c, "/")

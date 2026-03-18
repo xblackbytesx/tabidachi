@@ -7,9 +7,10 @@ import (
 )
 
 const (
-	sessionName  = "hakken_session"
-	keyUserID    = "user_id"
-	keyFlash     = "flash"
+	sessionName   = "hakken_session"
+	keyUserID     = "user_id"
+	keyFlash      = "flash"
+	keyDateFormat = "date_format"
 )
 
 var store *sessions.CookieStore
@@ -69,6 +70,29 @@ func SetFlash(w http.ResponseWriter, r *http.Request, msg string) {
 	}
 	sess.AddFlash(msg, keyFlash)
 	_ = sess.Save(r, w)
+}
+
+// SetDateFormat stores the user's date format preference in the session.
+func SetDateFormat(w http.ResponseWriter, r *http.Request, pref string) error {
+	sess, err := getSession(r)
+	if err != nil {
+		return err
+	}
+	sess.Values[keyDateFormat] = pref
+	return sess.Save(r, w)
+}
+
+// GetDateFormat retrieves the date format preference from the session. Returns "dmy" if absent.
+func GetDateFormat(r *http.Request) string {
+	sess, err := getSession(r)
+	if err != nil {
+		return "dmy"
+	}
+	v, _ := sess.Values[keyDateFormat].(string)
+	if v == "" {
+		return "dmy"
+	}
+	return v
 }
 
 // GetFlash retrieves and clears the flash message from the session.

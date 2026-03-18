@@ -4,34 +4,62 @@ import (
 	"fmt"
 	"time"
 	"github.com/hakken/hakken/internal/domain"
+	"github.com/hakken/hakken/internal/format"
 	"github.com/hakken/hakken/web/templates/layouts"
 )
 
 templ TripView(csrfToken string, trip *domain.Trip) {
 	@layouts.Base(trip.Title, csrfToken) {
 		<div class="trip-view">
-			<div class={ "trip-view-header", templ.KV("trip-view-header-has-image", trip.CoverImageURL != "") }
-				if trip.CoverImageURL != "" {
-					style={ "background-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%), url(" + trip.CoverImageURL + "); background-size: cover; background-position: center;" }
-				}
-			>
-				<div class="trip-view-header-left">
-					<a href="/" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> All trips</a>
-					<div class="trip-view-title-block">
+			if trip.CoverImageURL != "" {
+				<div class="trip-view-header trip-view-header-has-image"
+					style={ "background-image: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%), url(" + trip.CoverImageURL + "); background-size: cover; background-position: center;" }
+				>
+					<div class="trip-view-hero-nav">
+						<a href="/" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> All trips</a>
+						<div class="trip-view-hero-actions">
+							if trip.IsActive() {
+								<span class="badge badge-active badge-lg">Active now</span>
+							}
+							<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/export") } class="btn btn-ghost btn-sm" hx-boost="false">
+								<sl-icon name="download"></sl-icon> Export
+							</a>
+							<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/edit") } class="btn btn-ghost btn-sm">
+								<sl-icon name="pencil"></sl-icon> Edit
+							</a>
+						</div>
+					</div>
+					<div class="trip-view-hero-body">
 						<h1 class="trip-view-title">{ trip.Title }</h1>
 						<div class="trip-view-meta">
-							<span><sl-icon name="calendar3"></sl-icon> { trip.StartDate.Format("Jan 2") } — { trip.EndDate.Format("Jan 2, 2006") }</span>
+							<span><sl-icon name="calendar3"></sl-icon> { format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }</span>
 							if trip.HomeLocation != "" {
 								<span><sl-icon name="house"></sl-icon> { trip.HomeLocation }</span>
 							}
-							<span><sl-icon name="globe"></sl-icon> { trip.Timezone }</span>
+							if trip.Timezone != "" && trip.Timezone != "UTC" {
+								<span><sl-icon name="globe"></sl-icon> { trip.Timezone }</span>
+							}
 						</div>
 					</div>
 				</div>
-				<div class="trip-view-header-actions">
+			} else {
+				<a href="/" class="trip-view-back"><sl-icon name="arrow-left"></sl-icon> All trips</a>
+				<div class="trip-view-title-row">
+					<h1 class="trip-view-title">{ trip.Title }</h1>
 					if trip.IsActive() {
 						<span class="badge badge-active badge-lg">Active now</span>
 					}
+				</div>
+				<div class="trip-view-meta">
+					<span><sl-icon name="calendar3"></sl-icon> { format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }</span>
+					if trip.HomeLocation != "" {
+						<span><sl-icon name="house"></sl-icon> { trip.HomeLocation }</span>
+					}
+					if trip.Timezone != "" && trip.Timezone != "UTC" {
+						<span><sl-icon name="globe"></sl-icon> { trip.Timezone }</span>
+					}
+				</div>
+				<div class="trip-view-actions">
 					<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/export") } class="btn btn-ghost btn-sm" hx-boost="false">
 						<sl-icon name="download"></sl-icon> Export
 					</a>
@@ -39,7 +67,7 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 						<sl-icon name="pencil"></sl-icon> Edit
 					</a>
 				</div>
-			</div>
+			}
 			<div class="timeline" id="timeline">
 				if len(trip.Data.Legs) == 0 {
 					<div class="empty-state">
@@ -61,7 +89,7 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 									<span class="leg-region">{ leg.Region }</span>
 								}
 							</div>
-							<div class="leg-dates">{ leg.StartDate } — { leg.EndDate }</div>
+							<div class="leg-dates">{ format.ShortDate(ctx, leg.StartDate) } — { format.ShortDate(ctx, leg.EndDate) }</div>
 						</div>
 						if leg.Accommodation != nil {
 							<div class="accommodation-banner">
@@ -70,7 +98,11 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 								if leg.Accommodation.Neighborhood != "" {
 									<span class="accomm-neighborhood">{ leg.Accommodation.Neighborhood }</span>
 								}
-								<span class="accomm-dates">{ leg.Accommodation.CheckIn } → { leg.Accommodation.CheckOut }</span>
+								<span class="accomm-dates">
+									<span class="accomm-label">in</span> { format.DateTime(ctx, leg.Accommodation.CheckIn) }
+									<span class="accomm-sep">·</span>
+									<span class="accomm-label">out</span> { format.DateTime(ctx, leg.Accommodation.CheckOut) }
+								</span>
 								if leg.Accommodation.BookingReference != "" {
 									<span class="accomm-ref">Ref: { leg.Accommodation.BookingReference }</span>
 								}
@@ -112,7 +144,7 @@ templ daySection(trip *domain.Trip, day domain.Day) {
 		<div class="day-header">
 			<div class="day-header-left">
 				<span class="day-number">Day { fmt.Sprintf("%d", dayNumber(trip, day.Date)) }</span>
-				<span class="day-date">{ formatDayDate(day.Date) }</span>
+				<span class="day-date">{ format.DayDate(ctx, day.Date) }</span>
 				if day.Label != "" {
 					<span class="day-label">{ day.Label }</span>
 				}
@@ -263,14 +295,6 @@ func dayNumber(trip *domain.Trip, dateStr string) int {
 	}
 	diff := t.Sub(trip.StartDate.Truncate(24 * time.Hour))
 	return int(diff.Hours()/24) + 1
-}
-
-func formatDayDate(dateStr string) string {
-	t, err := time.Parse("2006-01-02", dateStr)
-	if err != nil {
-		return dateStr
-	}
-	return t.Format("Monday, Jan 2")
 }
 
 func formatDuration(iso string) string {

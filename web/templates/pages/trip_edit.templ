@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"github.com/hakken/hakken/internal/domain"
+	"github.com/hakken/hakken/internal/format"
 	"github.com/hakken/hakken/web/templates/layouts"
 )
 
@@ -147,7 +148,11 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 					if leg.Accommodation.Neighborhood != "" {
 						<span>{ leg.Accommodation.Neighborhood }</span>
 					}
-					<span>{ leg.Accommodation.CheckIn } → { leg.Accommodation.CheckOut }</span>
+					<span>
+					<span class="accomm-label">in</span> { format.DateTime(ctx, leg.Accommodation.CheckIn) }
+					<span class="accomm-sep">·</span>
+					<span class="accomm-label">out</span> { format.DateTime(ctx, leg.Accommodation.CheckOut) }
+				</span>
 				</div>
 			}
 			<div class="days-list">

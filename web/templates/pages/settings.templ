@@ -2,14 +2,16 @@ package pages
 
 import (
 	"github.com/hakken/hakken/internal/domain"
+	"github.com/hakken/hakken/internal/format"
 	"github.com/hakken/hakken/web/templates/layouts"
 )
 
-templ Settings(csrfToken string, tokens []*domain.APIToken, errMsg string) {
+templ Settings(csrfToken string, tokens []*domain.APIToken, errMsg string, dateFormat string) {
 	@layouts.Base("Settings", csrfToken) {
 		<div class="page-header">
 			<h1 class="page-title">Settings</h1>
 		</div>
+		@dateFormatSection(csrfToken, dateFormat)
 		<section class="settings-section">
 			<h2 class="settings-section-title">Personal Access Tokens</h2>
 			<p class="settings-section-desc">
@@ -49,11 +51,12 @@ templ Settings(csrfToken string, tokens []*domain.APIToken, errMsg string) {
 	}
 }
 
-templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken string) {
+templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken string, dateFormat string) {
 	@layouts.Base("Settings", csrfToken) {
 		<div class="page-header">
 			<h1 class="page-title">Settings</h1>
 		</div>
+		@dateFormatSection(csrfToken, dateFormat)
 		<section class="settings-section">
 			<h2 class="settings-section-title">Personal Access Tokens</h2>
 			<p class="settings-section-desc">
@@ -99,6 +102,36 @@ templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken
 	}
 }
 
+templ dateFormatSection(csrfToken string, dateFormat string) {
+	<section class="settings-section">
+		<h2 class="settings-section-title">Date format</h2>
+		<p class="settings-section-desc">Choose how dates appear throughout Hakken.</p>
+		<form
+			method="POST"
+			action="/settings/date-format"
+			hx-post="/settings/date-format"
+			hx-target="#main-content"
+			hx-swap="outerHTML show:window:top"
+		>
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<sl-radio-group name="date_format" value={ dateFormatOrDefault(dateFormat) } style="margin-bottom: 16px;">
+				<sl-radio-button value="dmy">2 Jan 2026</sl-radio-button>
+				<sl-radio-button value="mdy">Jan 2, 2026</sl-radio-button>
+				<sl-radio-button value="iso">2026-01-02</sl-radio-button>
+			</sl-radio-group>
+			<br/>
+			<button type="submit" class="btn btn-primary btn-sm">Save</button>
+		</form>
+	</section>
+}
+
+func dateFormatOrDefault(pref string) string {
+	if pref == "" {
+		return "dmy"
+	}
+	return pref
+}
+
 templ tokenList(csrfToken string, tokens []*domain.APIToken) {
 	if len(tokens) == 0 {
 		<p class="token-empty">No tokens yet.</p>
@@ -116,12 +149,12 @@ templ tokenList(csrfToken string, tokens []*domain.APIToken) {
 				for _, t := range tokens {
 					<tr>
 						<td>{ t.Name }</td>
-						<td>{ t.CreatedAt.Format("Jan 2, 2006") }</td>
+						<td>{ format.Time(ctx, t.CreatedAt) }</td>
 						<td>
 							if t.LastUsedAt == nil {
 								<span class="text-muted">Never</span>
 							} else {
-								{ t.LastUsedAt.Format("Jan 2, 2006") }
+								{ format.Time(ctx, *t.LastUsedAt) }
 							}
 						</td>
 						<td>

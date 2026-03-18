@@ -6,6 +6,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
+	"github.com/hakken/hakken/internal/format"
 	"github.com/labstack/echo/v4"
 )
 
@@ -30,6 +31,13 @@ func csrfToken(c echo.Context) string {
 	return ""
 }
 
+func datePref(c echo.Context) string {
+	if f, ok := c.Get("dateFormat").(string); ok && f != "" {
+		return f
+	}
+	return "dmy"
+}
+
 func redirect(c echo.Context, path string) error {
 	return c.Redirect(http.StatusSeeOther, path)
 }
@@ -42,5 +50,6 @@ func render(c echo.Context, status int, t templ.Component) error {
 	c.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
 	c.Response().Header().Set("Cache-Control", "no-store")
 	c.Response().WriteHeader(status)
-	return t.Render(c.Request().Context(), c.Response().Writer)
+	ctx := format.WithPref(c.Request().Context(), datePref(c))
+	return t.Render(ctx, c.Response().Writer)
 }

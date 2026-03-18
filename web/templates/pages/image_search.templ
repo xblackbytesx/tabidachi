@@ -39,7 +39,7 @@ templ imageThumb(csrfToken, postTarget, sectionID string, r images.ImageResult) 
 			hx-swap="outerHTML"
 			hx-disabled-elt="this"
 		>
-			<img src={ r.URL } alt={ r.Credit } class="image-thumb" loading="lazy" referrerpolicy="no-referrer"/>
+			<img src={ r.DisplayURL() } alt={ r.Credit } class="image-thumb" loading="lazy" referrerpolicy="no-referrer"/>
 			<div class="image-thumb-credit">{ r.Credit }</div>
 			<div class="image-thumb-loading" aria-hidden="true"></div>
 		</button>

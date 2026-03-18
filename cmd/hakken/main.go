@@ -62,7 +62,7 @@ func main() {
 	promptHandler := handler.NewPromptHandler()
 	builderHandler := handler.NewBuilderHandler(tripStore)
 	imageHandler := handler.NewImageHandler(tripStore, imageSvc)
-	settingsHandler := handler.NewSettingsHandler(tokenStore)
+	settingsHandler := handler.NewSettingsHandler(tokenStore, userStore)
 	apiHandler := handler.NewAPIHandler(tripStore, cfg.AppBaseURL)
 
 	e := echo.New()
@@ -174,6 +174,7 @@ func main() {
 	protected.GET("/settings", settingsHandler.Get)
 	protected.POST("/settings/tokens", settingsHandler.GenerateToken)
 	protected.POST("/settings/tokens/:id/revoke", settingsHandler.RevokeToken)
+	protected.POST("/settings/date-format", settingsHandler.UpdateDateFormat)
 
 	// JSON API — Bearer token auth; GET-only so gorilla/csrf does not apply.
 	api := e.Group("/api/v1", appmiddleware.RequireAPIToken(tokenStore))

@@ -15,6 +15,7 @@ func RequireAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			return c.Redirect(http.StatusSeeOther, "/login")
 		}
 		c.Set("userID", uid)
+		c.Set("dateFormat", auth.GetDateFormat(c.Request()))
 		return next(c)
 	}
 }

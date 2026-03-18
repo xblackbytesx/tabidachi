@@ -5,6 +5,9 @@ services:
       dockerfile: docker/Dockerfile.dev
     ports:
       - "8080:8080"
+    env_file:
+      - path: ../.env.dev
+        required: false
     environment:
       DATABASE_URL: postgres://hakken:hakken@hakken-db:5432/hakken?sslmode=disable
       SESSION_SECRET: dev-session-secret-32-chars-min!!
@@ -12,8 +15,6 @@ services:
       APP_BASE_URL: http://localhost:8080
       PORT: "8080"
       SECURE_COOKIES: "false"
-      PEXELS_API_KEY: ""
-      UNSPLASH_ACCESS_KEY: ""
       UPLOADS_DIR: data/uploads
     volumes:
       - ..:/app

@@ -12,6 +12,7 @@ type User struct {
 	Email        string
 	DisplayName  string
 	PasswordHash string
+	DateFormat   string
 	CreatedAt    time.Time
 }
 
