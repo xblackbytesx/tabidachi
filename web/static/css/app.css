@@ -856,6 +856,21 @@ sl-details.day-notes {
 .event-preview-title { flex: 1; }
 .event-preview-time { color: var(--color-text-faint); font-size: 11px; }
 
+/* Activity event group: wraps the event row + its image section together */
+.event-builder-group {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px 10px;
+}
+.event-builder-group .event-preview-row {
+  padding: 2px 0 4px;
+}
+.event-builder-group .image-section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+}
+
 .add-day-btn { margin-top: 4px; }
 
 /* Event type fields in dialog */
@@ -1108,14 +1123,45 @@ body.sl-theme-light .wizard-step.done .step-num {
    Settings page
    ============================================================ */
 
-.settings-section {
+.settings-body {
   max-width: 700px;
 }
 
+.settings-group {
+  margin-bottom: 44px;
+}
+
+.settings-group-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.settings-group-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.settings-group-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-faint);
+  white-space: nowrap;
+}
+
+.settings-section {
+  /* max-width moved to .settings-body */
+}
+
 .settings-section-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .settings-section-desc {
@@ -1218,14 +1264,25 @@ body.sl-theme-light .wizard-step.done .step-num {
   border-radius: 12px;
   padding: 0;
   background: transparent;
-  max-width: 92vw;
-  max-height: 92vh;
+  max-width: 95vw;
+  max-height: 95vh;
+  position: relative; /* contain the absolute close button */
 }
-.event-lightbox-dialog::backdrop { background: rgba(0,0,0,0.82); }
+.event-lightbox-dialog[open] {
+  /* Override browser UA centering to ensure true center-center */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+.event-lightbox-dialog::backdrop { background: rgba(0,0,0,0.85); }
 .event-lightbox-img {
   display: block;
-  max-width: 90vw;
-  max-height: 88vh;
+  max-width: 95vw;
+  max-height: 93vh;
+  width: auto;
+  height: auto;
   object-fit: contain;
   border-radius: 10px;
 }
@@ -1233,7 +1290,7 @@ body.sl-theme-light .wizard-step.done .step-num {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.55);
   border: none;
   color: #fff;
   cursor: pointer;

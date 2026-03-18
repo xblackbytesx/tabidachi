@@ -11,43 +11,55 @@ templ Settings(csrfToken string, tokens []*domain.APIToken, errMsg string, dateF
 		<div class="page-header">
 			<h1 class="page-title">Settings</h1>
 		</div>
-		@dateFormatSection(csrfToken, dateFormat)
-		<section class="settings-section">
-			<h2 class="settings-section-title">Personal Access Tokens</h2>
-			<p class="settings-section-desc">
-				Tokens allow the Hakken mobile app and other API clients to read your trips.
-				Each token has full read access to your account — treat it like a password.
-			</p>
-			if errMsg != "" {
-				<p class="form-error">{ errMsg }</p>
-			}
-			<form
-				method="POST"
-				action="/settings/tokens"
-				class="token-form"
-				hx-post="/settings/tokens"
-				hx-target="#main-content"
-				hx-swap="outerHTML show:window:top"
-			>
-				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
-				<div class="token-form-row">
-					<sl-input
-						name="name"
-						label="Token name"
-						placeholder="e.g. Android phone"
-						autocomplete="off"
-						clearable
-						required
-						class="token-name-input"
-					></sl-input>
-					<sl-button type="submit" variant="primary" class="token-submit-btn">
-						<sl-icon slot="prefix" name="key"></sl-icon>
-						Generate token
-					</sl-button>
+		<div class="settings-body">
+			<div class="settings-group">
+				<div class="settings-group-header">
+					<span class="settings-group-label">App settings</span>
 				</div>
-			</form>
-			@tokenList(csrfToken, tokens)
-		</section>
+				@dateFormatSection(csrfToken, dateFormat)
+			</div>
+			<div class="settings-group">
+				<div class="settings-group-header">
+					<span class="settings-group-label">Integrations</span>
+				</div>
+				<section class="settings-section">
+					<h2 class="settings-section-title">Personal Access Tokens</h2>
+					<p class="settings-section-desc">
+						Tokens allow the Hakken mobile app and other API clients to read your trips.
+						Each token has full read access to your account — treat it like a password.
+					</p>
+					if errMsg != "" {
+						<p class="form-error">{ errMsg }</p>
+					}
+					<form
+						method="POST"
+						action="/settings/tokens"
+						class="token-form"
+						hx-post="/settings/tokens"
+						hx-target="#main-content"
+						hx-swap="outerHTML show:window:top"
+					>
+						<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+						<div class="token-form-row">
+							<sl-input
+								name="name"
+								label="Token name"
+								placeholder="e.g. Android phone"
+								autocomplete="off"
+								clearable
+								required
+								class="token-name-input"
+							></sl-input>
+							<sl-button type="submit" variant="primary" class="token-submit-btn">
+								<sl-icon slot="prefix" name="key"></sl-icon>
+								Generate token
+							</sl-button>
+						</div>
+					</form>
+					@tokenList(csrfToken, tokens)
+				</section>
+			</div>
+		</div>
 	}
 }
 
@@ -56,49 +68,61 @@ templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken
 		<div class="page-header">
 			<h1 class="page-title">Settings</h1>
 		</div>
-		@dateFormatSection(csrfToken, dateFormat)
-		<section class="settings-section">
-			<h2 class="settings-section-title">Personal Access Tokens</h2>
-			<p class="settings-section-desc">
-				Tokens allow the Hakken mobile app and other API clients to read your trips.
-				Each token has full read access to your account — treat it like a password.
-			</p>
-			<div class="token-reveal">
-				<p class="token-reveal-warning">
-					<strong>Copy this token now.</strong> It will not be shown again.
-				</p>
-				<div class="token-reveal-value">
-					<code id="new-token-value">{ rawToken }</code>
-					<sl-copy-button from="new-token-value" copy-label="Copy token" success-label="Copied!"></sl-copy-button>
+		<div class="settings-body">
+			<div class="settings-group">
+				<div class="settings-group-header">
+					<span class="settings-group-label">App settings</span>
 				</div>
+				@dateFormatSection(csrfToken, dateFormat)
 			</div>
-			<form
-				method="POST"
-				action="/settings/tokens"
-				class="token-form"
-				hx-post="/settings/tokens"
-				hx-target="#main-content"
-				hx-swap="outerHTML show:window:top"
-			>
-				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
-				<div class="token-form-row">
-					<sl-input
-						name="name"
-						label="Token name"
-						placeholder="e.g. Android phone"
-						autocomplete="off"
-						clearable
-						required
-						class="token-name-input"
-					></sl-input>
-					<sl-button type="submit" variant="primary" class="token-submit-btn">
-						<sl-icon slot="prefix" name="key"></sl-icon>
-						Generate token
-					</sl-button>
+			<div class="settings-group">
+				<div class="settings-group-header">
+					<span class="settings-group-label">Integrations</span>
 				</div>
-			</form>
-			@tokenList(csrfToken, tokens)
-		</section>
+				<section class="settings-section">
+					<h2 class="settings-section-title">Personal Access Tokens</h2>
+					<p class="settings-section-desc">
+						Tokens allow the Hakken mobile app and other API clients to read your trips.
+						Each token has full read access to your account — treat it like a password.
+					</p>
+					<div class="token-reveal">
+						<p class="token-reveal-warning">
+							<strong>Copy this token now.</strong> It will not be shown again.
+						</p>
+						<div class="token-reveal-value">
+							<code id="new-token-value">{ rawToken }</code>
+							<sl-copy-button from="new-token-value" copy-label="Copy token" success-label="Copied!"></sl-copy-button>
+						</div>
+					</div>
+					<form
+						method="POST"
+						action="/settings/tokens"
+						class="token-form"
+						hx-post="/settings/tokens"
+						hx-target="#main-content"
+						hx-swap="outerHTML show:window:top"
+					>
+						<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+						<div class="token-form-row">
+							<sl-input
+								name="name"
+								label="Token name"
+								placeholder="e.g. Android phone"
+								autocomplete="off"
+								clearable
+								required
+								class="token-name-input"
+							></sl-input>
+							<sl-button type="submit" variant="primary" class="token-submit-btn">
+								<sl-icon slot="prefix" name="key"></sl-icon>
+								Generate token
+							</sl-button>
+						</div>
+					</form>
+					@tokenList(csrfToken, tokens)
+				</section>
+			</div>
+		</div>
 	}
 }
 

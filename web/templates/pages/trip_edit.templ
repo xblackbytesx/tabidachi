@@ -273,27 +273,41 @@ templ dayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 		</div>
 		<div class="day-events-preview">
 			for evtIdx, event := range day.Events {
-				<div class="event-preview-row">
-					<span class={ "event-preview-type", templ.KV("event-preview-transit", event.Type == "transit"), templ.KV("event-preview-accommodation", event.Type == "accommodation") }>
-						if event.Type == "transit" {
-							<sl-icon name={ domain.TransportIcon(event.TransportMode) }></sl-icon>
-						} else if event.Type == "accommodation" {
-							<sl-icon name="building"></sl-icon>
-						} else {
-							<sl-icon name="geo-alt"></sl-icon>
-						}
-					</span>
-					<span class="event-preview-title">{ event.Title }</span>
-					if event.StartTime != "" {
-						<span class="event-preview-time">{ event.StartTime }</span>
-					}
-					<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
-						<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
-						<button type="submit" class="btn btn-xs btn-ghost" title="Delete event">×</button>
-					</form>
-				</div>
 				if event.Type == "activity" {
-					@EventImageSection(csrfToken, tripID, strconv.Itoa(legIdx), strconv.Itoa(dayIdx), strconv.Itoa(evtIdx), event.ImageURL, event.ImageCredit, "")
+					<div class="event-builder-group">
+						<div class="event-preview-row">
+							<span class="event-preview-type">
+								<sl-icon name="geo-alt"></sl-icon>
+							</span>
+							<span class="event-preview-title">{ event.Title }</span>
+							if event.StartTime != "" {
+								<span class="event-preview-time">{ event.StartTime }</span>
+							}
+							<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
+								<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+								<button type="submit" class="btn btn-xs btn-ghost" title="Delete event">×</button>
+							</form>
+						</div>
+						@EventImageSection(csrfToken, tripID, strconv.Itoa(legIdx), strconv.Itoa(dayIdx), strconv.Itoa(evtIdx), event.ImageURL, event.ImageCredit, "")
+					</div>
+				} else {
+					<div class="event-preview-row">
+						<span class={ "event-preview-type", templ.KV("event-preview-transit", event.Type == "transit"), templ.KV("event-preview-accommodation", event.Type == "accommodation") }>
+							if event.Type == "transit" {
+								<sl-icon name={ domain.TransportIcon(event.TransportMode) }></sl-icon>
+							} else {
+								<sl-icon name="building"></sl-icon>
+							}
+						</span>
+						<span class="event-preview-title">{ event.Title }</span>
+						if event.StartTime != "" {
+							<span class="event-preview-time">{ event.StartTime }</span>
+						}
+						<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
+							<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+							<button type="submit" class="btn btn-xs btn-ghost" title="Delete event">×</button>
+						</form>
+					</div>
 				}
 			}
 		</div>
