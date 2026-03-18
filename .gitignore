@@ -1,7 +1,6 @@
 .env
 .env.dev
 go.sum
-data/uploads/*.jpg
-data/uploads/*.jpeg
-data/uploads/*.png
-data/uploads/*.webp
+tmp/
+node_modules/
+data/uploads/
