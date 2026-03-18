@@ -55,6 +55,15 @@ func (s *UserStore) GetByID(ctx context.Context, id uuid.UUID) (*domain.User, er
 	return u, nil
 }
 
+// Delete permanently removes a user and all associated data (trips, tokens cascade via FK).
+func (s *UserStore) Delete(ctx context.Context, userID uuid.UUID) error {
+	_, err := s.pool.Exec(ctx, `DELETE FROM users WHERE id = $1`, userID)
+	if err != nil {
+		return fmt.Errorf("delete user: %w", err)
+	}
+	return nil
+}
+
 func (s *UserStore) UpdateDateFormat(ctx context.Context, userID uuid.UUID, pref string) error {
 	_, err := s.pool.Exec(ctx,
 		`UPDATE users SET date_format = $1 WHERE id = $2`,

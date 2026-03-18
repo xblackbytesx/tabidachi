@@ -5,20 +5,67 @@ import (
 	"log/slog"
 	"net/http"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/xblackbytesx/tabidachi/internal/auth"
 	"github.com/xblackbytesx/tabidachi/internal/repository"
 	"github.com/xblackbytesx/tabidachi/web/templates/pages"
 	"github.com/jackc/pgx/v5"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/time/rate"
 )
 
-type AuthHandler struct {
-	users *repository.UserStore
+// loginLimiter enforces a per-IP rate limit on POST /login to slow brute-force attempts.
+// Each IP gets a burst of 5, refilling at 1 token/minute (5 attempts per minute max).
+var (
+	loginMu      sync.Mutex
+	loginBuckets = map[string]*loginBucket{}
+)
+
+type loginBucket struct {
+	limiter  *rate.Limiter
+	lastSeen time.Time
 }
 
-func NewAuthHandler(users *repository.UserStore) *AuthHandler {
-	return &AuthHandler{users: users}
+func init() {
+	// Periodically evict stale entries to avoid unbounded map growth.
+	go func() {
+		for {
+			time.Sleep(10 * time.Minute)
+			loginMu.Lock()
+			for ip, b := range loginBuckets {
+				if time.Since(b.lastSeen) > 15*time.Minute {
+					delete(loginBuckets, ip)
+				}
+			}
+			loginMu.Unlock()
+		}
+	}()
+}
+
+func loginLimiter(ip string) *rate.Limiter {
+	loginMu.Lock()
+	defer loginMu.Unlock()
+	if b, ok := loginBuckets[ip]; ok {
+		b.lastSeen = time.Now()
+		return b.limiter
+	}
+	b := &loginBucket{
+		limiter:  rate.NewLimiter(rate.Every(time.Minute), 5),
+		lastSeen: time.Now(),
+	}
+	loginBuckets[ip] = b
+	return b.limiter
+}
+
+type AuthHandler struct {
+	users             *repository.UserStore
+	allowRegistration bool
+}
+
+func NewAuthHandler(users *repository.UserStore, allowRegistration bool) *AuthHandler {
+	return &AuthHandler{users: users, allowRegistration: allowRegistration}
 }
 
 func (h *AuthHandler) LoginGet(c echo.Context) error {
@@ -27,6 +74,10 @@ func (h *AuthHandler) LoginGet(c echo.Context) error {
 }
 
 func (h *AuthHandler) LoginPost(c echo.Context) error {
+	if !loginLimiter(c.RealIP()).Allow() {
+		return render(c, http.StatusTooManyRequests, pages.Login(csrfToken(c), "Too many login attempts. Please wait a minute before trying again."))
+	}
+
 	email := strings.TrimSpace(c.FormValue("email"))
 	password := c.FormValue("password")
 
@@ -55,11 +106,18 @@ func (h *AuthHandler) LoginPost(c echo.Context) error {
 }
 
 func (h *AuthHandler) RegisterGet(c echo.Context) error {
+	if !h.allowRegistration {
+		return render(c, http.StatusForbidden, pages.Login(csrfToken(c), "Registration is not open on this instance."))
+	}
 	flash := auth.GetFlash(c.Response().Writer, c.Request())
 	return render(c, http.StatusOK, pages.Register(csrfToken(c), flash))
 }
 
 func (h *AuthHandler) RegisterPost(c echo.Context) error {
+	if !h.allowRegistration {
+		return render(c, http.StatusForbidden, pages.Login(csrfToken(c), "Registration is not open on this instance."))
+	}
+
 	email := strings.TrimSpace(strings.ToLower(c.FormValue("email")))
 	displayName := strings.TrimSpace(c.FormValue("display_name"))
 	password := c.FormValue("password")

@@ -55,7 +55,7 @@ func main() {
 	tokenStore := repository.NewTokenStore(pool)
 	imageSvc := images.NewService(cfg.PexelsAPIKey, cfg.UnsplashKey, cfg.UploadsDir)
 
-	authHandler := handler.NewAuthHandler(userStore)
+	authHandler := handler.NewAuthHandler(userStore, cfg.AllowRegistration)
 	dashHandler := handler.NewDashboardHandler(tripStore)
 	tripHandler := handler.NewTripHandler(tripStore, imageSvc)
 	importHandler := handler.NewImportHandler(tripStore, imageSvc)
@@ -120,7 +120,6 @@ func main() {
 	})
 
 	e.Static("/static", "web/static")
-	e.Static("/uploads", cfg.UploadsDir)
 
 	e.GET("/health", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
@@ -173,11 +172,17 @@ func main() {
 	protected.DELETE("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/image", imageHandler.ClearEventImage)
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/image/clear", imageHandler.ClearEventImage)
 
+	// Authenticated uploads
+	protected.GET("/uploads/*", func(c echo.Context) error {
+		return echo.WrapHandler(http.StripPrefix("/uploads/", http.FileServer(http.Dir(cfg.UploadsDir))))(c)
+	})
+
 	// Settings & token management
 	protected.GET("/settings", settingsHandler.Get)
 	protected.POST("/settings/tokens", settingsHandler.GenerateToken)
 	protected.POST("/settings/tokens/:id/revoke", settingsHandler.RevokeToken)
 	protected.POST("/settings/date-format", settingsHandler.UpdateDateFormat)
+	protected.POST("/settings/account/delete", settingsHandler.DeleteAccount)
 
 	// JSON API — Bearer token auth; GET-only so gorilla/csrf does not apply.
 	api := e.Group("/api/v1", appmiddleware.RequireAPIToken(tokenStore))

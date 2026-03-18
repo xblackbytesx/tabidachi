@@ -242,7 +242,7 @@ Tabidachi exposes a small read-only REST API intended for external clients such 
 All API requests require a **personal access token** (PAT) in the `Authorization` header:
 
 ```
-Authorization: Bearer hkn_<token>
+Authorization: Bearer tbd_<token>
 ```
 
 Tokens are generated in **Settings → Personal Access Tokens**. The raw token is shown only once at creation time. Tokens are stored as SHA-256 hashes in the database — a compromised database does not expose usable tokens.
@@ -257,7 +257,7 @@ Tokens are generated in **Settings → Personal Access Tokens**. The raw token i
 **Example**
 
 ```bash
-curl -H "Authorization: Bearer hkn_yourtoken" \
+curl -H "Authorization: Bearer tbd_yourtoken" \
      https://tabidachi.example.com/api/v1/trips
 ```
 
@@ -290,6 +290,7 @@ You can export any trip to its raw JSON from the trip view page and re-import it
 | `APP_BASE_URL` | No | `http://localhost:8080` | Public URL; used to make API image URLs absolute |
 | `PORT` | No | `8080` | Port the app listens on |
 | `SECURE_COOKIES` | No | `true` | Set `false` for HTTP-only local development |
+| `ALLOW_REGISTRATION` | No | `true` | Set `false` to prevent new user sign-ups |
 | `PEXELS_API_KEY` | No | — | Enable Pexels cover image search |
 | `UNSPLASH_ACCESS_KEY` | No | — | Enable Unsplash cover image search |
 | `UPLOADS_DIR` | No | `data/uploads` | Directory for downloaded cover images |

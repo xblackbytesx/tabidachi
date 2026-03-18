@@ -33,7 +33,8 @@ func (h *SettingsHandler) Get(c echo.Context) error {
 		tokens = nil
 	}
 
-	return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", datePref(c)))
+	flash := auth.GetFlash(c.Response().Writer, c.Request())
+	return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", datePref(c), flash))
 }
 
 // GenerateToken handles POST /settings/tokens
@@ -46,14 +47,14 @@ func (h *SettingsHandler) GenerateToken(c echo.Context) error {
 	name := c.FormValue("name")
 	if name == "" {
 		tokens, _ := h.tokens.List(c.Request().Context(), userID)
-		return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "Token name is required.", datePref(c)))
+		return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "Token name is required.", datePref(c), ""))
 	}
 
 	rawToken, _, err := h.tokens.Generate(c.Request().Context(), userID, name)
 	if err != nil {
 		slog.Error("settings: generate token", "err", err)
 		tokens, _ := h.tokens.List(c.Request().Context(), userID)
-		return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "Failed to generate token.", datePref(c)))
+		return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "Failed to generate token.", datePref(c), ""))
 	}
 
 	tokens, err := h.tokens.List(c.Request().Context(), userID)
@@ -81,7 +82,7 @@ func (h *SettingsHandler) RevokeToken(c echo.Context) error {
 	}
 
 	tokens, _ := h.tokens.List(c.Request().Context(), userID)
-	return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", datePref(c)))
+	return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", datePref(c), ""))
 }
 
 // UpdateDateFormat handles POST /settings/date-format
@@ -108,5 +109,34 @@ func (h *SettingsHandler) UpdateDateFormat(c echo.Context) error {
 	c.Set("dateFormat", pref)
 
 	tokens, _ := h.tokens.List(c.Request().Context(), userID)
-	return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", pref))
+	return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", pref, ""))
+}
+
+// DeleteAccount handles POST /settings/account/delete
+func (h *SettingsHandler) DeleteAccount(c echo.Context) error {
+	userID, err := parseUserID(c)
+	if err != nil {
+		return redirect(c, "/login")
+	}
+
+	user, err := h.users.GetByID(c.Request().Context(), userID)
+	if err != nil {
+		slog.Error("delete account: get user", "err", err)
+		auth.SetFlash(c.Response().Writer, c.Request(), "An error occurred. Please try again.")
+		return redirect(c, "/settings")
+	}
+
+	if !auth.CheckPassword(user.PasswordHash, c.FormValue("confirm_password")) {
+		tokens, _ := h.tokens.List(c.Request().Context(), userID)
+		return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", datePref(c), "Incorrect password — account not deleted."))
+	}
+
+	if err := h.users.Delete(c.Request().Context(), userID); err != nil {
+		slog.Error("delete account: delete user", "err", err)
+		tokens, _ := h.tokens.List(c.Request().Context(), userID)
+		return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", datePref(c), "Failed to delete account. Please try again."))
+	}
+
+	auth.ClearSession(c.Response().Writer, c.Request())
+	return redirect(c, "/login")
 }

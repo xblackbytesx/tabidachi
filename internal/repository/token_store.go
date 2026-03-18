@@ -28,7 +28,7 @@ func (s *TokenStore) Generate(ctx context.Context, userID uuid.UUID, name string
 	if _, err = rand.Read(raw); err != nil {
 		return "", nil, fmt.Errorf("generate token bytes: %w", err)
 	}
-	rawToken = "hkn_" + base64.RawURLEncoding.EncodeToString(raw)
+	rawToken = "tbd_" + base64.RawURLEncoding.EncodeToString(raw)
 	hash := hashToken(rawToken)
 
 	tok = &domain.APIToken{}
