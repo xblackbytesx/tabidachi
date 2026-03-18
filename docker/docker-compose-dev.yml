@@ -16,7 +16,6 @@ services:
       PORT: "8080"
       SECURE_COOKIES: "false"
       ALLOW_REGISTRATION: "true"
-      UPLOADS_DIR: data/uploads
     volumes:
       - ..:/app
       # Anonymous volume shadows the bind-mount for the vendor directory so

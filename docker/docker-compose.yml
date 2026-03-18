@@ -42,6 +42,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    restart: unless-stopped
 
   tabidachi-app:
     container_name: tabidachi-app
@@ -64,7 +65,6 @@ services:
       SECURE_COOKIES: ${SECURE_COOKIES:-true}
       PEXELS_API_KEY: ${PEXELS_API_KEY:-}
       UNSPLASH_ACCESS_KEY: ${UNSPLASH_ACCESS_KEY:-}
-      UPLOADS_DIR: data/uploads
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - tabidachi-uploads:/app/data/uploads

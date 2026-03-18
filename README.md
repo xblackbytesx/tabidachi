@@ -208,7 +208,6 @@ You can export any trip to its raw JSON from the trip view page and re-import it
 | `ALLOW_REGISTRATION` | No | `true` | Set `false` to prevent new user sign-ups |
 | `PEXELS_API_KEY` | No | — | Enable Pexels cover image search |
 | `UNSPLASH_ACCESS_KEY` | No | — | Enable Unsplash cover image search |
-| `UPLOADS_DIR` | No | `data/uploads` | Directory for downloaded cover images |
 
 ---
 

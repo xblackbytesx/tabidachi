@@ -19,10 +19,6 @@ type Config struct {
 }
 
 func Load() (*Config, error) {
-	uploadsDir := os.Getenv("UPLOADS_DIR")
-	if uploadsDir == "" {
-		uploadsDir = "data/uploads"
-	}
 	cfg := &Config{
 		DatabaseURL:       os.Getenv("DATABASE_URL"),
 		SessionSecret:     os.Getenv("SESSION_SECRET"),
@@ -33,7 +29,7 @@ func Load() (*Config, error) {
 		AllowRegistration: os.Getenv("ALLOW_REGISTRATION") != "false",
 		PexelsAPIKey:      os.Getenv("PEXELS_API_KEY"),
 		UnsplashKey:       os.Getenv("UNSPLASH_ACCESS_KEY"),
-		UploadsDir:        uploadsDir,
+		UploadsDir:        "data/uploads",
 	}
 	if cfg.DatabaseURL == "" {
 		return nil, fmt.Errorf("DATABASE_URL is required")
