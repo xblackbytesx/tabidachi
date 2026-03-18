@@ -25,8 +25,7 @@ func RequireAPIToken(tokenStore *repository.TokenStore) echo.MiddlewareFunc {
 				return c.JSON(http.StatusUnauthorized, map[string]string{"error": "invalid token"})
 			}
 
-			// Non-blocking last-used update — use a fresh context since the
-			// request context will be cancelled once the response is sent.
+			// Non-blocking last-used update; fresh context avoids cancellation on response send.
 			go tokenStore.UpdateLastUsed(context.Background(), tok.ID)
 
 			c.Set("userID", tok.UserID.String())

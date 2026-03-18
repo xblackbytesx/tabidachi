@@ -144,7 +144,7 @@ func (s *TripStore) UpdateTripImage(ctx context.Context, id, userID uuid.UUID, i
 	return err
 }
 
-// UpdateLegImage updates the CoverImageURL/Credit on a specific leg in the JSONB data.
+// UpdateLegImage sets a leg's cover image URL and credit in the trip's JSONB data.
 func (s *TripStore) UpdateLegImage(ctx context.Context, id, userID uuid.UUID, legIdx int, imageURL, credit string) error {
 	trip, err := s.GetByID(ctx, id, userID)
 	if err != nil {

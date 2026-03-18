@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
+	"log/slog"
 
 	"github.com/google/uuid"
 	"github.com/xblackbytesx/tabidachi/internal/domain"
@@ -83,10 +84,12 @@ func (s *TokenStore) GetByRawToken(ctx context.Context, rawToken string) (*domai
 
 // UpdateLastUsed records the current time as last_used_at for the given token.
 func (s *TokenStore) UpdateLastUsed(ctx context.Context, tokenID uuid.UUID) {
-	_, _ = s.pool.Exec(ctx,
+	if _, err := s.pool.Exec(ctx,
 		`UPDATE api_tokens SET last_used_at = now() WHERE id = $1`,
 		tokenID,
-	)
+	); err != nil {
+		slog.Warn("update token last_used_at", "err", err)
+	}
 }
 
 // Delete removes a token by ID, enforcing user ownership.

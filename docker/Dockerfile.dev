@@ -1,15 +1,13 @@
-FROM golang:1.24-alpine
+FROM golang:1.25-alpine
 
 RUN apk add --no-cache git curl nodejs npm
 
 WORKDIR /app
 
-RUN go install github.com/a-h/templ/cmd/templ@v0.3.857
-RUN go install github.com/air-verse/air@v1.61.5
+RUN go install github.com/a-h/templ/cmd/templ@v0.3.1001
+RUN go install github.com/air-verse/air@latest
 
-# Install front-end deps and copy assets into the image.
-# The docker-compose anonymous volume for web/static/vendor keeps these files
-# alive even when the host bind-mount shadows /app.
+# Install front-end deps; anonymous volume in compose keeps vendor assets alive under the bind-mount.
 COPY web/package.json ./web/
 RUN npm install --prefix ./web && \
     mkdir -p web/static/vendor/shoelace && \

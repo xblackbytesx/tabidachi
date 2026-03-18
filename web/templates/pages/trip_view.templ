@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	"strings"
 	"time"
 	"github.com/xblackbytesx/tabidachi/internal/domain"
 	"github.com/xblackbytesx/tabidachi/internal/format"
@@ -13,7 +14,7 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 		<div class="trip-view">
 			if trip.CoverImageURL != "" {
 				<div class="trip-view-header trip-view-header-has-image"
-					style={ "background-image: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%), url(" + trip.CoverImageURL + "); background-size: cover; background-position: center;" }
+					style={ tripHeaderStyle(trip.CoverImageURL) }
 				>
 					<div class="trip-view-hero-nav">
 						<a href="/" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> All trips</a>
@@ -79,7 +80,7 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 					<div class="leg-section" id={ fmt.Sprintf("leg-%d", legIdx) }>
 						<div class={ "leg-header", templ.KV("leg-header-has-image", leg.CoverImageURL != "") }
 							if leg.CoverImageURL != "" {
-								style={ "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.7) 100%), url(" + leg.CoverImageURL + "); background-size: cover; background-position: center;" }
+								style={ legHeaderStyle(leg.CoverImageURL) }
 							}
 						>
 							<div class="leg-destination">
@@ -346,4 +347,21 @@ func formatDuration(iso string) string {
 		return iso
 	}
 	return result
+}
+
+// tripHeaderStyle returns a safe inline style for the trip cover image.
+// Only paths under uploads/ are allowed to prevent CSS injection.
+func tripHeaderStyle(url string) string {
+	if !strings.HasPrefix(url, "/uploads/") {
+		return ""
+	}
+	return "background-image: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%), url(" + url + "); background-size: cover; background-position: center;"
+}
+
+// legHeaderStyle returns a safe inline style for a leg cover image.
+func legHeaderStyle(url string) string {
+	if !strings.HasPrefix(url, "/uploads/") {
+		return ""
+	}
+	return "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.7) 100%), url(" + url + "); background-size: cover; background-position: center;"
 }

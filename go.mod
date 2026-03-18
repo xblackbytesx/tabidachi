@@ -1,16 +1,16 @@
 module github.com/xblackbytesx/tabidachi
 
-go 1.24
+go 1.25.0
 
 require (
-	github.com/a-h/templ v0.3.857
-	github.com/golang-migrate/migrate/v4 v4.18.2
+	github.com/a-h/templ v0.3.1001
+	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/csrf v1.7.3
-	github.com/gorilla/sessions v1.2.2
-	github.com/jackc/pgx/v5 v5.7.2
-	github.com/labstack/echo/v4 v4.13.4
-	golang.org/x/crypto v0.38.0
+	github.com/gorilla/sessions v1.4.0
+	github.com/jackc/pgx/v5 v5.8.0
+	github.com/labstack/echo/v4 v4.15.1
+	golang.org/x/crypto v0.49.0
 )
 
 require (
@@ -27,9 +27,9 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sync v0.14.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.25.0 // indirect
-	golang.org/x/time v0.11.0 // indirect
+	golang.org/x/net v0.51.0 // indirect
+	golang.org/x/sync v0.20.0 // indirect
+	golang.org/x/sys v0.42.0 // indirect
+	golang.org/x/text v0.35.0 // indirect
+	golang.org/x/time v0.14.0 // indirect
 )

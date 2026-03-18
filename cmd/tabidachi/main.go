@@ -101,8 +101,7 @@ func main() {
 				"path", r.URL.Path,
 				"method", r.Method,
 			)
-			// Redirect to login — covers both stale-session and genuine CSRF failures.
-			// HTMX requests get an HX-Redirect header so the SPA navigates correctly.
+			// Redirect to login (stale session or CSRF failure); HTMX uses HX-Redirect.
 			if r.Header.Get("HX-Request") == "true" {
 				w.Header().Set("HX-Redirect", "/login")
 				w.WriteHeader(http.StatusForbidden)
@@ -139,7 +138,7 @@ func main() {
 
 	protected.GET("/", dashHandler.Get)
 
-	protected.GET("/trips/new", tripHandler.NewMethod)
+	protected.GET("/trips/new", tripHandler.NewOptions)
 	protected.GET("/trips/new/scratch", tripHandler.NewScratch)
 	protected.POST("/trips", tripHandler.Create)
 	protected.GET("/trips/new/import", importHandler.Get)

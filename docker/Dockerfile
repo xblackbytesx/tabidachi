@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 RUN apk add --no-cache git nodejs npm
 
@@ -12,15 +12,14 @@ RUN npm install --prefix ./web && \
     cp web/node_modules/htmx.org/dist/htmx.min.js web/static/vendor/htmx.min.js && \
     rm -rf web/node_modules
 
-# Download Go dependencies (cached layer — only re-runs when go.mod changes)
+# Cache Go dependencies (layer re-runs only when go.mod changes)
 COPY go.mod ./
 RUN go mod download
 
-# Copy source (go.sum excluded by .dockerignore so the downloaded one is preserved)
 COPY . .
 
 # Generate templ files
-RUN go install github.com/a-h/templ/cmd/templ@v0.3.857 && \
+RUN go install github.com/a-h/templ/cmd/templ@v0.3.1001 && \
     templ generate
 
 # Tidy ensures go.sum is complete

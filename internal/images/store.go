@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/google/uuid"
 )
@@ -14,6 +15,9 @@ import (
 // Download fetches a remote image and saves it to uploadsDir/{uuid}.jpg.
 // Returns the relative web path (e.g. "uploads/{uuid}.jpg").
 func Download(ctx context.Context, remoteURL, uploadsDir string) (string, error) {
+	if !strings.HasPrefix(remoteURL, "https://") && !strings.HasPrefix(remoteURL, "http://") {
+		return "", fmt.Errorf("download image: unsupported URL scheme")
+	}
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, remoteURL, nil)
 	if err != nil {
 		return "", fmt.Errorf("download image request: %w", err)

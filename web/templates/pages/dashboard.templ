@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	"strings"
 	"github.com/xblackbytesx/tabidachi/internal/domain"
 	"github.com/xblackbytesx/tabidachi/internal/format"
 	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
@@ -86,7 +87,7 @@ func tripAccentStyle(color string) string {
 
 func tripCardStyle(trip *domain.Trip) string {
 	base := tripAccentStyle(trip.CoverColor)
-	if trip.CoverImageURL != "" {
+	if trip.CoverImageURL != "" && strings.HasPrefix(trip.CoverImageURL, "/uploads/") {
 		base += " background-image: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.75) 100%), url(" + trip.CoverImageURL + "); background-size: cover; background-position: center;"
 	}
 	return base

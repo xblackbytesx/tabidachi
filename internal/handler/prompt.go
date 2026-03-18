@@ -197,16 +197,18 @@ func buildPrompt(itinerary, fromDate, toDate string, included []string) string {
 		dateHint = "\nTrip dates: " + fromDate + " to " + toDate
 	}
 
-	includedList := ""
+	var includedList string
 	if len(included) > 0 {
-		includedList = "\nFocus specifically on extracting: "
+		var b strings.Builder
+		b.WriteString("\nFocus specifically on extracting: ")
 		for i, item := range included {
 			if i > 0 {
-				includedList += ", "
+				b.WriteString(", ")
 			}
-			includedList += item
+			b.WriteString(item)
 		}
-		includedList += "."
+		b.WriteString(".")
+		includedList = b.String()
 	}
 
 	return `IMPORTANT RULES:

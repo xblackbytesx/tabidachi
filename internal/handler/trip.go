@@ -26,7 +26,7 @@ func NewTripHandler(trips *repository.TripStore, imageSvc *images.Service) *Trip
 	return &TripHandler{trips: trips, imageSvc: imageSvc}
 }
 
-func (h *TripHandler) NewMethod(c echo.Context) error {
+func (h *TripHandler) NewOptions(c echo.Context) error {
 	return render(c, http.StatusOK, pages.TripNew(csrfToken(c)))
 }
 
