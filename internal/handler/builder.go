@@ -65,6 +65,9 @@ func (h *BuilderHandler) AddLeg(c echo.Context) error {
 	if destination == "" || startDate == "" || endDate == "" {
 		return c.String(http.StatusBadRequest, "destination, start_date and end_date are required")
 	}
+	if len(destination) > 500 || len(region) > 500 || len(notes) > 5000 {
+		return c.String(http.StatusBadRequest, "field value too long")
+	}
 
 	leg := domain.Leg{
 		Sequence:    len(trip.Data.Legs) + 1,
@@ -205,6 +208,9 @@ func (h *BuilderHandler) AddEvent(c echo.Context) error {
 	if title == "" || eventType == "" {
 		return c.String(http.StatusBadRequest, "event_type and title are required")
 	}
+	if len(title) > 500 || len(c.FormValue("notes")) > 5000 || len(c.FormValue("location")) > 500 {
+		return c.String(http.StatusBadRequest, "field value too long")
+	}
 
 	day := &trip.Data.Legs[legIdx].Days[dayIdx]
 	event := domain.Event{
@@ -265,6 +271,9 @@ func (h *BuilderHandler) UpdateDay(c echo.Context) error {
 	dayType := c.FormValue("type")
 	if dayType == "" {
 		dayType = "normal"
+	}
+	if len(c.FormValue("label")) > 500 || len(c.FormValue("notes")) > 5000 {
+		return c.String(http.StatusBadRequest, "field value too long")
 	}
 
 	trip.Data.Legs[legIdx].Days[dayIdx].Label = c.FormValue("label")

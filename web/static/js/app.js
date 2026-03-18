@@ -1,122 +1,125 @@
 // Tabidachi — app.js
+(function () {
+  'use strict';
 
-// ============================================================
-// Theme toggle (light / dark)
-// ============================================================
-function toggleTheme() {
-  var isDark = document.body.classList.contains('sl-theme-dark');
-  if (isDark) {
-    document.body.classList.replace('sl-theme-dark', 'sl-theme-light');
-    localStorage.setItem('tabidachi-theme', 'light');
-  } else {
-    document.body.classList.replace('sl-theme-light', 'sl-theme-dark');
-    localStorage.removeItem('tabidachi-theme');
+  // ============================================================
+  // Theme toggle (light / dark)
+  // ============================================================
+  window.toggleTheme = function () {
+    var isDark = document.body.classList.contains('sl-theme-dark');
+    if (isDark) {
+      document.body.classList.replace('sl-theme-dark', 'sl-theme-light');
+      localStorage.setItem('tabidachi-theme', 'light');
+    } else {
+      document.body.classList.replace('sl-theme-light', 'sl-theme-dark');
+      localStorage.removeItem('tabidachi-theme');
+    }
+  };
+
+  // ============================================================
+  // Scroll to today
+  // ============================================================
+  function scrollToToday() {
+    var today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    var el = document.querySelector('[data-date="' + today + '"]');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
-}
 
-// ============================================================
-// Scroll to today
-// ============================================================
-function scrollToToday() {
-  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-  const el = document.querySelector(`[data-date="${today}"]`);
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-}
+  // ============================================================
+  // Prompt builder: copy to clipboard
+  // ============================================================
+  window.copyPrompt = function () {
+    var text = document.getElementById('prompt-text');
+    if (!text) return;
+    navigator.clipboard.writeText(text.textContent).then(function () {
+      var btn = document.getElementById('copy-btn');
+      if (btn) {
+        var orig = btn.innerHTML;
+        btn.innerHTML = '<sl-icon name="check2"></sl-icon> Copied!';
+        setTimeout(function () { btn.innerHTML = orig; }, 2000);
+      }
+    }).catch(function () {
+      var range = document.createRange();
+      range.selectNode(text);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+    });
+  };
 
-// ============================================================
-// Prompt builder: copy to clipboard
-// ============================================================
-function copyPrompt() {
-  const text = document.getElementById('prompt-text');
-  if (!text) return;
-  navigator.clipboard.writeText(text.textContent).then(() => {
-    const btn = document.getElementById('copy-btn');
-    if (btn) {
-      const orig = btn.innerHTML;
-      btn.innerHTML = '<sl-icon name="check2"></sl-icon> Copied!';
-      setTimeout(() => { btn.innerHTML = orig; }, 2000);
+  // ============================================================
+  // Builder: open/close dialogs via data-dialog attribute
+  // All onclick handlers in templates use these static functions.
+  // ============================================================
+  window.openDataDialog = function (el) {
+    var id = el.getAttribute('data-dialog');
+    if (id) {
+      var dlg = document.getElementById(id);
+      if (dlg) dlg.show();
     }
-  }).catch(() => {
-    const range = document.createRange();
-    range.selectNode(text);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-  });
-}
+    return false;
+  };
 
-// ============================================================
-// Builder: open/close dialogs via data-dialog attribute
-// All onclick handlers in templates use these static functions.
-// ============================================================
-function openDataDialog(el) {
-  const id = el.getAttribute('data-dialog');
-  if (id) document.getElementById(id)?.show();
-  return false;
-}
-
-function closeDataDialog(el) {
-  const id = el.getAttribute('data-dialog');
-  if (id) document.getElementById(id)?.hide();
-}
-
-// ============================================================
-// Builder: inline day edit toggle
-// ============================================================
-function toggleDayEdit(btn) {
-  const dayBuilder = btn.closest('.day-builder');
-  const form = dayBuilder.querySelector('.day-edit-form');
-  form.style.display = form.style.display === 'none' ? 'block' : 'none';
-}
-
-// ============================================================
-// Builder: event type field switching
-// ============================================================
-function onEventTypeChangeByAttr(select) {
-  const formId = select.getAttribute('data-event-form');
-  if (!formId) return;
-  const form = document.getElementById(formId);
-  if (!form) return;
-  const selected = select.value;
-  form.querySelectorAll('.event-type-fields').forEach(el => {
-    el.style.display = el.getAttribute('data-type') === selected ? '' : 'none';
-  });
-}
-
-// ============================================================
-// HTMX hooks
-// ============================================================
-document.addEventListener('DOMContentLoaded', function () {
-  // Inject the freshest CSRF token from #csrf-live into every HTMX request.
-  // Listen on document (not body) so the event is always caught regardless
-  // of which element triggers the request. Guard against empty values so we
-  // don't send an empty header that causes gorilla/csrf to fall through to
-  // the (potentially stale) form-field path.
-  document.addEventListener('htmx:configRequest', function (evt) {
-    var el = document.getElementById('csrf-live');
-    if (el && el.value) {
-      evt.detail.headers['X-CSRF-Token'] = el.value;
+  window.closeDataDialog = function (el) {
+    var id = el.getAttribute('data-dialog');
+    if (id) {
+      var dlg = document.getElementById(id);
+      if (dlg) dlg.hide();
     }
-  });
+  };
 
-  // Belt-and-suspenders for non-HTMX form submissions: sync the hidden CSRF
-  // field with csrf-live just before the form data is sent so the submitted
-  // token always matches the current cookie.
-  document.addEventListener('submit', function (evt) {
-    var form = evt.target;
-    if (!form || form.tagName !== 'FORM') return;
-    var csrfEl = document.getElementById('csrf-live');
-    if (!csrfEl || !csrfEl.value) return;
-    var hiddenInput = form.querySelector('input[name="gorilla.csrf.Token"]');
-    if (hiddenInput) {
-      hiddenInput.value = csrfEl.value;
-    }
-  });
+  // ============================================================
+  // Builder: inline day edit toggle
+  // ============================================================
+  window.toggleDayEdit = function (btn) {
+    var dayBuilder = btn.closest('.day-builder');
+    var form = dayBuilder.querySelector('.day-edit-form');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  };
 
-  document.body.addEventListener('htmx:afterSwap', function () {
-    if (document.getElementById('timeline')) {
-      scrollToToday();
-    }
+  // ============================================================
+  // Builder: event type field switching
+  // ============================================================
+  window.onEventTypeChangeByAttr = function (select) {
+    var formId = select.getAttribute('data-event-form');
+    if (!formId) return;
+    var form = document.getElementById(formId);
+    if (!form) return;
+    var selected = select.value;
+    form.querySelectorAll('.event-type-fields').forEach(function (el) {
+      el.style.display = el.getAttribute('data-type') === selected ? '' : 'none';
+    });
+  };
+
+  // ============================================================
+  // HTMX hooks
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function () {
+    // Inject the freshest CSRF token from #csrf-live into every HTMX request.
+    document.addEventListener('htmx:configRequest', function (evt) {
+      var el = document.getElementById('csrf-live');
+      if (el && el.value) {
+        evt.detail.headers['X-CSRF-Token'] = el.value;
+      }
+    });
+
+    // Sync the hidden CSRF field with csrf-live just before non-HTMX form submissions.
+    document.addEventListener('submit', function (evt) {
+      var form = evt.target;
+      if (!form || form.tagName !== 'FORM') return;
+      var csrfEl = document.getElementById('csrf-live');
+      if (!csrfEl || !csrfEl.value) return;
+      var hiddenInput = form.querySelector('input[name="gorilla.csrf.Token"]');
+      if (hiddenInput) {
+        hiddenInput.value = csrfEl.value;
+      }
+    });
+
+    document.body.addEventListener('htmx:afterSwap', function () {
+      if (document.getElementById('timeline')) {
+        scrollToToday();
+      }
+    });
   });
-});
+})();

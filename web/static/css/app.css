@@ -44,6 +44,13 @@ body.sl-theme-light {
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Keyboard focus indicator — visible only for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
 body {
   background: var(--color-bg);
   color: var(--color-text);
@@ -234,6 +241,8 @@ a:hover { color: var(--color-accent-hover); text-decoration: underline; }
   letter-spacing: 0.01em;
 }
 .required { color: var(--color-danger); }
+.field-optional { color: var(--color-text-faint); font-size: 12px; font-weight: 400; }
+.field-hint { color: var(--color-text-faint); font-size: 13px; margin-top: -2px; }
 .field-input,
 .field-textarea {
   background: var(--color-surface-2);
@@ -275,6 +284,7 @@ a:hover { color: var(--color-accent-hover); text-decoration: underline; }
 }
 .form-stack { display: flex; flex-direction: column; gap: 18px; }
 .form-actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 10px; }
+.form-error { color: #f87171; font-size: 14px; margin-bottom: 10px; }
 .form-help { color: var(--color-text-muted); font-size: 14px; margin-bottom: 18px; }
 .form-section-title { font-size: 17px; font-weight: 600; margin-bottom: 18px; }
 .form-section-header {

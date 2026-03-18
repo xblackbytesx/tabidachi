@@ -12,12 +12,10 @@ import (
 
 // WikipediaProvider fetches page thumbnail images from Wikipedia.
 // No API key required — used as a zero-config fallback.
-type WikipediaProvider struct {
-	client *http.Client
-}
+type WikipediaProvider struct{}
 
 func NewWikipediaProvider() *WikipediaProvider {
-	return &WikipediaProvider{client: &http.Client{}}
+	return &WikipediaProvider{}
 }
 
 func (p *WikipediaProvider) Name() string { return "wikipedia" }
@@ -38,7 +36,7 @@ func (p *WikipediaProvider) fetchSummary(ctx context.Context, title string) (*wi
 		return nil, err
 	}
 	req.Header.Set("User-Agent", "Tabidachi/1.0 (itinerary manager)")
-	resp, err := p.client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +61,7 @@ func (p *WikipediaProvider) search(ctx context.Context, query string, n int) ([]
 		return nil, err
 	}
 	req.Header.Set("User-Agent", "Tabidachi/1.0 (itinerary manager)")
-	resp, err := p.client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

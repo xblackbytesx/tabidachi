@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/a-h/templ"
 	"github.com/google/uuid"
@@ -52,4 +53,14 @@ func render(c echo.Context, status int, t templ.Component) error {
 	c.Response().WriteHeader(status)
 	ctx := format.WithPref(c.Request().Context(), datePref(c))
 	return t.Render(ctx, c.Response().Writer)
+}
+
+// isValidEmail performs a basic structural check on an email address.
+func isValidEmail(email string) bool {
+	at := strings.LastIndex(email, "@")
+	if at < 1 || at >= len(email)-1 {
+		return false
+	}
+	domain := email[at+1:]
+	return strings.Contains(domain, ".") && !strings.HasSuffix(domain, ".")
 }

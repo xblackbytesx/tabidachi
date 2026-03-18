@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"html"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -41,7 +42,7 @@ func (h *ImageHandler) ImageSearch(c echo.Context) error {
 
 // LegImageSearch handles GET /trips/:id/legs/:legIdx/image/search?q=
 func (h *ImageHandler) LegImageSearch(c echo.Context) error {
-	legIdx := c.Param("legIdx")
+	legIdx := html.EscapeString(c.Param("legIdx"))
 	query := c.QueryParam("q")
 	if query == "" {
 		return c.HTML(http.StatusOK, `<div id="leg-image-results-`+legIdx+`"></div>`)
@@ -154,9 +155,9 @@ func (h *ImageHandler) ClearLegImage(c echo.Context) error {
 
 // EventImageSearch handles GET /trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/image/search?q=
 func (h *ImageHandler) EventImageSearch(c echo.Context) error {
-	legIdx := c.Param("legIdx")
-	dayIdx := c.Param("dayIdx")
-	eventIdx := c.Param("eventIdx")
+	legIdx := html.EscapeString(c.Param("legIdx"))
+	dayIdx := html.EscapeString(c.Param("dayIdx"))
+	eventIdx := html.EscapeString(c.Param("eventIdx"))
 	query := c.QueryParam("q")
 	if query == "" {
 		return c.HTML(http.StatusOK, `<div id="event-image-results-`+legIdx+`-`+dayIdx+`-`+eventIdx+`"></div>`)

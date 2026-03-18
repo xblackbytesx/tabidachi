@@ -125,6 +125,9 @@ func (h *AuthHandler) RegisterPost(c echo.Context) error {
 	if email == "" || displayName == "" || password == "" {
 		return render(c, http.StatusOK, pages.Register(csrfToken(c), "All fields are required."))
 	}
+	if !isValidEmail(email) {
+		return render(c, http.StatusOK, pages.Register(csrfToken(c), "Please enter a valid email address."))
+	}
 	if len(password) < 8 {
 		return render(c, http.StatusOK, pages.Register(csrfToken(c), "Password must be at least 8 characters."))
 	}

@@ -19,6 +19,12 @@ type TripStorer interface {
 // AutoFetch fetches cover images for a trip and all its legs in the background.
 // Call as: go images.AutoFetch(tripStore, imageService, tripID, userID)
 func AutoFetch(trips TripStorer, svc *Service, tripID, userID uuid.UUID) {
+	defer func() {
+		if r := recover(); r != nil {
+			slog.Error("autofetch: panic recovered", "tripID", tripID, "panic", r)
+		}
+	}()
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 

@@ -11,7 +11,6 @@ import (
 // PexelsProvider fetches images from the Pexels API.
 type PexelsProvider struct {
 	apiKey string
-	client *http.Client
 }
 
 // NewPexelsProvider returns nil if apiKey is empty (provider skipped).
@@ -21,7 +20,7 @@ func NewPexelsProvider(apiKey string) Provider {
 	if apiKey == "" {
 		return nil
 	}
-	return &PexelsProvider{apiKey: apiKey, client: &http.Client{}}
+	return &PexelsProvider{apiKey: apiKey}
 }
 
 func (p *PexelsProvider) Name() string { return "pexels" }
@@ -47,7 +46,7 @@ func (p *PexelsProvider) doSearch(ctx context.Context, query string, perPage int
 		return nil, err
 	}
 	req.Header.Set("Authorization", p.apiKey)
-	resp, err := p.client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

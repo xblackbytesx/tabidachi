@@ -46,14 +46,20 @@ func (h *SettingsHandler) GenerateToken(c echo.Context) error {
 
 	name := c.FormValue("name")
 	if name == "" {
-		tokens, _ := h.tokens.List(c.Request().Context(), userID)
+		tokens, err := h.tokens.List(c.Request().Context(), userID)
+		if err != nil {
+			slog.Error("settings: list tokens", "err", err)
+		}
 		return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "Token name is required.", datePref(c), ""))
 	}
 
 	rawToken, _, err := h.tokens.Generate(c.Request().Context(), userID, name)
 	if err != nil {
 		slog.Error("settings: generate token", "err", err)
-		tokens, _ := h.tokens.List(c.Request().Context(), userID)
+		tokens, err := h.tokens.List(c.Request().Context(), userID)
+		if err != nil {
+			slog.Error("settings: list tokens", "err", err)
+		}
 		return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "Failed to generate token.", datePref(c), ""))
 	}
 
@@ -81,7 +87,10 @@ func (h *SettingsHandler) RevokeToken(c echo.Context) error {
 		slog.Error("settings: revoke token", "err", err)
 	}
 
-	tokens, _ := h.tokens.List(c.Request().Context(), userID)
+	tokens, err := h.tokens.List(c.Request().Context(), userID)
+	if err != nil {
+		slog.Error("settings: list tokens", "err", err)
+	}
 	return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", datePref(c), ""))
 }
 
@@ -108,7 +117,10 @@ func (h *SettingsHandler) UpdateDateFormat(c echo.Context) error {
 	// Update echo context so render() picks up the new pref immediately.
 	c.Set("dateFormat", pref)
 
-	tokens, _ := h.tokens.List(c.Request().Context(), userID)
+	tokens, err := h.tokens.List(c.Request().Context(), userID)
+	if err != nil {
+		slog.Error("settings: list tokens", "err", err)
+	}
 	return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", pref, ""))
 }
 
@@ -127,13 +139,19 @@ func (h *SettingsHandler) DeleteAccount(c echo.Context) error {
 	}
 
 	if !auth.CheckPassword(user.PasswordHash, c.FormValue("confirm_password")) {
-		tokens, _ := h.tokens.List(c.Request().Context(), userID)
+		tokens, err := h.tokens.List(c.Request().Context(), userID)
+		if err != nil {
+			slog.Error("settings: list tokens", "err", err)
+		}
 		return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", datePref(c), "Incorrect password — account not deleted."))
 	}
 
 	if err := h.users.Delete(c.Request().Context(), userID); err != nil {
 		slog.Error("delete account: delete user", "err", err)
-		tokens, _ := h.tokens.List(c.Request().Context(), userID)
+		tokens, err := h.tokens.List(c.Request().Context(), userID)
+		if err != nil {
+			slog.Error("settings: list tokens", "err", err)
+		}
 		return render(c, http.StatusOK, pages.Settings(csrfToken(c), tokens, "", datePref(c), "Failed to delete account. Please try again."))
 	}
 

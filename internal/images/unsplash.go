@@ -11,7 +11,6 @@ import (
 // UnsplashProvider fetches images from the Unsplash API.
 type UnsplashProvider struct {
 	accessKey string
-	client    *http.Client
 }
 
 // NewUnsplashProvider returns nil if accessKey is empty.
@@ -20,7 +19,7 @@ func NewUnsplashProvider(accessKey string) Provider {
 	if accessKey == "" {
 		return nil
 	}
-	return &UnsplashProvider{accessKey: accessKey, client: &http.Client{}}
+	return &UnsplashProvider{accessKey: accessKey}
 }
 
 func (p *UnsplashProvider) Name() string { return "unsplash" }
@@ -49,7 +48,7 @@ func (p *UnsplashProvider) doSearch(ctx context.Context, query string, perPage i
 		return nil, err
 	}
 	req.Header.Set("Authorization", "Client-ID "+p.accessKey)
-	resp, err := p.client.Do(req)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

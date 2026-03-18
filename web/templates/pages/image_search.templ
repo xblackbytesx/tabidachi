@@ -1,6 +1,9 @@
 package pages
 
-import "github.com/xblackbytesx/tabidachi/internal/images"
+import (
+	"encoding/json"
+	"github.com/xblackbytesx/tabidachi/internal/images"
+)
 
 // ImageSearchResults renders the HTMX partial for image search results.
 // legIdx is empty string for trip-level searches, a number string for leg searches.
@@ -32,7 +35,7 @@ templ imageThumb(csrfToken, postTarget, sectionID string, r images.ImageResult) 
 			type="button"
 			class="image-thumb-btn"
 			hx-post={ postTarget }
-			hx-vals={ `{"imageURL":"` + r.URL + `","thumbURL":"` + r.ThumbURL + `","credit":"` + r.Credit + `"}` }
+			hx-vals={ imageVals(r) }
 			hx-headers={ `{"X-CSRF-Token":"` + csrfToken + `"}` }
 			hx-target={ "#" + sectionID }
 			hx-select={ "#" + sectionID }
@@ -44,6 +47,17 @@ templ imageThumb(csrfToken, postTarget, sectionID string, r images.ImageResult) 
 			<div class="image-thumb-loading" aria-hidden="true"></div>
 		</button>
 	</div>
+}
+
+// imageVals safely JSON-encodes image metadata for hx-vals.
+func imageVals(r images.ImageResult) string {
+	v := map[string]string{
+		"imageURL": r.URL,
+		"thumbURL": r.ThumbURL,
+		"credit":   r.Credit,
+	}
+	b, _ := json.Marshal(v)
+	return string(b)
 }
 
 // TripImagePreview renders the image section on the trip edit page.

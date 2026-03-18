@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"log/slog"
 	"net/http"
 
 	"github.com/gorilla/sessions"
@@ -32,11 +33,20 @@ func getSession(r *http.Request) (*sessions.Session, error) {
 }
 
 // SetUserID stores the user ID in the session and saves it.
+// It regenerates the session first to prevent session fixation attacks.
 func SetUserID(w http.ResponseWriter, r *http.Request, userID string) error {
+	// Invalidate the old session to prevent fixation.
+	if old, err := getSession(r); err == nil {
+		old.Values = map[interface{}]interface{}{}
+		old.Options.MaxAge = -1
+		_ = old.Save(r, w)
+	}
+	// Create a fresh session with the new user ID.
 	sess, err := getSession(r)
 	if err != nil {
 		return err
 	}
+	sess.Options.MaxAge = 86400 * 7
 	sess.Values[keyUserID] = userID
 	return sess.Save(r, w)
 }
@@ -55,21 +65,27 @@ func GetUserID(r *http.Request) string {
 func ClearSession(w http.ResponseWriter, r *http.Request) {
 	sess, err := getSession(r)
 	if err != nil {
+		slog.Error("session: clear: get", "err", err)
 		return
 	}
 	sess.Values = map[interface{}]interface{}{}
 	sess.Options.MaxAge = -1
-	_ = sess.Save(r, w)
+	if err := sess.Save(r, w); err != nil {
+		slog.Error("session: clear: save", "err", err)
+	}
 }
 
 // SetFlash saves a one-shot flash message to the session.
 func SetFlash(w http.ResponseWriter, r *http.Request, msg string) {
 	sess, err := getSession(r)
 	if err != nil {
+		slog.Error("session: set flash: get", "err", err)
 		return
 	}
 	sess.AddFlash(msg, keyFlash)
-	_ = sess.Save(r, w)
+	if err := sess.Save(r, w); err != nil {
+		slog.Error("session: set flash: save", "err", err)
+	}
 }
 
 // SetDateFormat stores the user's date format preference in the session.

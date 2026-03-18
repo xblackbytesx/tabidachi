@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"time"
@@ -37,9 +38,17 @@ func (h *ImportHandler) Post(c echo.Context) error {
 		return render(c, http.StatusOK, pages.TripImport(csrfToken(c), "JSON data is required."))
 	}
 
+	if len(raw) > 2*1024*1024 { // 2 MB max
+		return render(c, http.StatusOK, pages.TripImport(csrfToken(c), "JSON data is too large (max 2 MB)."))
+	}
+
 	var data domain.TripData
 	if err := json.Unmarshal([]byte(raw), &data); err != nil {
 		return render(c, http.StatusOK, pages.TripImport(csrfToken(c), "Invalid JSON: "+err.Error()))
+	}
+
+	if err := validateTripData(&data); err != nil {
+		return render(c, http.StatusOK, pages.TripImport(csrfToken(c), err.Error()))
 	}
 
 	if data.Title == "" {
@@ -88,4 +97,83 @@ func (h *ImportHandler) Post(c echo.Context) error {
 		return c.NoContent(http.StatusNoContent)
 	}
 	return redirect(c, "/trips/"+created.ID.String())
+}
+
+// validateTripData enforces structural limits on imported trip data to prevent
+// abuse or accidental resource exhaustion.
+func validateTripData(data *domain.TripData) error {
+	const (
+		maxLegs        = 50
+		maxDaysPerLeg  = 60
+		maxEventsPerDay = 50
+		maxStringLen   = 1000
+	)
+
+	if len(data.Title) > maxStringLen {
+		return fmt.Errorf("Title is too long (max %d characters).", maxStringLen)
+	}
+	if len(data.HomeLocation) > maxStringLen {
+		return fmt.Errorf("Home location is too long (max %d characters).", maxStringLen)
+	}
+	if len(data.Legs) > maxLegs {
+		return fmt.Errorf("Too many legs (max %d).", maxLegs)
+	}
+
+	validDayTypes := map[string]bool{
+		"normal": true, "arrival": true, "departure": true,
+		"travel": true, "rest": true, "flexible": true, "": true,
+	}
+	validEventTypes := map[string]bool{
+		"activity": true, "transit": true, "accommodation": true,
+	}
+
+	for i, leg := range data.Legs {
+		if len(leg.Destination) > maxStringLen {
+			return fmt.Errorf("Leg %d destination is too long.", i+1)
+		}
+		if len(leg.Notes) > 5000 {
+			return fmt.Errorf("Leg %d notes are too long (max 5000 characters).", i+1)
+		}
+		if leg.StartDate != "" {
+			if _, err := time.Parse("2006-01-02", leg.StartDate); err != nil {
+				return fmt.Errorf("Leg %d has invalid startDate format (use YYYY-MM-DD).", i+1)
+			}
+		}
+		if leg.EndDate != "" {
+			if _, err := time.Parse("2006-01-02", leg.EndDate); err != nil {
+				return fmt.Errorf("Leg %d has invalid endDate format (use YYYY-MM-DD).", i+1)
+			}
+		}
+		if len(leg.Days) > maxDaysPerLeg {
+			return fmt.Errorf("Leg %d has too many days (max %d).", i+1, maxDaysPerLeg)
+		}
+		for j, day := range leg.Days {
+			if !validDayTypes[day.Type] {
+				return fmt.Errorf("Leg %d, day %d has invalid type %q.", i+1, j+1, day.Type)
+			}
+			if day.Date != "" {
+				if _, err := time.Parse("2006-01-02", day.Date); err != nil {
+					return fmt.Errorf("Leg %d, day %d has invalid date format (use YYYY-MM-DD).", i+1, j+1)
+				}
+			}
+			if len(day.Notes) > 5000 {
+				return fmt.Errorf("Leg %d, day %d notes are too long (max 5000 characters).", i+1, j+1)
+			}
+			if len(day.Events) > maxEventsPerDay {
+				return fmt.Errorf("Leg %d, day %d has too many events (max %d).", i+1, j+1, maxEventsPerDay)
+			}
+			for k, event := range day.Events {
+				if !validEventTypes[event.Type] {
+					return fmt.Errorf("Leg %d, day %d, event %d has invalid type %q.", i+1, j+1, k+1, event.Type)
+				}
+				if len(event.Title) > maxStringLen {
+					return fmt.Errorf("Leg %d, day %d, event %d title is too long.", i+1, j+1, k+1)
+				}
+				if len(event.Notes) > 5000 {
+					return fmt.Errorf("Leg %d, day %d, event %d notes are too long (max 5000 characters).", i+1, j+1, k+1)
+				}
+			}
+		}
+	}
+	return nil
 }

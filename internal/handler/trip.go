@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 	"unicode"
@@ -16,6 +17,13 @@ import (
 	"github.com/xblackbytesx/tabidachi/web/templates/pages"
 	"github.com/labstack/echo/v4"
 )
+
+var hexColorRe = regexp.MustCompile(`^#[0-9a-fA-F]{6}$`)
+
+// isValidHexColor returns true for empty strings (no color set) or valid 6-digit hex colors.
+func isValidHexColor(s string) bool {
+	return s == "" || hexColorRe.MatchString(s)
+}
 
 type TripHandler struct {
 	trips    *repository.TripStore
@@ -52,6 +60,12 @@ func (h *TripHandler) Create(c echo.Context) error {
 
 	if title == "" || startStr == "" || endStr == "" {
 		return render(c, http.StatusOK, pages.TripScratch(csrfToken(c)))
+	}
+	if len(title) > 500 || len(homeLocation) > 500 || len(timezone) > 100 {
+		return c.String(http.StatusBadRequest, "field value too long")
+	}
+	if !isValidHexColor(coverColor) {
+		coverColor = ""
 	}
 
 	startDate, err := time.Parse("2006-01-02", startStr)
@@ -154,6 +168,13 @@ func (h *TripHandler) Update(c echo.Context) error {
 	if title == "" || startStr == "" || endStr == "" {
 		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip))
 	}
+	if len(title) > 500 || len(c.FormValue("home_location")) > 500 || len(c.FormValue("timezone")) > 100 {
+		return c.String(http.StatusBadRequest, "field value too long")
+	}
+	coverColor := c.FormValue("cover_color")
+	if !isValidHexColor(coverColor) {
+		coverColor = ""
+	}
 
 	startDate, err := time.Parse("2006-01-02", startStr)
 	if err != nil {
@@ -172,7 +193,7 @@ func (h *TripHandler) Update(c echo.Context) error {
 	if trip.Timezone == "" {
 		trip.Timezone = "UTC"
 	}
-	trip.CoverColor = c.FormValue("cover_color")
+	trip.CoverColor = coverColor
 
 	// Update metadata fields in data too
 	trip.Data.Title = title
