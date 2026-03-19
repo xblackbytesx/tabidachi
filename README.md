@@ -27,6 +27,27 @@ Tabidachi is a self-hosted travel itinerary manager. Build and organise trips wi
 
 ---
 
+## Screenshots
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/03%20-%20Trips%20-%20Tabidachi.png" width="400" alt="Trip dashboard"></td>
+    <td><img src="docs/screenshots/04%20-%20Japan%20Itinerary%20-%20Tabidachi.png" width="400" alt="Trip view with cover image and itinerary"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/08%20-%20Edit%20Japan%20Itinerary%20-%20Tabidachi.png" width="400" alt="Itinerary builder with days and events"></td>
+    <td><img src="docs/screenshots/01%20-%20New%20Trip%20-%20Tabidachi.png" width="400" alt="New trip creation methods"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/11%20-%20Plan%20with%20AI%20-%20Tabidachi.png" width="400" alt="Plan a new trip with AI"></td>
+    <td><img src="docs/screenshots/10%20-%20Convert%20Existing%20Itinerary%20-%20Tabidachi.png" width="400" alt="Convert existing itinerary with AI"></td>
+  </tr>
+</table>
+
+[See all screenshots →](docs/screenshots/)
+
+---
+
 ## Tech stack
 
 | Layer | Technology |
