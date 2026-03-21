@@ -189,6 +189,11 @@ func main() {
 	api.GET("/trips", apiHandler.ListTrips)
 	api.GET("/trips/:id", apiHandler.GetTrip)
 
+	// API-authenticated uploads (for mobile clients using Bearer tokens).
+	api.GET("/uploads/*", func(c echo.Context) error {
+		return echo.WrapHandler(http.StripPrefix("/api/v1/uploads/", http.FileServer(http.Dir(cfg.UploadsDir))))(c)
+	})
+
 	// Manual builder mutation endpoints
 	protected.POST("/trips/:id/legs", builderHandler.AddLeg)
 	protected.POST("/trips/:id/legs/:legIdx/delete", builderHandler.DeleteLeg)
