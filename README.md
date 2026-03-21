@@ -21,7 +21,7 @@ Tabidachi is a self-hosted travel itinerary manager. Build and organise trips wi
 - **Cover images** — auto-fetched from Pexels / Unsplash / Wikipedia, or set manually
 - **AI prompt wizards** — convert existing booking docs into Tabidachi JSON, or plan a new trip from scratch
 - **Import / Export** — round-trip via a documented JSON schema
-- **JSON API** — read-only `/api/v1/` endpoints secured with personal access tokens (PATs)
+- **JSON API** — read-only `/api/v1/` endpoints secured with personal access tokens (PATs) — powers the [official mobile app](#mobile-apps)
 - **Single-user or multi-account** — each account only sees its own trips
 - **Dark theme** — built with Shoelace web components on an OLED-black palette
 
@@ -59,6 +59,16 @@ Tabidachi is a self-hosted travel itinerary manager. Build and organise trips wi
 | Database | PostgreSQL |
 | Auth | gorilla/sessions + gorilla/csrf |
 | Migrations | golang-migrate |
+
+---
+
+## Mobile apps
+
+| Platform | Repository |
+|----------|------------|
+| Android | [tabidachi-android](https://github.com/xblackbytesx/tabidachi-android) |
+
+The official Android companion app connects to your Tabidachi instance via the JSON API using a Personal Access Token. It's an offline-first app so all trips are cached locally and renders the full itineraries including images, transit routes, and day navigation. Built with Jetpack Compose and Material 3.
 
 ---
 
@@ -171,7 +181,7 @@ You can also set cover images manually from the trip editor — search results a
 
 ## JSON API
 
-Tabidachi exposes a small read-only REST API intended for external clients such as a native mobile app.
+Tabidachi exposes a small read-only REST API intended for external clients. See [Mobile apps](#mobile-apps) for the official Android companion app that uses this API.
 
 ### Authentication
 
