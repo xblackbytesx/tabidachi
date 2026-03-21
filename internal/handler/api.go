@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -81,20 +82,36 @@ func (h *APIHandler) GetTrip(c echo.Context) error {
 		tripSummary: h.toSummary(trip),
 		Data:        trip.Data,
 	}
-	// Make leg cover image URLs absolute too.
+	// Make all image URLs absolute and rewrite /uploads/ for Bearer token auth.
 	for i, leg := range detail.Data.Legs {
-		if leg.CoverImageURL != "" && len(leg.CoverImageURL) > 0 && leg.CoverImageURL[0] == '/' {
-			detail.Data.Legs[i].CoverImageURL = h.baseURL + leg.CoverImageURL
+		detail.Data.Legs[i].CoverImageURL = h.absImageURL(leg.CoverImageURL)
+		for j, day := range leg.Days {
+			for k, ev := range day.Events {
+				detail.Data.Legs[i].Days[j].Events[k].ImageURL = h.absImageURL(ev.ImageURL)
+				detail.Data.Legs[i].Days[j].Events[k].ImageThumbURL = h.absImageURL(ev.ImageThumbURL)
+			}
 		}
 	}
 	return c.JSON(http.StatusOK, detail)
 }
 
-func (h *APIHandler) toSummary(t *domain.Trip) tripSummary {
-	imgURL := t.CoverImageURL
-	if imgURL != "" && len(imgURL) > 0 && imgURL[0] == '/' {
-		imgURL = h.baseURL + imgURL
+// absImageURL makes a relative image path into an absolute URL suitable for
+// API clients.  It also rewrites /uploads/ to /api/v1/uploads/ so that Bearer
+// token auth works (the session-protected /uploads/ route does not accept API
+// tokens).
+func (h *APIHandler) absImageURL(path string) string {
+	if path == "" {
+		return ""
 	}
+	url := path
+	if url[0] == '/' {
+		url = h.baseURL + url
+	}
+	url = strings.Replace(url, "/uploads/", "/api/v1/uploads/", 1)
+	return url
+}
+
+func (h *APIHandler) toSummary(t *domain.Trip) tripSummary {
 	return tripSummary{
 		ID:               t.ID.String(),
 		Title:            t.Title,
@@ -103,7 +120,7 @@ func (h *APIHandler) toSummary(t *domain.Trip) tripSummary {
 		HomeLocation:     t.HomeLocation,
 		Timezone:         t.Timezone,
 		CoverColor:       t.CoverColor,
-		CoverImageURL:    imgURL,
+		CoverImageURL:    h.absImageURL(t.CoverImageURL),
 		CoverImageCredit: t.CoverImageCredit,
 		LegCount:         len(t.Data.Legs),
 		UpdatedAt:        t.UpdatedAt,
