@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 	"time"
 	"github.com/xblackbytesx/tabidachi/internal/domain"
@@ -191,7 +192,7 @@ templ daySection(trip *domain.Trip, day domain.Day) {
 }
 
 templ eventCard(event domain.Event) {
-	<div class={ "event-card", "event-" + event.Type }>
+	<div class={ "event-card", "event-" + event.Type, templ.KV("event-cancelled", event.Status == "cancelled") }>
 		<div class="event-card-inner">
 			if event.Type == "activity" && event.ImageThumbURL != "" {
 				<button class="event-thumb-btn" onclick="openEventLightbox(this)" data-full-url={ event.ImageURL } aria-label={ "View photo of " + event.Title }>
@@ -211,6 +212,9 @@ templ eventCard(event domain.Event) {
 					if event.Optional {
 						<span class="badge badge-optional">Optional</span>
 					}
+					if statusLabel(event.Status) != "" {
+						<span class={ "badge", "badge-status-" + event.Status }>{ statusLabel(event.Status) }</span>
+					}
 					if event.StartTime != "" {
 						<span class="event-time">
 							{ event.StartTime }
@@ -221,7 +225,14 @@ templ eventCard(event domain.Event) {
 					}
 				</div>
 				if event.Location != "" {
-					<div class="event-location"><sl-icon name="pin-map"></sl-icon> { event.Location }</div>
+					<div class="event-location">
+						<sl-icon name="pin-map"></sl-icon> { event.Location }
+						if mapsURL(event.Latitude, event.Longitude, event.Location) != "" {
+							<a href={ templ.SafeURL(mapsURL(event.Latitude, event.Longitude, event.Location)) } target="_blank" rel="noopener" class="maps-link" title="Open in Google Maps">
+								<sl-icon name="geo-alt-fill"></sl-icon>
+							</a>
+						}
+					</div>
 				}
 				if event.Type == "accommodation" {
 					<div class="event-accomm-type">
@@ -235,6 +246,9 @@ templ eventCard(event domain.Event) {
 				}
 				if event.BookingReference != "" {
 					<div class="event-ref"><sl-icon name="ticket"></sl-icon> Ref: { event.BookingReference }</div>
+				}
+				if event.URL != "" {
+					<div class="event-link"><a href={ templ.SafeURL(event.URL) } target="_blank" rel="noopener"><sl-icon name="link-45deg"></sl-icon> { event.URL }</a></div>
 				}
 				if event.Notes != "" {
 					<div class="event-notes">{ event.Notes }</div>
@@ -260,12 +274,18 @@ templ transitConnector(event domain.Event) {
 							if event.Departure.Code != "" {
 								<span class="transit-code">({ event.Departure.Code })</span>
 							}
+							if transitPointMapsURL(event.Departure) != "" {
+								<a href={ templ.SafeURL(transitPointMapsURL(event.Departure)) } target="_blank" rel="noopener" class="maps-link" title="Open in Google Maps"><sl-icon name="geo-alt-fill"></sl-icon></a>
+							}
 						</span>
 						<sl-icon name="arrow-right"></sl-icon>
 						<span class="transit-to">
 							{ event.Arrival.Location }
 							if event.Arrival.Code != "" {
 								<span class="transit-code">({ event.Arrival.Code })</span>
+							}
+							if transitPointMapsURL(event.Arrival) != "" {
+								<a href={ templ.SafeURL(transitPointMapsURL(event.Arrival)) } target="_blank" rel="noopener" class="maps-link" title="Open in Google Maps"><sl-icon name="geo-alt-fill"></sl-icon></a>
 							}
 						</span>
 					</div>
@@ -289,6 +309,9 @@ templ transitConnector(event domain.Event) {
 						<span class="transit-flight">{ event.FlightNumber }</span>
 					}
 				</div>
+				if event.URL != "" {
+					<div class="transit-link"><a href={ templ.SafeURL(event.URL) } target="_blank" rel="noopener"><sl-icon name="link-45deg"></sl-icon> { event.URL }</a></div>
+				}
 				if event.Notes != "" {
 					<div class="transit-notes">{ event.Notes }</div>
 				}
@@ -359,9 +382,40 @@ func tripHeaderStyle(url string) string {
 }
 
 // legHeaderStyle returns a safe inline style for a leg cover image.
-func legHeaderStyle(url string) string {
-	if !strings.HasPrefix(url, "/uploads/") {
+func legHeaderStyle(u string) string {
+	if !strings.HasPrefix(u, "/uploads/") {
 		return ""
 	}
-	return "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.7) 100%), url(" + url + "); background-size: cover; background-position: center;"
+	return "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.7) 100%), url(" + u + "); background-size: cover; background-position: center;"
+}
+
+// mapsURL returns a Google Maps search URL for the given coordinates or location name.
+func mapsURL(lat, lng float64, location string) string {
+	if lat != 0 || lng != 0 {
+		return fmt.Sprintf("https://www.google.com/maps/search/?api=1&query=%f,%f", lat, lng)
+	}
+	if location != "" {
+		return "https://www.google.com/maps/search/?api=1&query=" + url.QueryEscape(location)
+	}
+	return ""
+}
+
+// transitPointMapsURL returns a maps URL for a transit point.
+func transitPointMapsURL(tp *domain.TransitPoint) string {
+	if tp == nil {
+		return ""
+	}
+	return mapsURL(tp.Latitude, tp.Longitude, tp.Location)
+}
+
+// statusLabel returns the display label for an event status.
+func statusLabel(status string) string {
+	switch status {
+	case "tentative":
+		return "Tentative"
+	case "cancelled":
+		return "Cancelled"
+	default:
+		return ""
+	}
 }

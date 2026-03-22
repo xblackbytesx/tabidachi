@@ -2,9 +2,12 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
+	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -82,6 +85,40 @@ func validateTimeFormat(s string) bool {
 	h, err1 := strconv.Atoi(s[:2])
 	m, err2 := strconv.Atoi(s[3:])
 	return err1 == nil && err2 == nil && h >= 0 && h <= 23 && m >= 0 && m <= 59
+}
+
+// durationRe matches human-friendly durations like "1h30m", "90min", "2h", "45m".
+var durationRe = regexp.MustCompile(`(?i)^\s*(?:(\d+)\s*h(?:(?:ours?|rs?|))?\s*)?(?:(\d+)\s*m(?:in(?:utes?|s?)?)?)??\s*$`)
+
+// parseDuration converts human-friendly duration strings to ISO 8601 format.
+// Accepts: "1h30m", "90min", "2h", "45m", "1h 30m", "PT1H30M" (passed through).
+// Returns empty string for empty input, original string if already ISO 8601.
+func parseDuration(s string) string {
+	s = strings.TrimSpace(s)
+	if s == "" {
+		return ""
+	}
+	// Already ISO 8601 — pass through
+	if strings.HasPrefix(s, "PT") || strings.HasPrefix(s, "P") {
+		return s
+	}
+	m := durationRe.FindStringSubmatch(s)
+	if m == nil {
+		return s // unrecognised format, store as-is
+	}
+	hours, _ := strconv.Atoi(m[1])
+	mins, _ := strconv.Atoi(m[2])
+	if hours == 0 && mins == 0 {
+		return s
+	}
+	result := "PT"
+	if hours > 0 {
+		result += fmt.Sprintf("%dH", hours)
+	}
+	if mins > 0 {
+		result += fmt.Sprintf("%dM", mins)
+	}
+	return result
 }
 
 // AddLeg adds a new leg to the trip.
@@ -210,25 +247,15 @@ func (h *BuilderHandler) AddDay(c echo.Context) error {
 	if date == "" {
 		return c.String(http.StatusBadRequest, "date is required")
 	}
-	dayDate, ok := parseDate(date)
-	if !ok {
+	if _, ok := parseDate(date); !ok {
 		return c.String(http.StatusBadRequest, "invalid date format (expected YYYY-MM-DD)")
 	}
 
-	// #5: day date must be within leg date range
+	// Duplicate day check — day dates must be unique within a leg.
+	// Note: day dates are NOT constrained to the leg's date range because
+	// departure/arrival days legitimately fall outside (e.g. departure day
+	// before leg start, return-home day after leg end).
 	leg := trip.Data.Legs[idx]
-	if legStart, ok := parseDate(leg.StartDate); ok {
-		if dayDate.Before(legStart) {
-			return c.String(http.StatusBadRequest, "day date must be on or after leg start date ("+leg.StartDate+")")
-		}
-	}
-	if legEnd, ok := parseDate(leg.EndDate); ok {
-		if dayDate.After(legEnd) {
-			return c.String(http.StatusBadRequest, "day date must be on or before leg end date ("+leg.EndDate+")")
-		}
-	}
-
-	// #7: prevent duplicate day dates within this leg
 	for _, existing := range leg.Days {
 		if existing.Date == date {
 			return c.String(http.StatusBadRequest, "a day with date "+date+" already exists in this leg")
@@ -307,6 +334,11 @@ func (h *BuilderHandler) AddEvent(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "invalid end time format (expected HH:MM)")
 	}
 
+	eventURL := c.FormValue("url")
+	if len(eventURL) > 2000 {
+		return c.String(http.StatusBadRequest, "URL too long (max 2000 characters)")
+	}
+
 	day := &trip.Data.Legs[legIdx].Days[dayIdx]
 	event := domain.Event{
 		Sequence:  len(day.Events) + 1,
@@ -314,9 +346,11 @@ func (h *BuilderHandler) AddEvent(c echo.Context) error {
 		Title:     title,
 		StartTime: startTime,
 		EndTime:   endTime,
-		Duration:  c.FormValue("duration"),
+		Duration:  parseDuration(c.FormValue("duration")),
 		Notes:     c.FormValue("notes"),
 		Optional:  c.FormValue("optional") == "on",
+		URL:       eventURL,
+		Status:    c.FormValue("status"),
 	}
 
 	switch eventType {
@@ -324,6 +358,16 @@ func (h *BuilderHandler) AddEvent(c echo.Context) error {
 		event.Location = c.FormValue("location")
 		event.TicketRequired = c.FormValue("ticket_required") == "on"
 		event.BookingReference = c.FormValue("booking_reference")
+		if lat := c.FormValue("latitude"); lat != "" {
+			if v, err := strconv.ParseFloat(lat, 64); err == nil {
+				event.Latitude = v
+			}
+		}
+		if lng := c.FormValue("longitude"); lng != "" {
+			if v, err := strconv.ParseFloat(lng, 64); err == nil {
+				event.Longitude = v
+			}
+		}
 	case "transit":
 		event.TransportMode = c.FormValue("transport_mode")
 		event.Carrier = c.FormValue("carrier")
@@ -391,6 +435,111 @@ func (h *BuilderHandler) UpdateDay(c echo.Context) error {
 		))
 	}
 	return redirect(c, "/trips/"+trip.ID.String()+"/edit")
+}
+
+// UpdateEvent updates an existing event in place.
+func (h *BuilderHandler) UpdateEvent(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+	evtIdx, err := strconv.Atoi(c.Param("eventIdx"))
+	if err != nil || evtIdx < 0 || evtIdx >= len(trip.Data.Legs[legIdx].Days[dayIdx].Events) {
+		return c.String(http.StatusBadRequest, "invalid event index")
+	}
+
+	eventType := c.FormValue("event_type")
+	title := c.FormValue("title")
+	if title == "" || eventType == "" {
+		return c.String(http.StatusBadRequest, "event_type and title are required")
+	}
+	if len(title) > 500 || len(c.FormValue("notes")) > 5000 || len(c.FormValue("location")) > 500 {
+		return c.String(http.StatusBadRequest, "field value too long")
+	}
+
+	startTime := c.FormValue("start_time")
+	endTime := c.FormValue("end_time")
+	if !validateTimeFormat(startTime) {
+		return c.String(http.StatusBadRequest, "invalid start time format (expected HH:MM)")
+	}
+	if !validateTimeFormat(endTime) {
+		return c.String(http.StatusBadRequest, "invalid end time format (expected HH:MM)")
+	}
+
+	eventURL := c.FormValue("url")
+	if len(eventURL) > 2000 {
+		return c.String(http.StatusBadRequest, "URL too long (max 2000 characters)")
+	}
+
+	existing := &trip.Data.Legs[legIdx].Days[dayIdx].Events[evtIdx]
+	existing.Type = eventType
+	existing.Title = title
+	existing.StartTime = startTime
+	existing.EndTime = endTime
+	existing.Duration = parseDuration(c.FormValue("duration"))
+	existing.Notes = c.FormValue("notes")
+	existing.Optional = c.FormValue("optional") == "on"
+	existing.URL = eventURL
+	existing.Status = c.FormValue("status")
+
+	// Reset type-specific fields before applying
+	existing.Location = ""
+	existing.Latitude = 0
+	existing.Longitude = 0
+	existing.TicketRequired = false
+	existing.BookingReference = ""
+	existing.TransportMode = ""
+	existing.Departure = nil
+	existing.Arrival = nil
+	existing.Carrier = ""
+	existing.FlightNumber = ""
+	existing.CheckIn = false
+	existing.CheckOut = false
+
+	switch eventType {
+	case "activity":
+		existing.Location = c.FormValue("location")
+		existing.TicketRequired = c.FormValue("ticket_required") == "on"
+		existing.BookingReference = c.FormValue("booking_reference")
+		if lat := c.FormValue("latitude"); lat != "" {
+			if v, err := strconv.ParseFloat(lat, 64); err == nil {
+				existing.Latitude = v
+			}
+		}
+		if lng := c.FormValue("longitude"); lng != "" {
+			if v, err := strconv.ParseFloat(lng, 64); err == nil {
+				existing.Longitude = v
+			}
+		}
+	case "transit":
+		existing.TransportMode = c.FormValue("transport_mode")
+		existing.Carrier = c.FormValue("carrier")
+		existing.FlightNumber = c.FormValue("flight_number")
+		depLoc := c.FormValue("departure_location")
+		depCode := c.FormValue("departure_code")
+		if depLoc != "" {
+			existing.Departure = &domain.TransitPoint{Location: depLoc, Code: depCode}
+		}
+		arrLoc := c.FormValue("arrival_location")
+		arrCode := c.FormValue("arrival_code")
+		if arrLoc != "" {
+			existing.Arrival = &domain.TransitPoint{Location: arrLoc, Code: arrCode}
+		}
+	case "accommodation":
+		existing.CheckIn = c.FormValue("check_in") == "on"
+		existing.CheckOut = c.FormValue("check_out") == "on"
+	}
+
+	return h.saveAndRedirect(c, trip)
 }
 
 // DeleteEvent removes an event from a day.

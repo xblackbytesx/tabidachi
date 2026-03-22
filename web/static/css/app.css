@@ -741,6 +741,15 @@ sl-details.day-notes {
 .event-location { font-size: 13px; color: var(--color-text-muted); display: flex; align-items: center; gap: 4px; margin-top: 3px; }
 .event-ref { font-size: 13px; color: var(--color-text-muted); display: flex; align-items: center; gap: 4px; margin-top: 3px; }
 .event-notes { font-size: 14px; color: var(--color-text-muted); margin-top: 7px; line-height: 1.55; }
+.event-link { font-size: 13px; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.event-link a { color: var(--sl-color-primary-600); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+.event-link a:hover { text-decoration: underline; }
+.event-cancelled { opacity: 0.55; }
+.event-cancelled .event-title { text-decoration: line-through; }
+.badge-status-tentative { background: var(--sl-color-warning-100); color: var(--sl-color-warning-700); }
+.badge-status-cancelled { background: var(--sl-color-danger-100); color: var(--sl-color-danger-700); }
+.maps-link { color: var(--sl-color-primary-600); margin-left: 4px; font-size: 14px; vertical-align: middle; }
+.maps-link:hover { color: var(--sl-color-primary-800); }
 .event-accomm-type { margin-top: 6px; display: flex; gap: 6px; }
 
 /* Transit connectors */
@@ -793,6 +802,9 @@ sl-details.day-notes {
 .transit-time { font-variant-numeric: tabular-nums; }
 .transit-duration { display: flex; align-items: center; gap: 4px; }
 .transit-notes { font-size: 14px; color: var(--color-text-muted); margin-top: 7px; }
+.transit-link { font-size: 13px; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.transit-link a { color: var(--sl-color-primary-600); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+.transit-link a:hover { text-decoration: underline; }
 
 /* Leg connector between legs */
 .leg-connector {

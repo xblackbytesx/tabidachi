@@ -108,7 +108,7 @@ func TripImport(csrfToken string, flash string) templ.Component {
 
 func jsonPlaceholder() string {
 	return `{
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "title": "My Trip",
   "startDate": "2025-04-17",
   "endDate": "2025-05-04",

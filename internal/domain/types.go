@@ -53,16 +53,17 @@ type TripData struct {
 }
 
 type Leg struct {
-	Sequence        int            `json:"sequence"`
-	Destination     string         `json:"destination"`
-	Region          string         `json:"region,omitempty"`
-	StartDate       string         `json:"startDate"`
-	EndDate         string         `json:"endDate"`
-	Accommodation   *Accommodation `json:"accommodation,omitempty"`
-	Notes           string         `json:"notes,omitempty"`
-	Days            []Day          `json:"days"`
-	CoverImageURL   string         `json:"coverImageURL,omitempty"`
-	CoverImageCredit string        `json:"coverImageCredit,omitempty"`
+	Sequence         int            `json:"sequence"`
+	Destination      string         `json:"destination"`
+	Region           string         `json:"region,omitempty"`
+	StartDate        string         `json:"startDate"`
+	EndDate          string         `json:"endDate"`
+	Timezone         string         `json:"timezone,omitempty"` // IANA tz, overrides trip timezone
+	Accommodation    *Accommodation `json:"accommodation,omitempty"`
+	Notes            string         `json:"notes,omitempty"`
+	Days             []Day          `json:"days"`
+	CoverImageURL    string         `json:"coverImageURL,omitempty"`
+	CoverImageCredit string         `json:"coverImageCredit,omitempty"`
 }
 
 type Accommodation struct {
@@ -91,11 +92,15 @@ type Event struct {
 	Duration  string `json:"duration,omitempty"`
 	Notes     string `json:"notes,omitempty"`
 	Optional  bool   `json:"optional,omitempty"`
+	URL       string `json:"url,omitempty"`    // external link (booking, info page)
+	Status    string `json:"status,omitempty"` // confirmed|tentative|cancelled
 
 	// activity fields
-	Location         string `json:"location,omitempty"`
-	TicketRequired   bool   `json:"ticketRequired,omitempty"`
-	BookingReference string `json:"bookingReference,omitempty"`
+	Location         string  `json:"location,omitempty"`
+	Latitude         float64 `json:"latitude,omitempty"`
+	Longitude        float64 `json:"longitude,omitempty"`
+	TicketRequired   bool    `json:"ticketRequired,omitempty"`
+	BookingReference string  `json:"bookingReference,omitempty"`
 
 	// transit fields
 	TransportMode string        `json:"transportMode,omitempty"`
@@ -115,8 +120,10 @@ type Event struct {
 }
 
 type TransitPoint struct {
-	Location string `json:"location"`
-	Code     string `json:"code,omitempty"`
+	Location  string  `json:"location"`
+	Code      string  `json:"code,omitempty"`
+	Latitude  float64 `json:"latitude,omitempty"`
+	Longitude float64 `json:"longitude,omitempty"`
 }
 
 // APIToken represents a personal access token for API authentication.

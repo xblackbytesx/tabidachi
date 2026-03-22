@@ -68,7 +68,7 @@ func (h *ImportHandler) Post(c echo.Context) error {
 	}
 
 	if data.SchemaVersion == "" {
-		data.SchemaVersion = "1.0"
+		data.SchemaVersion = "1.1"
 	}
 	if data.Timezone == "" {
 		data.Timezone = "UTC"
@@ -126,6 +126,9 @@ func validateTripData(data *domain.TripData) error {
 	validEventTypes := map[string]bool{
 		"activity": true, "transit": true, "accommodation": true,
 	}
+	validStatuses := map[string]bool{
+		"confirmed": true, "tentative": true, "cancelled": true, "": true,
+	}
 
 	for i, leg := range data.Legs {
 		if len(leg.Destination) > maxStringLen {
@@ -171,6 +174,17 @@ func validateTripData(data *domain.TripData) error {
 				}
 				if len(event.Notes) > 5000 {
 					return fmt.Errorf("Leg %d, day %d, event %d notes are too long (max 5000 characters).", i+1, j+1, k+1)
+				}
+				if len(event.URL) > 2000 {
+					return fmt.Errorf("Leg %d, day %d, event %d URL is too long (max 2000 characters).", i+1, j+1, k+1)
+				}
+				if !validStatuses[event.Status] {
+					return fmt.Errorf("Leg %d, day %d, event %d has invalid status %q.", i+1, j+1, k+1, event.Status)
+				}
+				if event.Latitude < -90 || event.Latitude > 90 || event.Longitude < -180 || event.Longitude > 180 {
+					if event.Latitude != 0 || event.Longitude != 0 {
+						return fmt.Errorf("Leg %d, day %d, event %d has invalid coordinates.", i+1, j+1, k+1)
+					}
 				}
 			}
 		}

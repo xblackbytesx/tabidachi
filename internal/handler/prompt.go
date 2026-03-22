@@ -10,7 +10,7 @@ import (
 )
 
 const tabidachiSchema = `{
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "title": "string (required)",
   "startDate": "YYYY-MM-DD (required)",
   "endDate": "YYYY-MM-DD (required)",
@@ -23,6 +23,7 @@ const tabidachiSchema = `{
       "region": "Region (optional)",
       "startDate": "YYYY-MM-DD",
       "endDate": "YYYY-MM-DD",
+      "timezone": "IANA tz override for this leg (optional, defaults to trip timezone)",
       "accommodation": {
         "name": "Hotel name",
         "neighborhood": "optional",
@@ -48,14 +49,18 @@ const tabidachiSchema = `{
               "duration": "ISO8601 e.g. PT1H30M (optional)",
               "notes": "optional",
               "optional": false,
+              "url": "External link — booking page, info URL (optional)",
+              "status": "confirmed|tentative|cancelled (optional, default confirmed)",
 
               "location": "For activity type",
+              "latitude": 0.0,
+              "longitude": 0.0,
               "ticketRequired": false,
               "bookingReference": "optional",
 
               "transportMode": "flight|train|shinkansen|subway|bus|car|ferry|walk|taxi|tram",
-              "departure": { "location": "string", "code": "IATA/station code (optional)" },
-              "arrival": { "location": "string", "code": "optional" },
+              "departure": { "location": "string", "code": "IATA/station code (optional)", "latitude": 0.0, "longitude": 0.0 },
+              "arrival": { "location": "string", "code": "optional", "latitude": 0.0, "longitude": 0.0 },
               "carrier": "optional",
               "flightNumber": "optional",
 
@@ -228,7 +233,7 @@ Always include startTime and endTime where available. Always include transportMo
 For the optional "notes" field on legs and days: include a note ONLY if it contains genuinely actionable logistics — things like baggage storage instructions, pass validity reminders, check-out deadlines, or event booking requirements. Do NOT include food suggestions, cultural etiquette, general tips, or inspirational content in notes. Keep notes short and practical (one or two sentences max).` +
 		dateHint + includedList + `
 
-Output schema (schemaVersion 1.0):
+Output schema (schemaVersion 1.1):
 ` + tabidachiSchema + `
 
 Itinerary to convert:
@@ -283,7 +288,7 @@ func buildPlanningPrompt(data map[string]string) string {
 You are a travel planning assistant. Design a detailed day-by-day itinerary for the following trip, then output it as a single JSON object matching the schema below.
 
 ` + params.String() + `
-Output schema (schemaVersion 1.0):
+Output schema (schemaVersion 1.1):
 ` + tabidachiSchema + `
 
 Important output rules:

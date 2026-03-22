@@ -86,7 +86,7 @@ func (h *TripHandler) Create(c echo.Context) error {
 		Timezone:     timezone,
 		CoverColor:   coverColor,
 		Data: domain.TripData{
-			SchemaVersion: "1.0",
+			SchemaVersion: "1.1",
 			Title:         title,
 			StartDate:     startStr,
 			EndDate:       endStr,
