@@ -124,6 +124,10 @@
             if (!res.ok) {
               console.error('Reorder failed:', res.status);
               window.location.reload();
+            } else {
+              // Brief flash to confirm save
+              container.classList.add('reorder-saved');
+              setTimeout(function () { container.classList.remove('reorder-saved'); }, 600);
             }
           }).catch(function () {
             window.location.reload();

@@ -176,7 +176,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 			<div class="field">
 				<label class="field-label">Hotel / accommodation name</label>
-				<input class="field-input" type="text" name="name" value={ accommodationVal(leg.Accommodation, "name") } placeholder="Leave blank to remove"/>
+				<input class="field-input" type="text" name="name" value={ accommodationVal(leg.Accommodation, "name") } placeholder="Hotel name" required/>
 			</div>
 			<div class="field">
 				<label class="field-label">Neighbourhood</label>
@@ -201,6 +201,10 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 				<input class="field-input" type="text" name="booking_reference" value={ accommodationVal(leg.Accommodation, "ref") }/>
 			</div>
 			<div slot="footer" class="dialog-footer">
+				if leg.Accommodation != nil {
+					<button type="button" class="btn btn-xs btn-ghost btn-danger" onclick="if(confirm('Remove accommodation?')){var f=this.closest('form');f.noValidate=true;f.querySelector('[name=name]').value='';f.submit()}">Remove accommodation</button>
+				}
+				<span class="dialog-footer-spacer"></span>
 				<sl-button variant="neutral" data-dialog={ fmt.Sprintf("accomm-dialog-%d", legIdx) } onclick="closeDataDialog(this)">Cancel</sl-button>
 				<button type="submit" class="btn btn-primary">Save</button>
 			</div>
@@ -333,7 +337,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 							}
 							<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
 								<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
-								<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event">×</button>
+								<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event" onclick="return confirm('Delete this event?')">×</button>
 							</form>
 						</div>
 						@EventImageSection(csrfToken, tripID, strconv.Itoa(legIdx), strconv.Itoa(dayIdx), strconv.Itoa(evtIdx), event.ImageURL, event.ImageCredit, "")
@@ -354,7 +358,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 						}
 						<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
 							<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
-							<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event">×</button>
+							<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event" onclick="return confirm('Delete this event?')">×</button>
 						</form>
 					</div>
 				}

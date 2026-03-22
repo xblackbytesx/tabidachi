@@ -50,6 +50,40 @@ func (h *BuilderHandler) saveAndRedirect(c echo.Context, trip *domain.Trip) erro
 	return redirect(c, "/trips/"+trip.ID.String()+"/edit")
 }
 
+// parseDate parses an ISO date string, returning zero time on failure.
+func parseDate(s string) (time.Time, bool) {
+	t, err := time.Parse("2006-01-02", s)
+	return t, err == nil
+}
+
+// parseDateTimeLoose parses an ISO 8601 datetime, trying several common formats.
+func parseDateTimeLoose(s string) (time.Time, bool) {
+	for _, layout := range []string{
+		time.RFC3339,
+		"2006-01-02T15:04:05",
+		"2006-01-02T15:04",
+		"2006-01-02",
+	} {
+		if t, err := time.Parse(layout, s); err == nil {
+			return t, true
+		}
+	}
+	return time.Time{}, false
+}
+
+// validateTimeFormat checks that a time string is HH:MM or empty.
+func validateTimeFormat(s string) bool {
+	if s == "" {
+		return true
+	}
+	if len(s) != 5 || s[2] != ':' {
+		return false
+	}
+	h, err1 := strconv.Atoi(s[:2])
+	m, err2 := strconv.Atoi(s[3:])
+	return err1 == nil && err2 == nil && h >= 0 && h <= 23 && m >= 0 && m <= 59
+}
+
 // AddLeg adds a new leg to the trip.
 func (h *BuilderHandler) AddLeg(c echo.Context) error {
 	trip, _, err := h.loadTrip(c)
@@ -68,6 +102,23 @@ func (h *BuilderHandler) AddLeg(c echo.Context) error {
 	}
 	if len(destination) > 500 || len(region) > 500 || len(notes) > 5000 {
 		return c.String(http.StatusBadRequest, "field value too long")
+	}
+
+	start, okS := parseDate(startDate)
+	end, okE := parseDate(endDate)
+	if !okS || !okE {
+		return c.String(http.StatusBadRequest, "invalid date format (expected YYYY-MM-DD)")
+	}
+	if end.Before(start) {
+		return c.String(http.StatusBadRequest, "end date must be on or after start date")
+	}
+
+	tripStart := trip.StartDate.Truncate(24 * time.Hour)
+	tripEnd := trip.EndDate.Truncate(24 * time.Hour)
+	if !tripStart.IsZero() && !tripEnd.IsZero() {
+		if start.Before(tripStart) || end.After(tripEnd) {
+			return c.String(http.StatusBadRequest, "leg dates must be within the trip dates ("+tripStart.Format("2006-01-02")+" to "+tripEnd.Format("2006-01-02")+")")
+		}
 	}
 
 	leg := domain.Leg{
@@ -119,12 +170,24 @@ func (h *BuilderHandler) UpdateAccommodation(c echo.Context) error {
 	if name == "" {
 		trip.Data.Legs[idx].Accommodation = nil
 	} else {
+		checkIn := c.FormValue("check_in")
+		checkOut := c.FormValue("check_out")
+
+		// #5: validate check-in is before check-out when both are provided
+		if checkIn != "" && checkOut != "" {
+			ciTime, okCI := parseDateTimeLoose(checkIn)
+			coTime, okCO := parseDateTimeLoose(checkOut)
+			if okCI && okCO && !coTime.After(ciTime) {
+				return c.String(http.StatusBadRequest, "check-out must be after check-in")
+			}
+		}
+
 		trip.Data.Legs[idx].Accommodation = &domain.Accommodation{
 			Name:             name,
 			Neighborhood:     c.FormValue("neighborhood"),
 			Address:          c.FormValue("address"),
-			CheckIn:          c.FormValue("check_in"),
-			CheckOut:         c.FormValue("check_out"),
+			CheckIn:          checkIn,
+			CheckOut:         checkOut,
 			BookingReference: c.FormValue("booking_reference"),
 		}
 	}
@@ -147,8 +210,29 @@ func (h *BuilderHandler) AddDay(c echo.Context) error {
 	if date == "" {
 		return c.String(http.StatusBadRequest, "date is required")
 	}
-	if _, err := time.Parse("2006-01-02", date); err != nil {
-		return c.String(http.StatusBadRequest, "invalid date format")
+	dayDate, ok := parseDate(date)
+	if !ok {
+		return c.String(http.StatusBadRequest, "invalid date format (expected YYYY-MM-DD)")
+	}
+
+	// #5: day date must be within leg date range
+	leg := trip.Data.Legs[idx]
+	if legStart, ok := parseDate(leg.StartDate); ok {
+		if dayDate.Before(legStart) {
+			return c.String(http.StatusBadRequest, "day date must be on or after leg start date ("+leg.StartDate+")")
+		}
+	}
+	if legEnd, ok := parseDate(leg.EndDate); ok {
+		if dayDate.After(legEnd) {
+			return c.String(http.StatusBadRequest, "day date must be on or before leg end date ("+leg.EndDate+")")
+		}
+	}
+
+	// #7: prevent duplicate day dates within this leg
+	for _, existing := range leg.Days {
+		if existing.Date == date {
+			return c.String(http.StatusBadRequest, "a day with date "+date+" already exists in this leg")
+		}
 	}
 
 	dayType := c.FormValue("type")
@@ -213,13 +297,23 @@ func (h *BuilderHandler) AddEvent(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "field value too long")
 	}
 
+	// #6: validate time format (HH:MM)
+	startTime := c.FormValue("start_time")
+	endTime := c.FormValue("end_time")
+	if !validateTimeFormat(startTime) {
+		return c.String(http.StatusBadRequest, "invalid start time format (expected HH:MM)")
+	}
+	if !validateTimeFormat(endTime) {
+		return c.String(http.StatusBadRequest, "invalid end time format (expected HH:MM)")
+	}
+
 	day := &trip.Data.Legs[legIdx].Days[dayIdx]
 	event := domain.Event{
 		Sequence:  len(day.Events) + 1,
 		Type:      eventType,
 		Title:     title,
-		StartTime: c.FormValue("start_time"),
-		EndTime:   c.FormValue("end_time"),
+		StartTime: startTime,
+		EndTime:   endTime,
 		Duration:  c.FormValue("duration"),
 		Notes:     c.FormValue("notes"),
 		Optional:  c.FormValue("optional") == "on",
