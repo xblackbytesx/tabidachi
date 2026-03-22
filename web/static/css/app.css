@@ -748,8 +748,8 @@ sl-details.day-notes {
 .event-cancelled .event-title { text-decoration: line-through; }
 .badge-status-tentative { background: var(--sl-color-warning-100); color: var(--sl-color-warning-700); }
 .badge-status-cancelled { background: var(--sl-color-danger-100); color: var(--sl-color-danger-700); }
-.maps-link { color: var(--sl-color-primary-600); margin-left: 4px; font-size: 14px; vertical-align: middle; }
-.maps-link:hover { color: var(--sl-color-primary-800); }
+.location-link { color: var(--color-text); text-decoration: underline; text-decoration-color: var(--color-text-faint); text-underline-offset: 2px; }
+.location-link:hover { color: var(--color-accent); text-decoration-color: var(--color-accent); }
 .event-accomm-type { margin-top: 6px; display: flex; gap: 6px; }
 
 /* Transit connectors */

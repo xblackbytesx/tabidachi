@@ -141,6 +141,7 @@
   // HTMX hooks
   // ============================================================
   document.addEventListener('DOMContentLoaded', function () {
+    scrollToToday();
     initSortableEvents();
     // Inject the freshest CSRF token from #csrf-live into every HTMX request.
     document.addEventListener('htmx:configRequest', function (evt) {

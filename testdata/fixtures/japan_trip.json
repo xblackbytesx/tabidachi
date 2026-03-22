@@ -1,0 +1,1087 @@
+{
+  "schemaVersion": "1.1",
+  "title": "Japan 2026",
+  "startDate": "2026-03-16",
+  "endDate": "2026-04-04",
+  "homeLocation": "Germany",
+  "timezone": "Asia/Tokyo",
+  "legs": [
+    {
+      "sequence": 1,
+      "destination": "Osaka",
+      "region": "Kansai",
+      "startDate": "2026-03-17",
+      "endDate": "2026-03-19",
+      "accommodation": {
+        "name": "Toyoko Inn Osaka Namba",
+        "neighborhood": "Namba",
+        "checkIn": "2026-03-17T15:00:00+09:00",
+        "checkOut": "2026-03-19T11:00:00+09:00"
+      },
+      "days": [
+        {
+          "date": "2026-03-16",
+          "label": "Departure Day",
+          "type": "departure",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Flight to Helsinki",
+              "startTime": "10:30",
+              "transportMode": "flight",
+              "departure": {
+                "location": "Frankfurt",
+                "code": "FRA"
+              },
+              "arrival": {
+                "location": "Helsinki-Vantaa Airport",
+                "code": "HEL"
+              },
+              "carrier": "Lufthansa",
+              "flightNumber": "LH1234"
+            },
+            {
+              "sequence": 2,
+              "type": "transit",
+              "title": "Flight to Osaka",
+              "startTime": "17:15",
+              "transportMode": "flight",
+              "departure": {
+                "location": "Helsinki-Vantaa Airport",
+                "code": "HEL"
+              },
+              "arrival": {
+                "location": "Kansai International Airport",
+                "code": "KIX"
+              },
+              "carrier": "Japan Airlines",
+              "flightNumber": "JL5678"
+            }
+          ]
+        },
+        {
+          "date": "2026-03-17",
+          "label": "Arrival Day",
+          "type": "arrival",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Arrive Kansai Airport",
+              "startTime": "12:35",
+              "transportMode": "flight",
+              "departure": {
+                "location": "Frankfurt",
+                "code": "FRA"
+              },
+              "arrival": {
+                "location": "Kansai International Airport",
+                "code": "KIX"
+              },
+              "carrier": "Japan Airlines",
+              "flightNumber": "JL5678"
+            },
+            {
+              "sequence": 2,
+              "type": "transit",
+              "title": "Nankai Rapi:t Express to Namba",
+              "duration": "PT50M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Kansai International Airport",
+                "code": "KIX"
+              },
+              "arrival": {
+                "location": "Namba Station"
+              },
+              "carrier": "Nankai Electric Railway"
+            },
+            {
+              "sequence": 3,
+              "type": "accommodation",
+              "title": "Check-in Toyoko Inn Osaka Namba",
+              "checkIn": true
+            },
+            {
+              "sequence": 4,
+              "type": "activity",
+              "title": "Explore Namba area",
+              "location": "Namba"
+            }
+          ]
+        },
+        {
+          "date": "2026-03-18",
+          "label": "The Giants of the Sea",
+          "type": "normal",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Subway to Osakako Station",
+              "duration": "PT35M",
+              "transportMode": "subway",
+              "departure": {
+                "location": "Namba"
+              },
+              "arrival": {
+                "location": "Osakako Station"
+              }
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Osaka Aquarium Kaiyukan",
+              "location": "Osakako",
+              "ticketRequired": true
+            },
+            {
+              "sequence": 3,
+              "type": "activity",
+              "title": "Tempozan Marketplace",
+              "location": "Tempozan"
+            },
+            {
+              "sequence": 4,
+              "type": "transit",
+              "title": "Return to Namba",
+              "duration": "PT35M",
+              "transportMode": "subway",
+              "departure": {
+                "location": "Osakako Station"
+              },
+              "arrival": {
+                "location": "Namba"
+              }
+            },
+            {
+              "sequence": 5,
+              "type": "activity",
+              "title": "Dotonbori",
+              "location": "Dotonbori, Namba"
+            }
+          ]
+        },
+        {
+          "date": "2026-03-19",
+          "label": "Castles & Retro Vibes",
+          "type": "departure",
+          "notes": "Check out by 11:00 AM. Store luggage at hotel until after Shinsekai visit.",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Transit to Osaka Castle Park",
+              "duration": "PT30M",
+              "transportMode": "subway",
+              "departure": {
+                "location": "Namba"
+              },
+              "arrival": {
+                "location": "Osaka Castle Park"
+              }
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Osaka Castle",
+              "location": "Osaka Castle Park",
+              "ticketRequired": true
+            },
+            {
+              "sequence": 3,
+              "type": "transit",
+              "title": "Transit to Shinsekai",
+              "duration": "PT25M",
+              "transportMode": "subway",
+              "departure": {
+                "location": "Osaka Castle Park"
+              },
+              "arrival": {
+                "location": "Shinsekai"
+              }
+            },
+            {
+              "sequence": 4,
+              "type": "activity",
+              "title": "Shinsekai District",
+              "location": "Shinsekai"
+            },
+            {
+              "sequence": 5,
+              "type": "accommodation",
+              "title": "Check-out Toyoko Inn Osaka Namba",
+              "checkOut": true
+            },
+            {
+              "sequence": 6,
+              "type": "transit",
+              "title": "Train to Kyoto",
+              "duration": "PT1H",
+              "transportMode": "train",
+              "departure": {
+                "location": "Osaka"
+              },
+              "arrival": {
+                "location": "Kyoto Station"
+              }
+            },
+            {
+              "sequence": 7,
+              "type": "accommodation",
+              "title": "Check-in APA Hotel Kyoto Station",
+              "checkIn": true
+            }
+          ]
+        }
+      ],
+      "coverImageURL": "/uploads/test-osaka-cover.jpg",
+      "coverImageCredit": "Test image"
+    },
+    {
+      "sequence": 2,
+      "destination": "Kyoto",
+      "region": "Kansai",
+      "startDate": "2026-03-19",
+      "endDate": "2026-03-23",
+      "accommodation": {
+        "name": "APA Hotel Kyoto Station",
+        "neighborhood": "Kyoto Station Area",
+        "checkIn": "2026-03-19T15:00:00+09:00",
+        "checkOut": "2026-03-23T11:00:00+09:00"
+      },
+      "days": [
+        {
+          "date": "2026-03-20",
+          "label": "The Thousand Gates",
+          "type": "normal",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "JR to Inari Station",
+              "duration": "PT10M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Kyoto Station"
+              },
+              "arrival": {
+                "location": "JR Inari Station"
+              },
+              "carrier": "JR"
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Fushimi Inari Shrine",
+              "notes": "Full hike to top takes 2-3 hours",
+              "location": "Fushimi Inari"
+            },
+            {
+              "sequence": 3,
+              "type": "transit",
+              "title": "Train to Nara",
+              "duration": "PT50M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Inari"
+              },
+              "arrival": {
+                "location": "Nara"
+              }
+            },
+            {
+              "sequence": 4,
+              "type": "activity",
+              "title": "Nara Park - Todaiji Temple & Deer",
+              "location": "Nara Park"
+            },
+            {
+              "sequence": 5,
+              "type": "transit",
+              "title": "Return to Kyoto",
+              "duration": "PT50M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Nara"
+              },
+              "arrival": {
+                "location": "Kyoto Station"
+              }
+            }
+          ]
+        },
+        {
+          "date": "2026-03-21",
+          "label": "Traditional Japan",
+          "type": "normal",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Transit to Kiyomizu-dera",
+              "duration": "PT30M",
+              "transportMode": "bus",
+              "departure": {
+                "location": "Kyoto Station Area"
+              },
+              "arrival": {
+                "location": "Kiyomizu-dera"
+              }
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Kiyomizu-dera Temple",
+              "location": "Kiyomizu-dera",
+              "ticketRequired": true
+            },
+            {
+              "sequence": 3,
+              "type": "activity",
+              "title": "Sannenzaka & Ninenzaka streets",
+              "location": "Historic Kyoto"
+            },
+            {
+              "sequence": 4,
+              "type": "activity",
+              "title": "Gion District",
+              "location": "Gion"
+            },
+            {
+              "sequence": 5,
+              "type": "activity",
+              "title": "Yasaka Shrine",
+              "location": "Gion"
+            }
+          ]
+        },
+        {
+          "date": "2026-03-22",
+          "label": "Adventurous Nature Walk",
+          "type": "normal",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Train to Kurama Station",
+              "duration": "PT1H15M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Kyoto Station"
+              },
+              "arrival": {
+                "location": "Kurama Station"
+              }
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Kurama to Kibune Hike",
+              "duration": "PT2H30M",
+              "notes": "Mountain trail, moderate difficulty. Visit Kurama-dera Temple.",
+              "location": "Kurama - Kibune"
+            },
+            {
+              "sequence": 3,
+              "type": "transit",
+              "title": "Return to Kyoto",
+              "duration": "PT1H15M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Kibune"
+              },
+              "arrival": {
+                "location": "Kyoto Station"
+              }
+            }
+          ]
+        },
+        {
+          "date": "2026-03-23",
+          "label": "Bamboo, Monkeys & The Move",
+          "type": "departure",
+          "notes": "Check out by 11:00 AM. Store luggage at Kyoto Station coin lockers during Arashiyama visit.",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Train to Arashiyama",
+              "duration": "PT20M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Kyoto Station"
+              },
+              "arrival": {
+                "location": "Arashiyama"
+              }
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Arashiyama Bamboo Grove",
+              "location": "Arashiyama"
+            },
+            {
+              "sequence": 3,
+              "type": "transit",
+              "title": "Walk to Iwatayama Monkey Park",
+              "duration": "PT20M",
+              "transportMode": "walk",
+              "departure": {
+                "location": "Arashiyama Bamboo Grove"
+              },
+              "arrival": {
+                "location": "Iwatayama Monkey Park"
+              }
+            },
+            {
+              "sequence": 4,
+              "type": "activity",
+              "title": "Iwatayama Monkey Park",
+              "location": "Arashiyama",
+              "ticketRequired": true
+            },
+            {
+              "sequence": 5,
+              "type": "transit",
+              "title": "Return to Kyoto Station",
+              "duration": "PT20M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Arashiyama"
+              },
+              "arrival": {
+                "location": "Kyoto Station"
+              }
+            },
+            {
+              "sequence": 6,
+              "type": "accommodation",
+              "title": "Check-out APA Hotel Kyoto Station",
+              "checkOut": true
+            },
+            {
+              "sequence": 7,
+              "type": "transit",
+              "title": "Shinkansen to Nagoya",
+              "duration": "PT35M",
+              "transportMode": "shinkansen",
+              "departure": {
+                "location": "Kyoto Station"
+              },
+              "arrival": {
+                "location": "Nagoya Station"
+              }
+            },
+            {
+              "sequence": 8,
+              "type": "accommodation",
+              "title": "Check-in Comfort Hotel Nagoya Station",
+              "checkIn": true
+            }
+          ]
+        }
+      ],
+      "coverImageURL": "/uploads/test-kyoto-cover.jpg",
+      "coverImageCredit": "Test image"
+    },
+    {
+      "sequence": 3,
+      "destination": "Nagoya",
+      "region": "Chubu",
+      "startDate": "2026-03-23",
+      "endDate": "2026-03-24",
+      "accommodation": {
+        "name": "Comfort Hotel Nagoya Station",
+        "neighborhood": "Nagoya Station Area",
+        "checkIn": "2026-03-23T15:00:00+09:00",
+        "checkOut": "2026-03-24T11:00:00+09:00"
+      },
+      "days": [
+        {
+          "date": "2026-03-24",
+          "label": "Ghibli Pilgrimage & Move to Tokyo",
+          "type": "departure",
+          "notes": "Store luggage at Nagoya Station coin lockers during Ghibli Park visit.",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Transit to Ghibli Park",
+              "duration": "PT1H",
+              "transportMode": "train",
+              "departure": {
+                "location": "Nagoya Station"
+              },
+              "arrival": {
+                "location": "Ghibli Park"
+              }
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Ghibli Park",
+              "startTime": "11:00",
+              "notes": "Booked for 11:00 AM",
+              "location": "Ghibli Park",
+              "ticketRequired": true
+            },
+            {
+              "sequence": 3,
+              "type": "transit",
+              "title": "Return to Nagoya Station",
+              "duration": "PT1H",
+              "transportMode": "train",
+              "departure": {
+                "location": "Ghibli Park"
+              },
+              "arrival": {
+                "location": "Nagoya Station"
+              }
+            },
+            {
+              "sequence": 4,
+              "type": "accommodation",
+              "title": "Check-out Comfort Hotel Nagoya Station",
+              "checkOut": true
+            },
+            {
+              "sequence": 5,
+              "type": "transit",
+              "title": "Shinkansen to Tokyo",
+              "duration": "PT1H40M",
+              "transportMode": "shinkansen",
+              "departure": {
+                "location": "Nagoya Station"
+              },
+              "arrival": {
+                "location": "Tokyo Station"
+              }
+            },
+            {
+              "sequence": 6,
+              "type": "transit",
+              "title": "Transit to Akihabara",
+              "duration": "PT10M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Tokyo Station"
+              },
+              "arrival": {
+                "location": "Akihabara"
+              }
+            },
+            {
+              "sequence": 7,
+              "type": "accommodation",
+              "title": "Check-in Dormy Inn Akihabara",
+              "checkIn": true
+            }
+          ]
+        }
+      ],
+      "coverImageURL": "/uploads/test-nagoya-cover.jpg",
+      "coverImageCredit": "Test image"
+    },
+    {
+      "sequence": 4,
+      "destination": "Tokyo",
+      "region": "Kanto",
+      "startDate": "2026-03-24",
+      "endDate": "2026-03-28",
+      "accommodation": {
+        "name": "Dormy Inn Akihabara",
+        "neighborhood": "Ueno/Asakusa Area",
+        "checkIn": "2026-03-24T15:00:00+09:00",
+        "checkOut": "2026-03-28T11:00:00+09:00"
+      },
+      "days": [
+        {
+          "date": "2026-03-25",
+          "label": "Rest Day",
+          "type": "rest",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "activity",
+              "title": "Ueno Park (optional)",
+              "optional": true,
+              "location": "Ueno"
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Local neighborhood exploration",
+              "optional": true,
+              "location": "Akihabara/Ueno area"
+            }
+          ]
+        },
+        {
+          "date": "2026-03-26",
+          "label": "Disney Sea",
+          "type": "normal",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Transit to Tokyo Disney Sea",
+              "duration": "PT1H",
+              "transportMode": "train",
+              "departure": {
+                "location": "Ueno/Akihabara"
+              },
+              "arrival": {
+                "location": "Maihama Station"
+              },
+              "carrier": "JR Keiyo Line"
+            },
+            {
+              "sequence": 2,
+              "type": "transit",
+              "title": "Disney Resort Line to Disney Sea",
+              "duration": "PT10M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Maihama Station"
+              },
+              "arrival": {
+                "location": "Tokyo Disney Sea"
+              },
+              "carrier": "Disney Resort Line"
+            },
+            {
+              "sequence": 3,
+              "type": "activity",
+              "title": "Tokyo Disney Sea",
+              "notes": "Tickets pre-booked",
+              "location": "Tokyo Disney Sea",
+              "ticketRequired": true
+            },
+            {
+              "sequence": 4,
+              "type": "transit",
+              "title": "Return to Akihabara",
+              "duration": "PT1H",
+              "transportMode": "train",
+              "departure": {
+                "location": "Tokyo Disney Sea"
+              },
+              "arrival": {
+                "location": "Akihabara"
+              }
+            }
+          ]
+        },
+        {
+          "date": "2026-03-27",
+          "label": "Electric Town & Temple",
+          "type": "normal",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "activity",
+              "title": "Akihabara",
+              "location": "Akihabara"
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Senso-ji Temple",
+              "location": "Asakusa"
+            },
+            {
+              "sequence": 3,
+              "type": "activity",
+              "title": "Nakamise Shopping Street",
+              "location": "Asakusa"
+            }
+          ]
+        },
+        {
+          "date": "2026-03-28",
+          "label": "Moving Day",
+          "type": "departure",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "accommodation",
+              "title": "Check-out Dormy Inn Akihabara",
+              "checkOut": true
+            },
+            {
+              "sequence": 2,
+              "type": "transit",
+              "title": "JR Yamanote Line to Shinjuku",
+              "duration": "PT20M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Akihabara"
+              },
+              "arrival": {
+                "location": "Shinjuku"
+              },
+              "carrier": "JR Yamanote Line"
+            },
+            {
+              "sequence": 3,
+              "type": "accommodation",
+              "title": "Check-in Shinjuku Granbell Hotel",
+              "checkIn": true
+            },
+            {
+              "sequence": 4,
+              "type": "transit",
+              "title": "Transit to Shibuya",
+              "duration": "PT10M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Shinjuku"
+              },
+              "arrival": {
+                "location": "Shibuya"
+              }
+            },
+            {
+              "sequence": 5,
+              "type": "activity",
+              "title": "Shibuya Crossing",
+              "location": "Shibuya"
+            },
+            {
+              "sequence": 6,
+              "type": "activity",
+              "title": "Hachiko Statue",
+              "location": "Shibuya"
+            }
+          ]
+        }
+      ],
+      "coverImageURL": "/uploads/test-tokyo-cover.jpg",
+      "coverImageCredit": "Test image"
+    },
+    {
+      "sequence": 5,
+      "destination": "Tokyo",
+      "region": "Kanto",
+      "startDate": "2026-03-28",
+      "endDate": "2026-04-04",
+      "accommodation": {
+        "name": "Shinjuku Granbell Hotel",
+        "neighborhood": "Shinjuku",
+        "checkIn": "2026-03-28T15:00:00+09:00",
+        "checkOut": "2026-04-04T09:30:00+09:00"
+      },
+      "notes": "Cherry blossom season — expect crowds in parks.",
+      "days": [
+        {
+          "date": "2026-03-29",
+          "label": "Modern Art & Futuristic Island",
+          "type": "normal",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Transit to TeamLab Planets",
+              "duration": "PT40M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Shinjuku"
+              },
+              "arrival": {
+                "location": "Toyosu (TeamLab Planets)"
+              }
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "TeamLab Planets",
+              "notes": "Requires advance booking",
+              "location": "Toyosu",
+              "ticketRequired": true
+            },
+            {
+              "sequence": 3,
+              "type": "transit",
+              "title": "Transit to Odaiba",
+              "duration": "PT15M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Toyosu"
+              },
+              "arrival": {
+                "location": "Odaiba"
+              }
+            },
+            {
+              "sequence": 4,
+              "type": "activity",
+              "title": "Odaiba - Gundam Statue & DiverCity",
+              "location": "Odaiba"
+            },
+            {
+              "sequence": 5,
+              "type": "transit",
+              "title": "Return to Shinjuku",
+              "duration": "PT40M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Odaiba"
+              },
+              "arrival": {
+                "location": "Shinjuku"
+              }
+            }
+          ]
+        },
+        {
+          "date": "2026-03-30",
+          "label": "Harajuku Fashion & Sacred Forest",
+          "type": "normal",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "JR Yamanote Line to Harajuku",
+              "duration": "PT7M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Shinjuku"
+              },
+              "arrival": {
+                "location": "Harajuku"
+              },
+              "carrier": "JR Yamanote Line"
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Meiji Shrine",
+              "location": "Harajuku"
+            },
+            {
+              "sequence": 3,
+              "type": "activity",
+              "title": "Harajuku - Takeshita Street",
+              "location": "Harajuku"
+            },
+            {
+              "sequence": 4,
+              "type": "activity",
+              "title": "Omotesando",
+              "location": "Harajuku"
+            },
+            {
+              "sequence": 5,
+              "type": "transit",
+              "title": "Return to Shinjuku",
+              "duration": "PT7M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Harajuku"
+              },
+              "arrival": {
+                "location": "Shinjuku"
+              }
+            }
+          ]
+        },
+        {
+          "date": "2026-03-31",
+          "label": "Studio Ghibli Vibes in Nature",
+          "type": "normal",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "JR Chuo Line to Kichijoji",
+              "duration": "PT15M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Shinjuku"
+              },
+              "arrival": {
+                "location": "Kichijoji"
+              },
+              "carrier": "JR Chuo Line"
+            },
+            {
+              "sequence": 2,
+              "type": "activity",
+              "title": "Inokashira Park",
+              "location": "Kichijoji"
+            },
+            {
+              "sequence": 3,
+              "type": "activity",
+              "title": "Kichijoji neighborhood exploration",
+              "location": "Kichijoji"
+            },
+            {
+              "sequence": 4,
+              "type": "transit",
+              "title": "Return to Shinjuku",
+              "duration": "PT15M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Kichijoji"
+              },
+              "arrival": {
+                "location": "Shinjuku"
+              }
+            }
+          ]
+        },
+        {
+          "date": "2026-04-01",
+          "label": "Free Day / Shopping",
+          "type": "flexible",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "activity",
+              "title": "Free day - Shopping or revisit favorites",
+              "optional": true,
+              "location": "Tokyo"
+            }
+          ]
+        },
+        {
+          "date": "2026-04-02",
+          "label": "Free Day / Final Explorations",
+          "type": "flexible",
+          "notes": "Pack for departure.",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "activity",
+              "title": "Free day - Final explorations",
+              "optional": true,
+              "location": "Tokyo"
+            }
+          ]
+        },
+        {
+          "date": "2026-04-03",
+          "label": "Yokohama & Departure",
+          "type": "departure",
+          "notes": "Check out 09:30.",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "accommodation",
+              "title": "Check-out Shinjuku Granbell Hotel",
+              "startTime": "09:30",
+              "checkOut": true
+            },
+            {
+              "sequence": 2,
+              "type": "transit",
+              "title": "JR Shonan-Shinjuku Line to Yokohama",
+              "startTime": "10:00",
+              "duration": "PT35M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Shinjuku"
+              },
+              "arrival": {
+                "location": "Yokohama Station"
+              },
+              "carrier": "JR Shonan-Shinjuku Line"
+            },
+            {
+              "sequence": 3,
+              "type": "activity",
+              "title": "Cup Noodle Museum",
+              "startTime": "11:00",
+              "location": "Yokohama",
+              "ticketRequired": true
+            },
+            {
+              "sequence": 4,
+              "type": "activity",
+              "title": "Red Brick Warehouse",
+              "startTime": "13:00",
+              "location": "Yokohama waterfront"
+            },
+            {
+              "sequence": 5,
+              "type": "activity",
+              "title": "Yokohama Chinatown",
+              "startTime": "14:30",
+              "location": "Yokohama"
+            },
+            {
+              "sequence": 6,
+              "type": "activity",
+              "title": "Yamashita Park",
+              "startTime": "16:00",
+              "location": "Yokohama"
+            },
+            {
+              "sequence": 7,
+              "type": "transit",
+              "title": "Keikyu Line to Haneda Airport",
+              "startTime": "19:45",
+              "duration": "PT25M",
+              "transportMode": "train",
+              "departure": {
+                "location": "Yokohama Station"
+              },
+              "arrival": {
+                "location": "Haneda Airport Terminal 3",
+                "code": "HND"
+              },
+              "carrier": "Keikyu Line"
+            },
+            {
+              "sequence": 8,
+              "type": "transit",
+              "title": "Flight to Helsinki",
+              "startTime": "21:50",
+              "transportMode": "flight",
+              "departure": {
+                "location": "Haneda Airport",
+                "code": "HND"
+              },
+              "arrival": {
+                "location": "Helsinki-Vantaa Airport",
+                "code": "HEL"
+              },
+              "carrier": "Japan Airlines",
+              "flightNumber": "JL9012"
+            }
+          ]
+        },
+        {
+          "date": "2026-04-04",
+          "label": "Arrival Home",
+          "type": "arrival",
+          "events": [
+            {
+              "sequence": 1,
+              "type": "transit",
+              "title": "Flight to Frankfurt",
+              "startTime": "08:10",
+              "transportMode": "flight",
+              "departure": {
+                "location": "Helsinki-Vantaa Airport",
+                "code": "HEL"
+              },
+              "arrival": {
+                "location": "Frankfurt Airport",
+                "code": "FRA"
+              },
+              "carrier": "Lufthansa",
+              "flightNumber": "LH5679"
+            }
+          ]
+        }
+      ],
+      "coverImageURL": "/uploads/test-tokyo-shinjuku-cover.jpg",
+      "coverImageCredit": "Test image"
+    }
+  ]
+}

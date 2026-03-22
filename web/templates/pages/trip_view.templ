@@ -134,9 +134,6 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 			<img id="event-lightbox-img" src="" alt="Event photo" class="event-lightbox-img"/>
 		</dialog>
 		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				scrollToToday();
-			});
 			function openEventLightbox(btn) {
 				var img = document.getElementById('event-lightbox-img');
 				img.src = btn.dataset.fullUrl;
@@ -226,11 +223,11 @@ templ eventCard(event domain.Event) {
 				</div>
 				if event.Location != "" {
 					<div class="event-location">
-						<sl-icon name="pin-map"></sl-icon> { event.Location }
+						<sl-icon name="pin-map"></sl-icon>
 						if mapsURL(event.Latitude, event.Longitude, event.Location) != "" {
-							<a href={ templ.SafeURL(mapsURL(event.Latitude, event.Longitude, event.Location)) } target="_blank" rel="noopener" class="maps-link" title="Open in Google Maps">
-								<sl-icon name="geo-alt-fill"></sl-icon>
-							</a>
+							<a href={ templ.SafeURL(mapsURL(event.Latitude, event.Longitude, event.Location)) } target="_blank" rel="noopener" class="location-link" title="Open in Google Maps">{ event.Location }</a>
+						} else {
+							{ event.Location }
 						}
 					</div>
 				}
@@ -270,22 +267,24 @@ templ transitConnector(event domain.Event) {
 				if event.Departure != nil && event.Arrival != nil {
 					<div class="transit-route">
 						<span class="transit-from">
-							{ event.Departure.Location }
+							if transitPointMapsURL(event.Departure) != "" {
+								<a href={ templ.SafeURL(transitPointMapsURL(event.Departure)) } target="_blank" rel="noopener" class="location-link" title="Open in Google Maps">{ event.Departure.Location }</a>
+							} else {
+								{ event.Departure.Location }
+							}
 							if event.Departure.Code != "" {
 								<span class="transit-code">({ event.Departure.Code })</span>
-							}
-							if transitPointMapsURL(event.Departure) != "" {
-								<a href={ templ.SafeURL(transitPointMapsURL(event.Departure)) } target="_blank" rel="noopener" class="maps-link" title="Open in Google Maps"><sl-icon name="geo-alt-fill"></sl-icon></a>
 							}
 						</span>
 						<sl-icon name="arrow-right"></sl-icon>
 						<span class="transit-to">
-							{ event.Arrival.Location }
+							if transitPointMapsURL(event.Arrival) != "" {
+								<a href={ templ.SafeURL(transitPointMapsURL(event.Arrival)) } target="_blank" rel="noopener" class="location-link" title="Open in Google Maps">{ event.Arrival.Location }</a>
+							} else {
+								{ event.Arrival.Location }
+							}
 							if event.Arrival.Code != "" {
 								<span class="transit-code">({ event.Arrival.Code })</span>
-							}
-							if transitPointMapsURL(event.Arrival) != "" {
-								<a href={ templ.SafeURL(transitPointMapsURL(event.Arrival)) } target="_blank" rel="noopener" class="maps-link" title="Open in Google Maps"><sl-icon name="geo-alt-fill"></sl-icon></a>
 							}
 						</span>
 					</div>
