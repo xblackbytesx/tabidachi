@@ -10,6 +10,7 @@ RUN npm install --prefix ./web && \
     mkdir -p web/static/vendor/shoelace && \
     cp -r web/node_modules/@shoelace-style/shoelace/cdn/. web/static/vendor/shoelace/ && \
     cp web/node_modules/htmx.org/dist/htmx.min.js web/static/vendor/htmx.min.js && \
+    cp web/node_modules/sortablejs/Sortable.min.js web/static/vendor/sortable.min.js && \
     rm -rf web/node_modules
 
 # Cache Go dependencies (layer re-runs only when go.mod changes)
