@@ -2,6 +2,7 @@ package format
 
 import (
 	"context"
+	"strconv"
 	"time"
 )
 
@@ -53,22 +54,8 @@ func DateTime(ctx context.Context, s string) string {
 	if s == "" {
 		return ""
 	}
-	// Try RFC3339 first, then a few common truncations.
-	var t time.Time
-	var err error
-	for _, layout := range []string{
-		time.RFC3339,
-		"2006-01-02T15:04:05",
-		"2006-01-02T15:04Z07:00",
-		"2006-01-02T15:04",
-		"2006-01-02",
-	} {
-		t, err = time.Parse(layout, s)
-		if err == nil {
-			break
-		}
-	}
-	if err != nil {
+	t := parseDateTime(s)
+	if t.IsZero() {
 		return s
 	}
 	switch PrefFromCtx(ctx) {
@@ -78,6 +65,62 @@ func DateTime(ctx context.Context, s string) string {
 		return t.Format("2006-01-02 15:04")
 	default: // "dmy"
 		return t.Format("Mon 2 Jan, 15:04")
+	}
+}
+
+// StayInfo formats check-in/check-out datetimes as a compact stay summary.
+// Example: "in Fri 17th · out Sun 19th (2 nights)"
+func StayInfo(checkIn, checkOut string) string {
+	inTime := parseDateTime(checkIn)
+	outTime := parseDateTime(checkOut)
+	if inTime.IsZero() || outTime.IsZero() {
+		return checkIn + " – " + checkOut
+	}
+	nights := int(outTime.Sub(inTime).Hours() / 24)
+	nightLabel := "night"
+	if nights != 1 {
+		nightLabel = "nights"
+	}
+	return "in " + formatDayShort(inTime) + "  ·  out " + formatDayShort(outTime) +
+		" (" + strconv.Itoa(nights) + " " + nightLabel + ")"
+}
+
+// parseDateTime tries common ISO 8601 datetime formats and returns the parsed time.
+func parseDateTime(s string) time.Time {
+	for _, layout := range []string{
+		time.RFC3339,
+		"2006-01-02T15:04:05",
+		"2006-01-02T15:04Z07:00",
+		"2006-01-02T15:04",
+		"2006-01-02",
+	} {
+		if t, err := time.Parse(layout, s); err == nil {
+			return t
+		}
+	}
+	return time.Time{}
+}
+
+// formatDayShort returns "Mon 2nd" style strings.
+func formatDayShort(t time.Time) string {
+	dow := t.Format("Mon")
+	day := t.Day()
+	return dow + " " + strconv.Itoa(day) + ordinalSuffix(day)
+}
+
+func ordinalSuffix(day int) string {
+	if day >= 11 && day <= 13 {
+		return "th"
+	}
+	switch day % 10 {
+	case 1:
+		return "st"
+	case 2:
+		return "nd"
+	case 3:
+		return "rd"
+	default:
+		return "th"
 	}
 }
 
