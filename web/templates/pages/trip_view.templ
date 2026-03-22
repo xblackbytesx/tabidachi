@@ -100,9 +100,7 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 									<span class="accomm-neighborhood">{ leg.Accommodation.Neighborhood }</span>
 								}
 								<span class="accomm-dates">
-									<span class="accomm-label">in</span> { format.DateTime(ctx, leg.Accommodation.CheckIn) }
-									<span class="accomm-sep">·</span>
-									<span class="accomm-label">out</span> { format.DateTime(ctx, leg.Accommodation.CheckOut) }
+									{ format.StayInfo(leg.Accommodation.CheckIn, leg.Accommodation.CheckOut) }
 								</span>
 								if leg.Accommodation.BookingReference != "" {
 									<span class="accomm-ref">Ref: { leg.Accommodation.BookingReference }</span>
