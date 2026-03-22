@@ -315,11 +315,15 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 				</div>
 			</form>
 		</div>
-		<div class="day-events-preview">
+		<div
+			class="day-events-preview"
+			data-sortable-url={ "/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/reorder" }
+		>
 			for evtIdx, event := range day.Events {
 				if event.Type == "activity" {
-					<div class="event-builder-group">
+					<div class="event-builder-group sortable-item" data-event-idx={ strconv.Itoa(evtIdx) }>
 						<div class="event-preview-row">
+							<span class="drag-handle" title="Drag to reorder"><sl-icon name="grip-vertical"></sl-icon></span>
 							<span class="event-preview-type">
 								<sl-icon name="geo-alt"></sl-icon>
 							</span>
@@ -335,7 +339,8 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 						@EventImageSection(csrfToken, tripID, strconv.Itoa(legIdx), strconv.Itoa(dayIdx), strconv.Itoa(evtIdx), event.ImageURL, event.ImageCredit, "")
 					</div>
 				} else {
-					<div class="event-preview-row">
+					<div class="event-preview-row sortable-item" data-event-idx={ strconv.Itoa(evtIdx) }>
+						<span class="drag-handle" title="Drag to reorder"><sl-icon name="grip-vertical"></sl-icon></span>
 						<span class={ "event-preview-type", templ.KV("event-preview-transit", event.Type == "transit"), templ.KV("event-preview-accommodation", event.Type == "accommodation") }>
 							if event.Type == "transit" {
 								<sl-icon name={ domain.TransportIcon(event.TransportMode) }></sl-icon>

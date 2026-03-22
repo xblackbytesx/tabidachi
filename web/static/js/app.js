@@ -93,9 +93,51 @@
   };
 
   // ============================================================
+  // Builder: sortable event lists (drag-and-drop reordering)
+  // ============================================================
+  function initSortableEvents() {
+    if (typeof Sortable === 'undefined') return;
+    document.querySelectorAll('.day-events-preview[data-sortable-url]').forEach(function (container) {
+      if (container._sortable) return; // already initialized
+      container._sortable = Sortable.create(container, {
+        handle: '.drag-handle',
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        dragClass: 'sortable-drag',
+        onEnd: function () {
+          var items = container.querySelectorAll('.sortable-item');
+          var order = [];
+          items.forEach(function (item) {
+            order.push(parseInt(item.getAttribute('data-event-idx'), 10));
+          });
+          var csrfEl = document.getElementById('csrf-live');
+          var headers = { 'Content-Type': 'application/json' };
+          if (csrfEl && csrfEl.value) {
+            headers['X-CSRF-Token'] = csrfEl.value;
+          }
+          fetch(container.getAttribute('data-sortable-url'), {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(order)
+          }).then(function (res) {
+            if (!res.ok) {
+              console.error('Reorder failed:', res.status);
+              window.location.reload();
+            }
+          }).catch(function () {
+            window.location.reload();
+          });
+        }
+      });
+    });
+  }
+
+  // ============================================================
   // HTMX hooks
   // ============================================================
   document.addEventListener('DOMContentLoaded', function () {
+    initSortableEvents();
     // Inject the freshest CSRF token from #csrf-live into every HTMX request.
     document.addEventListener('htmx:configRequest', function (evt) {
       var el = document.getElementById('csrf-live');
@@ -120,6 +162,7 @@
       if (document.getElementById('timeline')) {
         scrollToToday();
       }
+      initSortableEvents();
     });
   });
 })();

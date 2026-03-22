@@ -202,6 +202,7 @@ func main() {
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx", builderHandler.UpdateDay)
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/delete", builderHandler.DeleteDay)
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events", builderHandler.AddEvent)
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events/reorder", builderHandler.ReorderEvents)
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/delete", builderHandler.DeleteEvent)
 
 	go func() {

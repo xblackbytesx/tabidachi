@@ -892,6 +892,31 @@ sl-details.day-notes {
   color: var(--color-text-muted);
   padding: 3px 0;
 }
+/* Drag handle for sortable events */
+.drag-handle {
+  cursor: grab;
+  color: var(--color-text-faint);
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  padding: 2px 0;
+  min-width: 16px;
+  min-height: 20px;
+  flex-shrink: 0;
+}
+.drag-handle:hover { opacity: 1; }
+.drag-handle:active { cursor: grabbing; }
+
+/* SortableJS states */
+.sortable-ghost {
+  opacity: 0.3;
+}
+.sortable-chosen {
+  background: var(--color-surface-raised);
+  border-radius: var(--radius-sm);
+}
+
 .event-preview-type { color: var(--color-text-faint); }
 .event-preview-transit { color: var(--color-transit); }
 .event-preview-accommodation { color: var(--color-accommodation); }

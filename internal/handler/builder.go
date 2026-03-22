@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -325,4 +326,55 @@ func (h *BuilderHandler) DeleteEvent(c echo.Context) error {
 		trip.Data.Legs[legIdx].Days[dayIdx].Events[i].Sequence = i + 1
 	}
 	return h.saveAndRedirect(c, trip)
+}
+
+// ReorderEvents reorders events within a day based on the provided index order.
+func (h *BuilderHandler) ReorderEvents(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+
+	var order []int
+	if err := json.NewDecoder(c.Request().Body).Decode(&order); err != nil {
+		return c.String(http.StatusBadRequest, "invalid JSON body")
+	}
+
+	events := trip.Data.Legs[legIdx].Days[dayIdx].Events
+	if len(order) != len(events) {
+		return c.String(http.StatusBadRequest, "order length mismatch")
+	}
+
+	// Validate indices
+	seen := make(map[int]bool, len(order))
+	for _, idx := range order {
+		if idx < 0 || idx >= len(events) || seen[idx] {
+			return c.String(http.StatusBadRequest, "invalid event index in order")
+		}
+		seen[idx] = true
+	}
+
+	// Build reordered slice
+	reordered := make([]domain.Event, len(events))
+	for newPos, oldIdx := range order {
+		reordered[newPos] = events[oldIdx]
+		reordered[newPos].Sequence = newPos + 1
+	}
+	trip.Data.Legs[legIdx].Days[dayIdx].Events = reordered
+
+	if err := h.trips.Update(c.Request().Context(), trip); err != nil {
+		slog.Error("builder: reorder events", "err", err)
+		return c.String(http.StatusInternalServerError, "error saving trip")
+	}
+
+	return c.NoContent(http.StatusNoContent)
 }
