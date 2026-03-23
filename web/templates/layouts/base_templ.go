@@ -55,7 +55,7 @@ func Base(title string, csrfToken string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><link rel=\"stylesheet\" href=\"/static/css/app.css\"><link rel=\"stylesheet\" href=\"/static/vendor/webawesome/styles/themes/default.css\"><script type=\"module\" src=\"/static/vendor/webawesome/webawesome.loader.js\"></script><script src=\"/static/vendor/htmx.min.js\" defer></script><script src=\"/static/vendor/sortable.min.js\" defer></script></head><body hx-headers=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><link rel=\"stylesheet\" href=\"/static/vendor/webawesome/styles/themes/default.css\"><link rel=\"stylesheet\" href=\"/static/css/app.css\"><script type=\"module\" src=\"/static/vendor/webawesome/webawesome.loader.js\"></script><script src=\"/static/vendor/htmx.min.js\" defer></script><script src=\"/static/vendor/sortable.min.js\" defer></script></head><body hx-headers=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -181,7 +181,7 @@ func Auth(title string, csrfToken string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, " — Tabidachi</title><link rel=\"stylesheet\" href=\"/static/css/app.css\"><link rel=\"stylesheet\" href=\"/static/vendor/webawesome/styles/themes/default.css\"><script type=\"module\" src=\"/static/vendor/webawesome/webawesome.loader.js\"></script></head><body class=\"auth-body\"><script>if(localStorage.getItem('tabidachi-theme')==='light'){document.documentElement.classList.remove('wa-dark');}</script><div class=\"auth-container\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, " — Tabidachi</title><link rel=\"stylesheet\" href=\"/static/vendor/webawesome/styles/themes/default.css\"><link rel=\"stylesheet\" href=\"/static/css/app.css\"><script type=\"module\" src=\"/static/vendor/webawesome/webawesome.loader.js\"></script></head><body class=\"auth-body\"><script>if(localStorage.getItem('tabidachi-theme')==='light'){document.documentElement.classList.remove('wa-dark');}</script><div class=\"auth-container\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
