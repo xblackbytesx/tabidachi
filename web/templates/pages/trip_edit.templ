@@ -335,6 +335,13 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 							if event.StartTime != "" {
 								<span class="event-preview-time">{ event.StartTime }</span>
 							}
+							<button
+								class="btn btn-xs btn-ghost"
+								data-dialog={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) }
+								onclick="openDataDialog(this); return false;"
+								title="Edit event"
+								aria-label="Edit event"
+							><sl-icon name="pencil"></sl-icon></button>
 							<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
 								<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 								<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event" onclick="return confirm('Delete this event?')">×</button>
@@ -356,6 +363,13 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 						if event.StartTime != "" {
 							<span class="event-preview-time">{ event.StartTime }</span>
 						}
+						<button
+							class="btn btn-xs btn-ghost"
+							data-dialog={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) }
+							onclick="openDataDialog(this); return false;"
+							title="Edit event"
+							aria-label="Edit event"
+						><sl-icon name="pencil"></sl-icon></button>
 						<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
 							<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 							<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event" onclick="return confirm('Delete this event?')">×</button>
@@ -365,6 +379,10 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 			}
 		</div>
 	</div>
+	<!-- Edit Event dialogs -->
+	for evtIdx, event := range day.Events {
+		@editEventDialog(csrfToken, tripID, legIdx, dayIdx, evtIdx, event)
+	}
 	<!-- Add Event dialog -->
 	<sl-dialog label="Add Event" id={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) }>
 		<form
@@ -408,7 +426,21 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 			<div class="event-type-fields" data-type="activity">
 				<div class="field">
 					<label class="field-label">Location</label>
-					<input class="field-input" type="text" name="location"/>
+					<input class="field-input" type="text" name="location" placeholder="Venue or place name"/>
+				</div>
+				<div class="field">
+					<label class="field-label">Address</label>
+					<input class="field-input" type="text" name="address" placeholder="Street address for navigation"/>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">Latitude</label>
+						<input class="field-input" type="text" name="latitude" placeholder="e.g. 35.6762"/>
+					</div>
+					<div class="field">
+						<label class="field-label">Longitude</label>
+						<input class="field-input" type="text" name="longitude" placeholder="e.g. 139.6503"/>
+					</div>
 				</div>
 				<div class="field">
 					<label class="field-label">Booking reference</label>
@@ -447,12 +479,32 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 				</div>
 				<div class="field-row">
 					<div class="field">
+						<label class="field-label">From lat</label>
+						<input class="field-input" type="text" name="departure_latitude" placeholder="Latitude"/>
+					</div>
+					<div class="field">
+						<label class="field-label">From lng</label>
+						<input class="field-input" type="text" name="departure_longitude" placeholder="Longitude"/>
+					</div>
+				</div>
+				<div class="field-row">
+					<div class="field">
 						<label class="field-label">To</label>
 						<input class="field-input" type="text" name="arrival_location" placeholder="City or station"/>
 					</div>
 					<div class="field">
 						<label class="field-label">To code</label>
 						<input class="field-input" type="text" name="arrival_code" placeholder="e.g. NRT"/>
+					</div>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">To lat</label>
+						<input class="field-input" type="text" name="arrival_latitude" placeholder="Latitude"/>
+					</div>
+					<div class="field">
+						<label class="field-label">To lng</label>
+						<input class="field-input" type="text" name="arrival_longitude" placeholder="Longitude"/>
 					</div>
 				</div>
 				<div class="field-row">
@@ -480,6 +532,10 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 				</label>
 			</div>
 			<div class="field">
+				<label class="field-label">URL</label>
+				<input class="field-input" type="url" name="url" placeholder="https://example.com"/>
+			</div>
+			<div class="field">
 				<label class="field-label">Notes</label>
 				<textarea class="field-textarea" name="notes"></textarea>
 			</div>
@@ -505,6 +561,23 @@ func colorOrDefault(color string) string {
 	return color
 }
 
+func transitPointVal(tp *domain.TransitPoint, field string) string {
+	if tp == nil {
+		return ""
+	}
+	switch field {
+	case "location":
+		return tp.Location
+	case "code":
+		return tp.Code
+	case "latitude":
+		return tp.Latitude
+	case "longitude":
+		return tp.Longitude
+	}
+	return ""
+}
+
 func accommodationVal(a *domain.Accommodation, field string) string {
 	if a == nil {
 		return ""
@@ -524,4 +597,184 @@ func accommodationVal(a *domain.Accommodation, field string) string {
 		return a.BookingReference
 	}
 	return ""
+}
+
+templ editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, evtIdx int, event domain.Event) {
+	<sl-dialog label="Edit Event" id={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) }>
+		<form
+			method="POST"
+			action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx)) }
+			class="form-stack"
+			id={ fmt.Sprintf("edit-event-form-%d-%d-%d", legIdx, dayIdx, evtIdx) }
+		>
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label">Event type <span class="required">*</span></label>
+					<select
+						class="field-input"
+						name="event_type"
+						data-event-form={ fmt.Sprintf("edit-event-form-%d-%d-%d", legIdx, dayIdx, evtIdx) }
+						onchange="onEventTypeChangeByAttr(this)"
+						required
+					>
+						<option value="activity" selected?={ event.Type == "activity" }>Activity</option>
+						<option value="transit" selected?={ event.Type == "transit" }>Transit</option>
+						<option value="accommodation" selected?={ event.Type == "accommodation" }>Accommodation</option>
+					</select>
+				</div>
+				<div class="field">
+					<label class="field-label">Title <span class="required">*</span></label>
+					<input class="field-input" type="text" name="title" required value={ event.Title }/>
+				</div>
+			</div>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label">Start time</label>
+					<input class="field-input" type="text" name="start_time" placeholder="HH:MM" value={ event.StartTime }/>
+				</div>
+				<div class="field">
+					<label class="field-label">End time</label>
+					<input class="field-input" type="text" name="end_time" placeholder="HH:MM" value={ event.EndTime }/>
+				</div>
+			</div>
+			<!-- Activity fields -->
+			<div class="event-type-fields" data-type="activity" style={ editEventTypeDisplay(event.Type, "activity") }>
+				<div class="field">
+					<label class="field-label">Location</label>
+					<input class="field-input" type="text" name="location" placeholder="Venue or place name" value={ event.Location }/>
+				</div>
+				<div class="field">
+					<label class="field-label">Address</label>
+					<input class="field-input" type="text" name="address" placeholder="Street address for navigation" value={ event.Address }/>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">Latitude</label>
+						<input class="field-input" type="text" name="latitude" placeholder="e.g. 35.6762" value={ event.Latitude }/>
+					</div>
+					<div class="field">
+						<label class="field-label">Longitude</label>
+						<input class="field-input" type="text" name="longitude" placeholder="e.g. 139.6503" value={ event.Longitude }/>
+					</div>
+				</div>
+				<div class="field">
+					<label class="field-label">Booking reference</label>
+					<input class="field-input" type="text" name="booking_reference" value={ event.BookingReference }/>
+				</div>
+				<label class="checkbox-item">
+					<input type="checkbox" name="ticket_required" checked?={ event.TicketRequired }/> Ticket required
+				</label>
+			</div>
+			<!-- Transit fields -->
+			<div class="event-type-fields" data-type="transit" style={ editEventTypeDisplay(event.Type, "transit") }>
+				<div class="field">
+					<label class="field-label">Transport mode</label>
+					<select class="field-input" name="transport_mode">
+						<option value="flight" selected?={ event.TransportMode == "flight" }>Flight</option>
+						<option value="shinkansen" selected?={ event.TransportMode == "shinkansen" }>Shinkansen</option>
+						<option value="train" selected?={ event.TransportMode == "train" }>Train</option>
+						<option value="subway" selected?={ event.TransportMode == "subway" }>Subway</option>
+						<option value="bus" selected?={ event.TransportMode == "bus" }>Bus</option>
+						<option value="tram" selected?={ event.TransportMode == "tram" }>Tram</option>
+						<option value="ferry" selected?={ event.TransportMode == "ferry" }>Ferry</option>
+						<option value="taxi" selected?={ event.TransportMode == "taxi" }>Taxi</option>
+						<option value="car" selected?={ event.TransportMode == "car" }>Car</option>
+						<option value="walk" selected?={ event.TransportMode == "walk" }>Walk</option>
+					</select>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">From</label>
+						<input class="field-input" type="text" name="departure_location" placeholder="City or station" value={ transitPointVal(event.Departure, "location") }/>
+					</div>
+					<div class="field">
+						<label class="field-label">From code</label>
+						<input class="field-input" type="text" name="departure_code" placeholder="e.g. KIX" value={ transitPointVal(event.Departure, "code") }/>
+					</div>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">From lat</label>
+						<input class="field-input" type="text" name="departure_latitude" placeholder="Latitude" value={ transitPointVal(event.Departure, "latitude") }/>
+					</div>
+					<div class="field">
+						<label class="field-label">From lng</label>
+						<input class="field-input" type="text" name="departure_longitude" placeholder="Longitude" value={ transitPointVal(event.Departure, "longitude") }/>
+					</div>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">To</label>
+						<input class="field-input" type="text" name="arrival_location" placeholder="City or station" value={ transitPointVal(event.Arrival, "location") }/>
+					</div>
+					<div class="field">
+						<label class="field-label">To code</label>
+						<input class="field-input" type="text" name="arrival_code" placeholder="e.g. NRT" value={ transitPointVal(event.Arrival, "code") }/>
+					</div>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">To lat</label>
+						<input class="field-input" type="text" name="arrival_latitude" placeholder="Latitude" value={ transitPointVal(event.Arrival, "latitude") }/>
+					</div>
+					<div class="field">
+						<label class="field-label">To lng</label>
+						<input class="field-input" type="text" name="arrival_longitude" placeholder="Longitude" value={ transitPointVal(event.Arrival, "longitude") }/>
+					</div>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">Carrier</label>
+						<input class="field-input" type="text" name="carrier" placeholder="e.g. JAL" value={ event.Carrier }/>
+					</div>
+					<div class="field">
+						<label class="field-label">Flight / train no.</label>
+						<input class="field-input" type="text" name="flight_number" placeholder="e.g. JL123" value={ event.FlightNumber }/>
+					</div>
+				</div>
+				<div class="field">
+					<label class="field-label">Duration</label>
+					<input class="field-input" type="text" name="duration" placeholder="e.g. PT2H30M" value={ event.Duration }/>
+				</div>
+			</div>
+			<!-- Accommodation event fields -->
+			<div class="event-type-fields" data-type="accommodation" style={ editEventTypeDisplay(event.Type, "accommodation") }>
+				<label class="checkbox-item">
+					<input type="checkbox" name="check_in" checked?={ event.CheckIn }/> Check-in
+				</label>
+				<label class="checkbox-item">
+					<input type="checkbox" name="check_out" checked?={ event.CheckOut }/> Check-out
+				</label>
+			</div>
+			<div class="field">
+				<label class="field-label">URL</label>
+				<input class="field-input" type="url" name="url" placeholder="https://example.com" value={ event.URL }/>
+			</div>
+			<div class="field">
+				<label class="field-label">Notes</label>
+				<textarea class="field-textarea" name="notes">{ event.Notes }</textarea>
+			</div>
+			<label class="checkbox-item">
+				<input type="checkbox" name="optional" checked?={ event.Optional }/> Optional event
+			</label>
+			<div slot="footer" class="dialog-footer">
+				<sl-button
+					variant="neutral"
+					data-dialog={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) }
+					onclick="closeDataDialog(this)"
+				>Cancel</sl-button>
+				<button type="submit" class="btn btn-primary">Save event</button>
+			</div>
+		</form>
+	</sl-dialog>
+}
+
+// editEventTypeDisplay returns "display:none" if the event type doesn't match the section type,
+// or "" (visible) if it does.
+func editEventTypeDisplay(eventType, sectionType string) string {
+	if eventType == sectionType {
+		return ""
+	}
+	return "display:none"
 }
