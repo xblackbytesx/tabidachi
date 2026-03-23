@@ -13,12 +13,12 @@ templ Dashboard(csrfToken string, trips []*domain.Trip) {
 		<div class="page-header">
 			<h1 class="page-title">My Trips</h1>
 			<a href="/trips/new" class="btn btn-primary">
-				<sl-icon name="plus-lg"></sl-icon> New trip
+				<wa-icon name="plus"></wa-icon> New trip
 			</a>
 		</div>
 		if len(trips) == 0 {
 			<div class="empty-state">
-				<sl-icon name="map" class="empty-icon"></sl-icon>
+				<wa-icon name="map" class="empty-icon"></wa-icon>
 				<h2>No trips yet</h2>
 				<p>Start by creating your first itinerary.</p>
 				<a href="/trips/new" class="btn btn-primary">Plan a trip</a>
@@ -49,17 +49,17 @@ templ TripCard(trip *domain.Trip) {
 			</div>
 			<div class="trip-card-meta">
 				<span class="trip-dates">
-					<sl-icon name="calendar3"></sl-icon>
+					<wa-icon name="calendar-days"></wa-icon>
 					{ format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }
 				</span>
 				if trip.HomeLocation != "" {
 					<span class="trip-home">
-						<sl-icon name="house"></sl-icon>
+						<wa-icon name="house"></wa-icon>
 						{ trip.HomeLocation }
 					</span>
 				}
 				<span class="trip-legs">
-					<sl-icon name="geo-alt"></sl-icon>
+					<wa-icon name="location-dot"></wa-icon>
 					{ fmt.Sprintf("%d leg(s)", len(trip.Data.Legs)) }
 				</span>
 			</div>

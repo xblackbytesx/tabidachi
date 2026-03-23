@@ -6,12 +6,12 @@
   // Theme toggle (light / dark)
   // ============================================================
   window.toggleTheme = function () {
-    var isDark = document.body.classList.contains('sl-theme-dark');
+    var isDark = document.documentElement.classList.contains('wa-dark');
     if (isDark) {
-      document.body.classList.replace('sl-theme-dark', 'sl-theme-light');
+      document.documentElement.classList.remove('wa-dark');
       localStorage.setItem('tabidachi-theme', 'light');
     } else {
-      document.body.classList.replace('sl-theme-light', 'sl-theme-dark');
+      document.documentElement.classList.add('wa-dark');
       localStorage.removeItem('tabidachi-theme');
     }
   };
@@ -37,7 +37,7 @@
       var btn = document.getElementById('copy-btn');
       if (btn) {
         var orig = btn.innerHTML;
-        btn.innerHTML = '<sl-icon name="check2"></sl-icon> Copied!';
+        btn.innerHTML = '<wa-icon name="check"></wa-icon> Copied!';
         setTimeout(function () { btn.innerHTML = orig; }, 2000);
       }
     }).catch(function () {
@@ -76,6 +76,16 @@
     var dayBuilder = btn.closest('.day-builder');
     var form = dayBuilder.querySelector('.day-edit-form');
     form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  };
+
+  // ============================================================
+  // Trip view: open event photo lightbox
+  // ============================================================
+  window.openEventLightbox = function (btn) {
+    var img = document.getElementById('event-lightbox-img');
+    img.src = btn.dataset.fullUrl;
+    img.alt = btn.getAttribute('aria-label') || 'Event photo';
+    document.getElementById('event-lightbox').showModal();
   };
 
   // ============================================================
@@ -142,6 +152,9 @@
   // ============================================================
   document.addEventListener('DOMContentLoaded', function () {
     initSortableEvents();
+    if (document.getElementById('timeline')) {
+      scrollToToday();
+    }
     // Inject the freshest CSRF token from #csrf-live into every HTMX request.
     document.addEventListener('htmx:configRequest', function (evt) {
       var el = document.getElementById('csrf-live');

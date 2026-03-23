@@ -41,19 +41,19 @@ templ Settings(csrfToken string, tokens []*domain.APIToken, errMsg string, dateF
 					>
 						<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 						<div class="token-form-row">
-							<sl-input
+							<wa-input
 								name="name"
 								label="Token name"
 								placeholder="e.g. Android phone"
 								autocomplete="off"
-								clearable
+								with-clear
 								required
 								class="token-name-input"
-							></sl-input>
-							<sl-button type="submit" variant="primary" class="token-submit-btn">
-								<sl-icon slot="prefix" name="key"></sl-icon>
+							></wa-input>
+							<wa-button type="submit" variant="primary" class="token-submit-btn">
+								<wa-icon slot="start" name="key"></wa-icon>
 								Generate token
-							</sl-button>
+							</wa-button>
 						</div>
 					</form>
 					@tokenList(csrfToken, tokens)
@@ -113,7 +113,7 @@ templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken
 						</p>
 						<div class="token-reveal-value">
 							<code id="new-token-value">{ rawToken }</code>
-							<sl-copy-button from="new-token-value" copy-label="Copy token" success-label="Copied!"></sl-copy-button>
+							<wa-copy-button from="new-token-value" copy-label="Copy token" success-label="Copied!"></wa-copy-button>
 						</div>
 					</div>
 					<form
@@ -126,19 +126,19 @@ templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken
 					>
 						<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 						<div class="token-form-row">
-							<sl-input
+							<wa-input
 								name="name"
 								label="Token name"
 								placeholder="e.g. Android phone"
 								autocomplete="off"
-								clearable
+								with-clear
 								required
 								class="token-name-input"
-							></sl-input>
-							<sl-button type="submit" variant="primary" class="token-submit-btn">
-								<sl-icon slot="prefix" name="key"></sl-icon>
+							></wa-input>
+							<wa-button type="submit" variant="primary" class="token-submit-btn">
+								<wa-icon slot="start" name="key"></wa-icon>
 								Generate token
-							</sl-button>
+							</wa-button>
 						</div>
 					</form>
 					@tokenList(csrfToken, tokens)
@@ -179,11 +179,20 @@ templ dateFormatSection(csrfToken string, dateFormat string) {
 			hx-swap="outerHTML show:window:top"
 		>
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
-			<sl-radio-group name="date_format" value={ dateFormatOrDefault(dateFormat) } style="margin-bottom: 16px;">
-				<sl-radio-button value="dmy">2 Jan 2026</sl-radio-button>
-				<sl-radio-button value="mdy">Jan 2, 2026</sl-radio-button>
-				<sl-radio-button value="iso">2026-01-02</sl-radio-button>
-			</sl-radio-group>
+			<div class="radio-pills mb-400">
+				<label class="radio-pill">
+					<input type="radio" name="date_format" value="dmy" checked?={ dateFormatOrDefault(dateFormat) == "dmy" }/>
+					2 Jan 2026
+				</label>
+				<label class="radio-pill">
+					<input type="radio" name="date_format" value="mdy" checked?={ dateFormatOrDefault(dateFormat) == "mdy" }/>
+					Jan 2, 2026
+				</label>
+				<label class="radio-pill">
+					<input type="radio" name="date_format" value="iso" checked?={ dateFormatOrDefault(dateFormat) == "iso" }/>
+					2026-01-02
+				</label>
+			</div>
 			<br/>
 			<button type="submit" class="btn btn-primary btn-sm">Save</button>
 		</form>

@@ -12,6 +12,8 @@ import (
 	"golang.org/x/time/rate"
 )
 
+const maxAPILimiters = 10000
+
 // apiLimiters holds per-IP rate limiters for API token endpoints.
 var apiLimiters struct {
 	sync.Mutex
@@ -50,7 +52,10 @@ func getAPILimiter(ip string) *rate.Limiter {
 	if !ok {
 		// 10 requests/second, burst of 20.
 		entry = &apiLimiterEntry{limiter: rate.NewLimiter(10, 20)}
-		apiLimiters.m[ip] = entry
+		// Cap map size to prevent unbounded memory growth under DDoS.
+		if len(apiLimiters.m) < maxAPILimiters {
+			apiLimiters.m[ip] = entry
+		}
 	}
 	entry.lastSeen = time.Now()
 	return entry.limiter

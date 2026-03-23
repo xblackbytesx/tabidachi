@@ -17,34 +17,34 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 					style={ tripHeaderStyle(trip.CoverImageURL) }
 				>
 					<div class="trip-view-hero-nav">
-						<a href="/" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> All trips</a>
+						<a href="/" class="btn btn-ghost btn-sm"><wa-icon name="arrow-left"></wa-icon> All trips</a>
 						<div class="trip-view-hero-actions">
 							if trip.IsActive() {
 								<span class="badge badge-active badge-lg">Active now</span>
 							}
 							<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/export") } class="btn btn-ghost btn-sm" hx-boost="false">
-								<sl-icon name="download"></sl-icon> Export
+								<wa-icon name="download"></wa-icon> Export
 							</a>
 							<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/edit") } class="btn btn-ghost btn-sm">
-								<sl-icon name="pencil"></sl-icon> Edit
+								<wa-icon name="pencil"></wa-icon> Edit
 							</a>
 						</div>
 					</div>
 					<div class="trip-view-hero-body">
 						<h1 class="trip-view-title">{ trip.Title }</h1>
 						<div class="trip-view-meta">
-							<span><sl-icon name="calendar3"></sl-icon> { format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }</span>
+							<span><wa-icon name="calendar-days"></wa-icon> { format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }</span>
 							if trip.HomeLocation != "" {
-								<span><sl-icon name="house"></sl-icon> { trip.HomeLocation }</span>
+								<span><wa-icon name="house"></wa-icon> { trip.HomeLocation }</span>
 							}
 							if trip.Timezone != "" && trip.Timezone != "UTC" {
-								<span><sl-icon name="globe"></sl-icon> { trip.Timezone }</span>
+								<span><wa-icon name="globe"></wa-icon> { trip.Timezone }</span>
 							}
 						</div>
 					</div>
 				</div>
 			} else {
-				<a href="/" class="trip-view-back"><sl-icon name="arrow-left"></sl-icon> All trips</a>
+				<a href="/" class="trip-view-back"><wa-icon name="arrow-left"></wa-icon> All trips</a>
 				<div class="trip-view-title-row">
 					<h1 class="trip-view-title">{ trip.Title }</h1>
 					if trip.IsActive() {
@@ -52,27 +52,27 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 					}
 				</div>
 				<div class="trip-view-meta">
-					<span><sl-icon name="calendar3"></sl-icon> { format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }</span>
+					<span><wa-icon name="calendar-days"></wa-icon> { format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }</span>
 					if trip.HomeLocation != "" {
-						<span><sl-icon name="house"></sl-icon> { trip.HomeLocation }</span>
+						<span><wa-icon name="house"></wa-icon> { trip.HomeLocation }</span>
 					}
 					if trip.Timezone != "" && trip.Timezone != "UTC" {
-						<span><sl-icon name="globe"></sl-icon> { trip.Timezone }</span>
+						<span><wa-icon name="globe"></wa-icon> { trip.Timezone }</span>
 					}
 				</div>
 				<div class="trip-view-actions">
 					<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/export") } class="btn btn-ghost btn-sm" hx-boost="false">
-						<sl-icon name="download"></sl-icon> Export
+						<wa-icon name="download"></wa-icon> Export
 					</a>
 					<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/edit") } class="btn btn-ghost btn-sm">
-						<sl-icon name="pencil"></sl-icon> Edit
+						<wa-icon name="pencil"></wa-icon> Edit
 					</a>
 				</div>
 			}
 			<div class="timeline" id="timeline">
 				if len(trip.Data.Legs) == 0 {
 					<div class="empty-state">
-						<sl-icon name="map" class="empty-icon"></sl-icon>
+						<wa-icon name="map" class="empty-icon"></wa-icon>
 						<p>No itinerary yet. <a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/edit") }>Add legs and events</a>.</p>
 					</div>
 				}
@@ -94,7 +94,7 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 						</div>
 						if leg.Accommodation != nil {
 							<div class="accommodation-banner">
-								<sl-icon name="building"></sl-icon>
+								<wa-icon name="building"></wa-icon>
 								<span class="accomm-name">{ leg.Accommodation.Name }</span>
 								if leg.Accommodation.Neighborhood != "" {
 									<span class="accomm-neighborhood">{ leg.Accommodation.Neighborhood }</span>
@@ -108,10 +108,10 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 							</div>
 						}
 						if leg.Notes != "" {
-							<sl-details class="leg-notes">
-								<span slot="summary"><sl-icon name="info-circle"></sl-icon> Leg notes</span>
+							<wa-details class="leg-notes">
+								<span slot="summary"><wa-icon name="circle-info"></wa-icon> Leg notes</span>
 								<p class="notes-text">{ leg.Notes }</p>
-							</sl-details>
+							</wa-details>
 						}
 						for _, day := range leg.Days {
 							@daySection(trip, day)
@@ -119,7 +119,7 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 					</div>
 					if legIdx < len(trip.Data.Legs)-1 {
 						<div class="leg-connector">
-							<sl-icon name="arrow-down-circle" class="leg-connector-icon"></sl-icon>
+							<wa-icon name="circle-arrow-down" class="leg-connector-icon"></wa-icon>
 							<span class="leg-connector-label">{ trip.Data.Legs[legIdx+1].Destination }</span>
 						</div>
 					}
@@ -128,21 +128,10 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 		</div>
 		<dialog id="event-lightbox" class="event-lightbox-dialog" aria-label="Event photo viewer">
 			<button class="event-lightbox-close" onclick="document.getElementById('event-lightbox').close()" aria-label="Close lightbox">
-				<sl-icon name="x-lg"></sl-icon>
+				<wa-icon name="xmark"></wa-icon>
 			</button>
 			<img id="event-lightbox-img" src="" alt="Event photo" class="event-lightbox-img"/>
 		</dialog>
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				scrollToToday();
-			});
-			function openEventLightbox(btn) {
-				var img = document.getElementById('event-lightbox-img');
-				img.src = btn.dataset.fullUrl;
-				img.alt = btn.getAttribute('aria-label') || 'Event photo';
-				document.getElementById('event-lightbox').showModal();
-			}
-		</script>
 	}
 }
 
@@ -168,15 +157,15 @@ templ daySection(trip *domain.Trip, day domain.Day) {
 					<span class="badge badge-today">Today</span>
 				}
 				if day.Notes != "" {
-					<span class="day-has-notes"><sl-icon name="sticky"></sl-icon></span>
+					<span class="day-has-notes"><wa-icon name="note-sticky"></wa-icon></span>
 				}
 			</div>
 		</div>
 		if day.Notes != "" {
-			<sl-details class="day-notes">
-				<span slot="summary"><sl-icon name="sticky"></sl-icon> Day notes</span>
+			<wa-details class="day-notes">
+				<span slot="summary"><wa-icon name="note-sticky"></wa-icon> Day notes</span>
 				<p class="notes-text">{ day.Notes }</p>
-			</sl-details>
+			</wa-details>
 		}
 		<div class="events-list">
 			for _, event := range day.Events {
@@ -202,17 +191,17 @@ templ eventCard(event domain.Event) {
 				<div class="event-header">
 					<span class="event-icon">
 						if event.Type == "accommodation" {
-							<sl-icon name="building"></sl-icon>
+							<wa-icon name="building"></wa-icon>
 						} else {
-							<sl-icon name="geo-alt"></sl-icon>
+							<wa-icon name="location-dot"></wa-icon>
 						}
 					</span>
 					<span class="event-title">{ event.Title }</span>
 					if event.URL != "" {
-						<a href={ templ.SafeURL(event.URL) } target="_blank" rel="noopener" class="event-link" aria-label="Open link"><sl-icon name="box-arrow-up-right"></sl-icon></a>
+						<a href={ templ.SafeURL(event.URL) } target="_blank" rel="noopener" class="event-link" aria-label="Open link"><wa-icon name="up-right-from-square"></wa-icon></a>
 					}
 					if event.TicketRequired {
-						<span class="badge badge-ticket"><sl-icon name="ticket-perforated"></sl-icon> Ticket</span>
+						<span class="badge badge-ticket"><wa-icon name="ticket"></wa-icon> Ticket</span>
 					}
 					if event.Optional {
 						<span class="badge badge-optional">Optional</span>
@@ -228,7 +217,7 @@ templ eventCard(event domain.Event) {
 				</div>
 				if event.Location != "" {
 					<div class="event-location">
-						<sl-icon name="pin-map"></sl-icon>
+						<wa-icon name="map-pin"></wa-icon>
 						if format.MapsURL(event.Latitude, event.Longitude, event.Address, event.Location) != "" {
 							<a href={ templ.SafeURL(format.MapsURL(event.Latitude, event.Longitude, event.Address, event.Location)) } target="_blank" rel="noopener" class="stealth-link">{ event.Location }</a>
 						} else {
@@ -238,7 +227,7 @@ templ eventCard(event domain.Event) {
 				}
 				if event.Address != "" && event.Address != event.Location {
 					<div class="event-address">
-						<sl-icon name="signpost-2"></sl-icon>
+						<wa-icon name="signs-post"></wa-icon>
 						if format.MapsURL(event.Latitude, event.Longitude, event.Address, "") != "" {
 							<a href={ templ.SafeURL(format.MapsURL(event.Latitude, event.Longitude, event.Address, "")) } target="_blank" rel="noopener" class="stealth-link">{ event.Address }</a>
 						} else {
@@ -257,7 +246,7 @@ templ eventCard(event domain.Event) {
 					</div>
 				}
 				if event.BookingReference != "" {
-					<div class="event-ref"><sl-icon name="ticket"></sl-icon> Ref: { event.BookingReference }</div>
+					<div class="event-ref"><wa-icon name="ticket"></wa-icon> Ref: { event.BookingReference }</div>
 				}
 				if event.Notes != "" {
 					<div class="event-notes">{ event.Notes }</div>
@@ -272,13 +261,13 @@ templ transitConnector(event domain.Event) {
 		<div class="transit-line"></div>
 		<div class="transit-content">
 			<div class="transit-icon-wrap">
-				<sl-icon name={ domain.TransportIcon(event.TransportMode) } class="transit-icon"></sl-icon>
+				<wa-icon name={ domain.TransportIcon(event.TransportMode) } class="transit-icon"></wa-icon>
 			</div>
 			<div class="transit-info">
 				<div class="transit-title">
 					{ event.Title }
 					if event.URL != "" {
-						<a href={ templ.SafeURL(event.URL) } target="_blank" rel="noopener" class="event-link" aria-label="Open link"><sl-icon name="box-arrow-up-right"></sl-icon></a>
+						<a href={ templ.SafeURL(event.URL) } target="_blank" rel="noopener" class="event-link" aria-label="Open link"><wa-icon name="up-right-from-square"></wa-icon></a>
 					}
 				</div>
 				if event.Departure != nil && event.Arrival != nil {
@@ -293,7 +282,7 @@ templ transitConnector(event domain.Event) {
 								<span class="transit-code">({ event.Departure.Code })</span>
 							}
 						</span>
-						<sl-icon name="arrow-right"></sl-icon>
+						<wa-icon name="arrow-right"></wa-icon>
 						<span class="transit-to">
 							if format.MapsURL(event.Arrival.Latitude, event.Arrival.Longitude, "", event.Arrival.Location) != "" {
 								<a href={ templ.SafeURL(format.MapsURL(event.Arrival.Latitude, event.Arrival.Longitude, "", event.Arrival.Location)) } target="_blank" rel="noopener" class="stealth-link">{ event.Arrival.Location }</a>
@@ -316,7 +305,7 @@ templ transitConnector(event domain.Event) {
 						</span>
 					}
 					if event.Duration != "" {
-						<span class="transit-duration"><sl-icon name="clock"></sl-icon> { formatDuration(event.Duration) }</span>
+						<span class="transit-duration"><wa-icon name="clock"></wa-icon> { formatDuration(event.Duration) }</span>
 					}
 					if event.Carrier != "" {
 						<span class="transit-carrier">{ event.Carrier }</span>

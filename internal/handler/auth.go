@@ -8,13 +8,16 @@ import (
 	"sync"
 	"time"
 
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/labstack/echo/v4"
 	"github.com/xblackbytesx/tabidachi/internal/auth"
 	"github.com/xblackbytesx/tabidachi/internal/repository"
 	"github.com/xblackbytesx/tabidachi/web/templates/pages"
-	"github.com/jackc/pgx/v5"
-	"github.com/labstack/echo/v4"
 	"golang.org/x/time/rate"
 )
+
+const maxLoginBuckets = 10000
 
 // loginLimiter enforces a per-IP rate limit on POST /login to slow brute-force attempts.
 // Each IP gets a burst of 5, refilling at 1 token/minute (5 attempts per minute max).
@@ -50,6 +53,10 @@ func loginLimiter(ip string) *rate.Limiter {
 	if b, ok := loginBuckets[ip]; ok {
 		b.lastSeen = time.Now()
 		return b.limiter
+	}
+	// Cap map size to prevent unbounded memory growth under DDoS.
+	if len(loginBuckets) >= maxLoginBuckets {
+		return rate.NewLimiter(rate.Every(time.Minute), 5)
 	}
 	b := &loginBucket{
 		limiter:  rate.NewLimiter(rate.Every(time.Minute), 5),
@@ -140,7 +147,8 @@ func (h *AuthHandler) RegisterPost(c echo.Context) error {
 
 	user, err := h.users.Create(c.Request().Context(), email, displayName, hash)
 	if err != nil {
-		if strings.Contains(err.Error(), "unique") || strings.Contains(err.Error(), "duplicate") {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) && pgErr.Code == "23505" {
 			return render(c, http.StatusOK, pages.Register(csrfToken(c), "An account with that email already exists."))
 		}
 		slog.Error("register: create user", "err", err)

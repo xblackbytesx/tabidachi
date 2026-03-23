@@ -135,19 +135,19 @@ type APIToken struct {
 	LastUsedAt  *time.Time
 }
 
-// TransportIcon maps a transport mode string to a Shoelace icon name.
+// TransportIcon maps a transport mode string to a Font Awesome icon name.
 func TransportIcon(mode string) string {
 	icons := map[string]string{
-		"flight":     "airplane",
-		"train":      "train-front",
-		"shinkansen": "train-front",
-		"subway":     "train-lightrail-front",
-		"bus":        "bus-front",
-		"car":        "car-front",
+		"flight":     "plane",
+		"train":      "train",
+		"shinkansen": "train",
+		"subway":     "train-subway",
+		"bus":        "bus",
+		"car":        "car",
 		"ferry":      "water",
 		"walk":       "person-walking",
-		"taxi":       "taxi-front",
-		"tram":       "tram-front-fill",
+		"taxi":       "taxi",
+		"tram":       "train-tram",
 	}
 	if icon, ok := icons[mode]; ok {
 		return icon
