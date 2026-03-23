@@ -4,20 +4,21 @@ RUN apk add --no-cache git nodejs npm
 
 WORKDIR /app
 
-# Front-end assets
-COPY web/package.json ./web/
-RUN npm install --prefix ./web && \
-    mkdir -p web/static/vendor/webawesome && \
-    cp -r web/node_modules/@awesome.me/webawesome/dist-cdn/. web/static/vendor/webawesome/ && \
-    cp web/node_modules/htmx.org/dist/htmx.min.js web/static/vendor/htmx.min.js && \
-    cp web/node_modules/sortablejs/Sortable.min.js web/static/vendor/sortable.min.js && \
-    rm -rf web/node_modules
+# Front-end deps (installed to /tmp so COPY . . can't shadow them)
+COPY web/package.json /tmp/web/
+RUN npm install --prefix /tmp/web
 
 # Cache Go dependencies (layer re-runs only when go.mod changes)
 COPY go.mod ./
 RUN go mod download
 
 COPY . .
+
+# Vendor frontend assets after COPY to avoid overlay directory shadowing
+RUN mkdir -p web/static/vendor/webawesome && \
+    cp -r /tmp/web/node_modules/@awesome.me/webawesome/dist-cdn/. web/static/vendor/webawesome/ && \
+    cp /tmp/web/node_modules/htmx.org/dist/htmx.min.js web/static/vendor/htmx.min.js && \
+    cp /tmp/web/node_modules/sortablejs/Sortable.min.js web/static/vendor/sortable.min.js
 
 # Generate templ files
 RUN go install github.com/a-h/templ/cmd/templ@v0.3.1001 && \
