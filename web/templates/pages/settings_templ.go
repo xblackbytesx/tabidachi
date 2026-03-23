@@ -91,7 +91,7 @@ func Settings(csrfToken string, tokens []*domain.APIToken, errMsg string, dateFo
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"><div class=\"token-form-row\"><sl-input name=\"name\" label=\"Token name\" placeholder=\"e.g. Android phone\" autocomplete=\"off\" clearable required class=\"token-name-input\"></sl-input> <sl-button type=\"submit\" variant=\"primary\" class=\"token-submit-btn\"><sl-icon slot=\"prefix\" name=\"key\"></sl-icon> Generate token</sl-button></div></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"><div class=\"token-form-row\"><wa-input name=\"name\" label=\"Token name\" placeholder=\"e.g. Android phone\" autocomplete=\"off\" with-clear required class=\"token-name-input\"></wa-input> <wa-button type=\"submit\" variant=\"primary\" class=\"token-submit-btn\"><wa-icon slot=\"start\" name=\"key\"></wa-icon> Generate token</wa-button></div></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -203,7 +203,7 @@ func SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</code> <sl-copy-button from=\"new-token-value\" copy-label=\"Copy token\" success-label=\"Copied!\"></sl-copy-button></div></div><form method=\"POST\" action=\"/settings/tokens\" class=\"token-form\" hx-post=\"/settings/tokens\" hx-target=\"#main-content\" hx-swap=\"outerHTML show:window:top\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</code> <wa-copy-button from=\"new-token-value\" copy-label=\"Copy token\" success-label=\"Copied!\"></wa-copy-button></div></div><form method=\"POST\" action=\"/settings/tokens\" class=\"token-form\" hx-post=\"/settings/tokens\" hx-target=\"#main-content\" hx-swap=\"outerHTML show:window:top\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -216,7 +216,7 @@ func SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\"><div class=\"token-form-row\"><sl-input name=\"name\" label=\"Token name\" placeholder=\"e.g. Android phone\" autocomplete=\"off\" clearable required class=\"token-name-input\"></sl-input> <sl-button type=\"submit\" variant=\"primary\" class=\"token-submit-btn\"><sl-icon slot=\"prefix\" name=\"key\"></sl-icon> Generate token</sl-button></div></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\"><div class=\"token-form-row\"><wa-input name=\"name\" label=\"Token name\" placeholder=\"e.g. Android phone\" autocomplete=\"off\" with-clear required class=\"token-name-input\"></wa-input> <wa-button type=\"submit\" variant=\"primary\" class=\"token-submit-btn\"><wa-icon slot=\"start\" name=\"key\"></wa-icon> Generate token</wa-button></div></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -285,7 +285,7 @@ func dateFormatSection(csrfToken string, dateFormat string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "\"> <sl-radio-group name=\"date_format\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "\"> <wa-radio-group name=\"date_format\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -298,7 +298,7 @@ func dateFormatSection(csrfToken string, dateFormat string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\" style=\"margin-bottom: 16px;\"><sl-radio-button value=\"dmy\">2 Jan 2026</sl-radio-button> <sl-radio-button value=\"mdy\">Jan 2, 2026</sl-radio-button> <sl-radio-button value=\"iso\">2026-01-02</sl-radio-button></sl-radio-group><br><button type=\"submit\" class=\"btn btn-primary btn-sm\">Save</button></form></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\" style=\"margin-bottom: 16px;\"><wa-radio value=\"dmy\" appearance=\"button\">2 Jan 2026</wa-radio> <wa-radio value=\"mdy\" appearance=\"button\">Jan 2, 2026</wa-radio> <wa-radio value=\"iso\" appearance=\"button\">2026-01-02</wa-radio></wa-radio-group><br><button type=\"submit\" class=\"btn btn-primary btn-sm\">Save</button></form></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -5,7 +5,7 @@ import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
 templ PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[string]string) {
 	@layouts.Base("Plan with AI", csrfToken) {
 		<div class="page-header">
-			<a href="/trips/new" class="btn btn-ghost btn-sm"><sl-icon name="arrow-left"></sl-icon> Back</a>
+			<a href="/trips/new" class="btn btn-ghost btn-sm"><wa-icon name="arrow-left"></wa-icon> Back</a>
 			<h1 class="page-title">Plan New Trip with AI</h1>
 		</div>
 		<div class="wizard-steps">
@@ -89,15 +89,15 @@ templ planStep1(csrfToken string, data map[string]string) {
 				<p class="field-hint">Helps AI suggest routing from your origin.</p>
 			</div>
 			<div class="field">
-				<sl-radio-group name="intensity" label="Trip intensity" value={ intensityOrDefault(data) }>
-					<sl-radio-button value="maximize">Maximize sightseeing</sl-radio-button>
-					<sl-radio-button value="balanced">Balanced</sl-radio-button>
-					<sl-radio-button value="relaxed">Relaxed</sl-radio-button>
-				</sl-radio-group>
+				<wa-radio-group name="intensity" label="Trip intensity" value={ intensityOrDefault(data) }>
+					<wa-radio value="maximize" appearance="button">Maximize sightseeing</wa-radio>
+					<wa-radio value="balanced" appearance="button">Balanced</wa-radio>
+					<wa-radio value="relaxed" appearance="button">Relaxed</wa-radio>
+				</wa-radio-group>
 				<p class="field-hint">Calibrates the number and pace of activities the AI plans per day.</p>
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary">Next <sl-icon name="arrow-right"></sl-icon></button>
+				<button type="submit" class="btn btn-primary">Next <wa-icon name="arrow-right"></wa-icon></button>
 			</div>
 		</form>
 	</div>
@@ -201,7 +201,7 @@ templ planStep2(csrfToken string, data map[string]string) {
 				</div>
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary">Generate prompt <sl-icon name="stars"></sl-icon></button>
+				<button type="submit" class="btn btn-primary">Generate prompt <wa-icon name="wand-magic-sparkles"></wa-icon></button>
 			</div>
 		</form>
 	</div>
@@ -259,7 +259,7 @@ templ planStep3(csrfToken string, prompt string) {
 			<div class="prompt-box-header">
 				<span class="prompt-box-label">Prompt to copy</span>
 				<button class="btn btn-sm btn-ghost" onclick="copyPrompt()" id="copy-btn">
-					<sl-icon name="clipboard"></sl-icon> Copy prompt
+					<wa-icon name="clipboard"></wa-icon> Copy prompt
 				</button>
 			</div>
 			<pre class="prompt-box" id="prompt-text">{ prompt }</pre>
@@ -267,7 +267,7 @@ templ planStep3(csrfToken string, prompt string) {
 		<div class="form-actions">
 			<a href="/trips/new/plan" class="btn btn-ghost">Start over</a>
 			<a href="/trips/new/import" class="btn btn-primary">
-				<sl-icon name="file-earmark-arrow-down"></sl-icon> Import the result
+				<wa-icon name="file-arrow-down"></wa-icon> Import the result
 			</a>
 		</div>
 	</div>

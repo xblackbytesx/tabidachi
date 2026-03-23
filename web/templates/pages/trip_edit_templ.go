@@ -62,7 +62,7 @@ func TripEdit(csrfToken string, trip *domain.Trip) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"btn btn-ghost btn-sm\"><sl-icon name=\"arrow-left\"></sl-icon> View timeline</a><h1 class=\"page-title\">Edit: ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"btn btn-ghost btn-sm\"><wa-icon name=\"arrow-left\"></wa-icon> View timeline</a><h1 class=\"page-title\">Edit: ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -88,7 +88,7 @@ func TripEdit(csrfToken string, trip *domain.Trip) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"btn btn-ghost btn-sm\" hx-boost=\"false\"><sl-icon name=\"download\"></sl-icon> Export JSON</a></div><!-- Metadata form --> <div class=\"form-card\"><h2 class=\"form-section-title\">Trip details</h2><form method=\"POST\" action=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"btn btn-ghost btn-sm\" hx-boost=\"false\"><wa-icon name=\"download\"></wa-icon> Export JSON</a></div><!-- Metadata form --> <div class=\"form-card\"><h2 class=\"form-section-title\">Trip details</h2><form method=\"POST\" action=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -200,7 +200,7 @@ func TripEdit(csrfToken string, trip *domain.Trip) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</div><!-- Legs builder --> <div class=\"form-card\"><div class=\"form-section-header\"><h2 class=\"form-section-title\">Legs &amp; days</h2><button class=\"btn btn-sm btn-primary\" data-dialog=\"add-leg-dialog\" onclick=\"openDataDialog(this); return false;\"><sl-icon name=\"plus-lg\"></sl-icon> Add leg</button></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</div><!-- Legs builder --> <div class=\"form-card\"><div class=\"form-section-header\"><h2 class=\"form-section-title\">Legs &amp; days</h2><button class=\"btn btn-sm btn-primary\" data-dialog=\"add-leg-dialog\" onclick=\"openDataDialog(this); return false;\"><wa-icon name=\"plus\"></wa-icon> Add leg</button></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -220,7 +220,7 @@ func TripEdit(csrfToken string, trip *domain.Trip) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</div></div><!-- Add Leg Dialog --> <sl-dialog label=\"Add Leg\" id=\"add-leg-dialog\"><form method=\"POST\" action=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "</div></div><!-- Add Leg Dialog --> <wa-dialog label=\"Add Leg\" id=\"add-leg-dialog\"><form method=\"POST\" action=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -246,7 +246,7 @@ func TripEdit(csrfToken string, trip *domain.Trip) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"><div class=\"field\"><label class=\"field-label\">Destination <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"text\" name=\"destination\" required placeholder=\"e.g. Osaka\"></div><div class=\"field\"><label class=\"field-label\">Region</label> <input class=\"field-input\" type=\"text\" name=\"region\" placeholder=\"e.g. Kansai\"></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Start date <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"date\" name=\"start_date\" required></div><div class=\"field\"><label class=\"field-label\">End date <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"date\" name=\"end_date\" required></div></div><div class=\"field\"><label class=\"field-label\">Logistics notes</label> <textarea class=\"field-textarea\" name=\"notes\" placeholder=\"Actionable notes (e.g. JR Pass covers this leg)\"></textarea></div><div slot=\"footer\" class=\"dialog-footer\"><sl-button variant=\"neutral\" data-dialog=\"add-leg-dialog\" onclick=\"closeDataDialog(this)\">Cancel</sl-button> <button type=\"submit\" class=\"btn btn-primary\">Add leg</button></div></form></sl-dialog>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"><div class=\"field\"><label class=\"field-label\">Destination <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"text\" name=\"destination\" required placeholder=\"e.g. Osaka\"></div><div class=\"field\"><label class=\"field-label\">Region</label> <input class=\"field-input\" type=\"text\" name=\"region\" placeholder=\"e.g. Kansai\"></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Start date <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"date\" name=\"start_date\" required></div><div class=\"field\"><label class=\"field-label\">End date <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"date\" name=\"end_date\" required></div></div><div class=\"field\"><label class=\"field-label\">Logistics notes</label> <textarea class=\"field-textarea\" name=\"notes\" placeholder=\"Actionable notes (e.g. JR Pass covers this leg)\"></textarea></div><div slot=\"footer\" class=\"dialog-footer\"><wa-button variant=\"neutral\" data-dialog=\"add-leg-dialog\" onclick=\"closeDataDialog(this)\">Cancel</wa-button> <button type=\"submit\" class=\"btn btn-primary\">Add leg</button></div></form></wa-dialog>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -281,7 +281,7 @@ func legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) tem
 			templ_7745c5c3_Var16 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<sl-details class=\"leg-builder-section\"><div slot=\"summary\" class=\"leg-summary\"><span class=\"leg-num-badge\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<wa-details class=\"leg-builder-section\"><div slot=\"summary\" class=\"leg-summary\"><span class=\"leg-num-badge\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -382,7 +382,7 @@ func legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) tem
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\"> <button type=\"submit\" class=\"btn btn-sm btn-danger\" onclick=\"return confirm('Delete this leg and all its days?')\"><sl-icon name=\"trash\"></sl-icon> Delete leg</button></form><button class=\"btn btn-sm btn-ghost\" data-dialog=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\"> <button type=\"submit\" class=\"btn btn-sm btn-danger\" onclick=\"return confirm('Delete this leg and all its days?')\"><wa-icon name=\"trash\"></wa-icon> Delete leg</button></form><button class=\"btn btn-sm btn-ghost\" data-dialog=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -395,7 +395,7 @@ func legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) tem
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "\" onclick=\"openDataDialog(this); return false;\"><sl-icon name=\"building\"></sl-icon> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "\" onclick=\"openDataDialog(this); return false;\"><wa-icon name=\"building\"></wa-icon> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -415,7 +415,7 @@ func legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) tem
 			return templ_7745c5c3_Err
 		}
 		if leg.Accommodation != nil {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "<div class=\"accomm-preview\"><sl-icon name=\"building\"></sl-icon> <strong>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "<div class=\"accomm-preview\"><wa-icon name=\"building\"></wa-icon> <strong>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -505,7 +505,7 @@ func legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) tem
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "\" onclick=\"openDataDialog(this); return false;\"><sl-icon name=\"plus-circle\"></sl-icon> Add day</button>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "\" onclick=\"openDataDialog(this); return false;\"><wa-icon name=\"circle-plus\"></wa-icon> Add day</button>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -513,7 +513,7 @@ func legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) tem
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "</div></sl-details><!-- Accommodation dialog --><sl-dialog label=\"Accommodation\" id=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "</div></wa-details><!-- Accommodation dialog --><wa-dialog label=\"Accommodation\" id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -640,7 +640,7 @@ func legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) tem
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "<span class=\"dialog-footer-spacer\"></span> <sl-button variant=\"neutral\" data-dialog=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "<span class=\"dialog-footer-spacer\"></span> <wa-button variant=\"neutral\" data-dialog=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -653,7 +653,7 @@ func legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) tem
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "\" onclick=\"closeDataDialog(this)\">Cancel</sl-button> <button type=\"submit\" class=\"btn btn-primary\">Save</button></div></form></sl-dialog><!-- Add Day dialog --><sl-dialog label=\"Add Day\" id=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "\" onclick=\"closeDataDialog(this)\">Cancel</wa-button> <button type=\"submit\" class=\"btn btn-primary\">Save</button></div></form></wa-dialog><!-- Add Day dialog --><wa-dialog label=\"Add Day\" id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -692,7 +692,7 @@ func legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) tem
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "\"><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Date <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"date\" name=\"date\" required></div><div class=\"field\"><label class=\"field-label\">Day type</label> <select class=\"field-input\" name=\"type\"><option value=\"normal\">Normal</option> <option value=\"arrival\">Arrival</option> <option value=\"departure\">Departure</option> <option value=\"travel\">Travel</option> <option value=\"rest\">Rest</option> <option value=\"flexible\">Flexible</option></select></div></div><div class=\"field\"><label class=\"field-label\">Label</label> <input class=\"field-input\" type=\"text\" name=\"label\" placeholder=\"e.g. Osaka Castle &amp; Shinsekai\"></div><div class=\"field\"><label class=\"field-label\">Notes</label> <textarea class=\"field-textarea\" name=\"notes\" placeholder=\"Actionable logistics notes\"></textarea></div><div slot=\"footer\" class=\"dialog-footer\"><sl-button variant=\"neutral\" data-dialog=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "\"><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Date <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"date\" name=\"date\" required></div><div class=\"field\"><label class=\"field-label\">Day type</label> <select class=\"field-input\" name=\"type\"><option value=\"normal\">Normal</option> <option value=\"arrival\">Arrival</option> <option value=\"departure\">Departure</option> <option value=\"travel\">Travel</option> <option value=\"rest\">Rest</option> <option value=\"flexible\">Flexible</option></select></div></div><div class=\"field\"><label class=\"field-label\">Label</label> <input class=\"field-input\" type=\"text\" name=\"label\" placeholder=\"e.g. Osaka Castle &amp; Shinsekai\"></div><div class=\"field\"><label class=\"field-label\">Notes</label> <textarea class=\"field-textarea\" name=\"notes\" placeholder=\"Actionable logistics notes\"></textarea></div><div slot=\"footer\" class=\"dialog-footer\"><wa-button variant=\"neutral\" data-dialog=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -705,7 +705,7 @@ func legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) tem
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "\" onclick=\"closeDataDialog(this)\">Cancel</sl-button> <button type=\"submit\" class=\"btn btn-primary\">Add day</button></div></form></sl-dialog>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "\" onclick=\"closeDataDialog(this)\">Cancel</wa-button> <button type=\"submit\" class=\"btn btn-primary\">Add day</button></div></form></wa-dialog>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -807,7 +807,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "</div><div class=\"day-builder-actions\"><button class=\"btn btn-xs btn-ghost\" onclick=\"toggleDayEdit(this); return false;\" title=\"Edit day\" aria-label=\"Edit day\"><sl-icon name=\"pencil\"></sl-icon></button> <button class=\"btn btn-xs btn-ghost\" data-dialog=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "</div><div class=\"day-builder-actions\"><button class=\"btn btn-xs btn-ghost\" onclick=\"toggleDayEdit(this); return false;\" title=\"Edit day\" aria-label=\"Edit day\"><wa-icon name=\"pencil\"></wa-icon></button> <button class=\"btn btn-xs btn-ghost\" data-dialog=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -820,7 +820,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, "\" onclick=\"openDataDialog(this); return false;\"><sl-icon name=\"plus-lg\"></sl-icon> Event</button><form method=\"POST\" action=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, "\" onclick=\"openDataDialog(this); return false;\"><wa-icon name=\"plus\"></wa-icon> Event</button><form method=\"POST\" action=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -846,7 +846,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 70, "\"> <button type=\"submit\" class=\"btn btn-xs btn-danger\" onclick=\"return confirm('Delete this day?')\" aria-label=\"Delete day\"><sl-icon name=\"trash\"></sl-icon></button></form></div></div><div class=\"day-edit-form\" style=\"display:none\"><form method=\"POST\" action=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 70, "\"> <button type=\"submit\" class=\"btn btn-xs btn-danger\" onclick=\"return confirm('Delete this day?')\" aria-label=\"Delete day\"><wa-icon name=\"trash\"></wa-icon></button></form></div></div><div class=\"day-edit-form\" style=\"display:none\"><form method=\"POST\" action=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1003,7 +1003,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 90, "\"><div class=\"event-preview-row\"><span class=\"drag-handle\" title=\"Drag to reorder\"><sl-icon name=\"grip-vertical\"></sl-icon></span> <span class=\"event-preview-type\"><sl-icon name=\"geo-alt\"></sl-icon></span> <span class=\"event-preview-title\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 90, "\"><div class=\"event-preview-row\"><span class=\"drag-handle\" title=\"Drag to reorder\"><wa-icon name=\"grip-vertical\"></wa-icon></span> <span class=\"event-preview-type\"><wa-icon name=\"location-dot\"></wa-icon></span> <span class=\"event-preview-title\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1052,7 +1052,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 95, "\" onclick=\"openDataDialog(this); return false;\" title=\"Edit event\" aria-label=\"Edit event\"><sl-icon name=\"pencil\"></sl-icon></button><form method=\"POST\" action=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 95, "\" onclick=\"openDataDialog(this); return false;\" title=\"Edit event\" aria-label=\"Edit event\"><wa-icon name=\"pencil\"></wa-icon></button><form method=\"POST\" action=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1104,7 +1104,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 100, "\"><span class=\"drag-handle\" title=\"Drag to reorder\"><sl-icon name=\"grip-vertical\"></sl-icon></span> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 100, "\"><span class=\"drag-handle\" title=\"Drag to reorder\"><wa-icon name=\"grip-vertical\"></wa-icon></span> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1131,7 +1131,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 					return templ_7745c5c3_Err
 				}
 				if event.Type == "transit" {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 103, "<sl-icon name=\"")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 103, "<wa-icon name=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -1144,12 +1144,12 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 104, "\"></sl-icon>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 104, "\"></wa-icon>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 				} else {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 105, "<sl-icon name=\"building\"></sl-icon>")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 105, "<wa-icon name=\"building\"></wa-icon>")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -1203,7 +1203,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 111, "\" onclick=\"openDataDialog(this); return false;\" title=\"Edit event\" aria-label=\"Edit event\"><sl-icon name=\"pencil\"></sl-icon></button><form method=\"POST\" action=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 111, "\" onclick=\"openDataDialog(this); return false;\" title=\"Edit event\" aria-label=\"Edit event\"><wa-icon name=\"pencil\"></wa-icon></button><form method=\"POST\" action=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1245,7 +1245,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 115, "<!-- Add Event dialog --><sl-dialog label=\"Add Event\" id=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 115, "<!-- Add Event dialog --><wa-dialog label=\"Add Event\" id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1310,7 +1310,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 120, "\" onchange=\"onEventTypeChangeByAttr(this)\" required><option value=\"activity\">Activity</option> <option value=\"transit\">Transit</option> <option value=\"accommodation\">Accommodation</option></select></div><div class=\"field\"><label class=\"field-label\">Title <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"text\" name=\"title\" required placeholder=\"e.g. Fushimi Inari\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Start time</label> <input class=\"field-input\" type=\"text\" name=\"start_time\" placeholder=\"HH:MM\"></div><div class=\"field\"><label class=\"field-label\">End time</label> <input class=\"field-input\" type=\"text\" name=\"end_time\" placeholder=\"HH:MM\"></div></div><!-- Activity fields --><div class=\"event-type-fields\" data-type=\"activity\"><div class=\"field\"><label class=\"field-label\">Location</label> <input class=\"field-input\" type=\"text\" name=\"location\" placeholder=\"Venue or place name\"></div><div class=\"field\"><label class=\"field-label\">Address</label> <input class=\"field-input\" type=\"text\" name=\"address\" placeholder=\"Street address for navigation\"></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Latitude</label> <input class=\"field-input\" type=\"text\" name=\"latitude\" placeholder=\"e.g. 35.6762\"></div><div class=\"field\"><label class=\"field-label\">Longitude</label> <input class=\"field-input\" type=\"text\" name=\"longitude\" placeholder=\"e.g. 139.6503\"></div></div><div class=\"field\"><label class=\"field-label\">Booking reference</label> <input class=\"field-input\" type=\"text\" name=\"booking_reference\"></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"ticket_required\"> Ticket required</label></div><!-- Transit fields --><div class=\"event-type-fields\" data-type=\"transit\" style=\"display:none\"><div class=\"field\"><label class=\"field-label\">Transport mode</label> <select class=\"field-input\" name=\"transport_mode\"><option value=\"flight\">Flight</option> <option value=\"shinkansen\">Shinkansen</option> <option value=\"train\">Train</option> <option value=\"subway\">Subway</option> <option value=\"bus\">Bus</option> <option value=\"tram\">Tram</option> <option value=\"ferry\">Ferry</option> <option value=\"taxi\">Taxi</option> <option value=\"car\">Car</option> <option value=\"walk\">Walk</option></select></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">From</label> <input class=\"field-input\" type=\"text\" name=\"departure_location\" placeholder=\"City or station\"></div><div class=\"field\"><label class=\"field-label\">From code</label> <input class=\"field-input\" type=\"text\" name=\"departure_code\" placeholder=\"e.g. KIX\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">From lat</label> <input class=\"field-input\" type=\"text\" name=\"departure_latitude\" placeholder=\"Latitude\"></div><div class=\"field\"><label class=\"field-label\">From lng</label> <input class=\"field-input\" type=\"text\" name=\"departure_longitude\" placeholder=\"Longitude\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">To</label> <input class=\"field-input\" type=\"text\" name=\"arrival_location\" placeholder=\"City or station\"></div><div class=\"field\"><label class=\"field-label\">To code</label> <input class=\"field-input\" type=\"text\" name=\"arrival_code\" placeholder=\"e.g. NRT\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">To lat</label> <input class=\"field-input\" type=\"text\" name=\"arrival_latitude\" placeholder=\"Latitude\"></div><div class=\"field\"><label class=\"field-label\">To lng</label> <input class=\"field-input\" type=\"text\" name=\"arrival_longitude\" placeholder=\"Longitude\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Carrier</label> <input class=\"field-input\" type=\"text\" name=\"carrier\" placeholder=\"e.g. JAL\"></div><div class=\"field\"><label class=\"field-label\">Flight / train no.</label> <input class=\"field-input\" type=\"text\" name=\"flight_number\" placeholder=\"e.g. JL123\"></div></div><div class=\"field\"><label class=\"field-label\">Duration (ISO8601)</label> <input class=\"field-input\" type=\"text\" name=\"duration\" placeholder=\"e.g. PT2H30M\"></div></div><!-- Accommodation event fields --><div class=\"event-type-fields\" data-type=\"accommodation\" style=\"display:none\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_in\"> Check-in</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_out\"> Check-out</label></div><div class=\"field\"><label class=\"field-label\">URL</label> <input class=\"field-input\" type=\"url\" name=\"url\" placeholder=\"https://example.com\"></div><div class=\"field\"><label class=\"field-label\">Notes</label> <textarea class=\"field-textarea\" name=\"notes\"></textarea></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"optional\"> Optional event</label><div slot=\"footer\" class=\"dialog-footer\"><sl-button variant=\"neutral\" data-dialog=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 120, "\" onchange=\"onEventTypeChangeByAttr(this)\" required><option value=\"activity\">Activity</option> <option value=\"transit\">Transit</option> <option value=\"accommodation\">Accommodation</option></select></div><div class=\"field\"><label class=\"field-label\">Title <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"text\" name=\"title\" required placeholder=\"e.g. Fushimi Inari\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Start time</label> <input class=\"field-input\" type=\"text\" name=\"start_time\" placeholder=\"HH:MM\"></div><div class=\"field\"><label class=\"field-label\">End time</label> <input class=\"field-input\" type=\"text\" name=\"end_time\" placeholder=\"HH:MM\"></div></div><!-- Activity fields --><div class=\"event-type-fields\" data-type=\"activity\"><div class=\"field\"><label class=\"field-label\">Location</label> <input class=\"field-input\" type=\"text\" name=\"location\" placeholder=\"Venue or place name\"></div><div class=\"field\"><label class=\"field-label\">Address</label> <input class=\"field-input\" type=\"text\" name=\"address\" placeholder=\"Street address for navigation\"></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Latitude</label> <input class=\"field-input\" type=\"text\" name=\"latitude\" placeholder=\"e.g. 35.6762\"></div><div class=\"field\"><label class=\"field-label\">Longitude</label> <input class=\"field-input\" type=\"text\" name=\"longitude\" placeholder=\"e.g. 139.6503\"></div></div><div class=\"field\"><label class=\"field-label\">Booking reference</label> <input class=\"field-input\" type=\"text\" name=\"booking_reference\"></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"ticket_required\"> Ticket required</label></div><!-- Transit fields --><div class=\"event-type-fields\" data-type=\"transit\" style=\"display:none\"><div class=\"field\"><label class=\"field-label\">Transport mode</label> <select class=\"field-input\" name=\"transport_mode\"><option value=\"flight\">Flight</option> <option value=\"shinkansen\">Shinkansen</option> <option value=\"train\">Train</option> <option value=\"subway\">Subway</option> <option value=\"bus\">Bus</option> <option value=\"tram\">Tram</option> <option value=\"ferry\">Ferry</option> <option value=\"taxi\">Taxi</option> <option value=\"car\">Car</option> <option value=\"walk\">Walk</option></select></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">From</label> <input class=\"field-input\" type=\"text\" name=\"departure_location\" placeholder=\"City or station\"></div><div class=\"field\"><label class=\"field-label\">From code</label> <input class=\"field-input\" type=\"text\" name=\"departure_code\" placeholder=\"e.g. KIX\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">From lat</label> <input class=\"field-input\" type=\"text\" name=\"departure_latitude\" placeholder=\"Latitude\"></div><div class=\"field\"><label class=\"field-label\">From lng</label> <input class=\"field-input\" type=\"text\" name=\"departure_longitude\" placeholder=\"Longitude\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">To</label> <input class=\"field-input\" type=\"text\" name=\"arrival_location\" placeholder=\"City or station\"></div><div class=\"field\"><label class=\"field-label\">To code</label> <input class=\"field-input\" type=\"text\" name=\"arrival_code\" placeholder=\"e.g. NRT\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">To lat</label> <input class=\"field-input\" type=\"text\" name=\"arrival_latitude\" placeholder=\"Latitude\"></div><div class=\"field\"><label class=\"field-label\">To lng</label> <input class=\"field-input\" type=\"text\" name=\"arrival_longitude\" placeholder=\"Longitude\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Carrier</label> <input class=\"field-input\" type=\"text\" name=\"carrier\" placeholder=\"e.g. JAL\"></div><div class=\"field\"><label class=\"field-label\">Flight / train no.</label> <input class=\"field-input\" type=\"text\" name=\"flight_number\" placeholder=\"e.g. JL123\"></div></div><div class=\"field\"><label class=\"field-label\">Duration (ISO8601)</label> <input class=\"field-input\" type=\"text\" name=\"duration\" placeholder=\"e.g. PT2H30M\"></div></div><!-- Accommodation event fields --><div class=\"event-type-fields\" data-type=\"accommodation\" style=\"display:none\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_in\"> Check-in</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_out\"> Check-out</label></div><div class=\"field\"><label class=\"field-label\">URL</label> <input class=\"field-input\" type=\"url\" name=\"url\" placeholder=\"https://example.com\"></div><div class=\"field\"><label class=\"field-label\">Notes</label> <textarea class=\"field-textarea\" name=\"notes\"></textarea></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"optional\"> Optional event</label><div slot=\"footer\" class=\"dialog-footer\"><wa-button variant=\"neutral\" data-dialog=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1323,7 +1323,7 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 121, "\" onclick=\"closeDataDialog(this)\">Cancel</sl-button> <button type=\"submit\" class=\"btn btn-primary\">Add event</button></div></form></sl-dialog>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 121, "\" onclick=\"closeDataDialog(this)\">Cancel</wa-button> <button type=\"submit\" class=\"btn btn-primary\">Add event</button></div></form></wa-dialog>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1397,7 +1397,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 			templ_7745c5c3_Var80 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 122, "<sl-dialog label=\"Edit Event\" id=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 122, "<wa-dialog label=\"Edit Event\" id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1944,7 +1944,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 185, "> Optional event</label><div slot=\"footer\" class=\"dialog-footer\"><sl-button variant=\"neutral\" data-dialog=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 185, "> Optional event</label><div slot=\"footer\" class=\"dialog-footer\"><wa-button variant=\"neutral\" data-dialog=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1957,7 +1957,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 186, "\" onclick=\"closeDataDialog(this)\">Cancel</sl-button> <button type=\"submit\" class=\"btn btn-primary\">Save event</button></div></form></sl-dialog>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 186, "\" onclick=\"closeDataDialog(this)\">Cancel</wa-button> <button type=\"submit\" class=\"btn btn-primary\">Save event</button></div></form></wa-dialog>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

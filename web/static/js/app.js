@@ -6,12 +6,12 @@
   // Theme toggle (light / dark)
   // ============================================================
   window.toggleTheme = function () {
-    var isDark = document.body.classList.contains('sl-theme-dark');
+    var isDark = document.documentElement.classList.contains('wa-dark');
     if (isDark) {
-      document.body.classList.replace('sl-theme-dark', 'sl-theme-light');
+      document.documentElement.classList.remove('wa-dark');
       localStorage.setItem('tabidachi-theme', 'light');
     } else {
-      document.body.classList.replace('sl-theme-light', 'sl-theme-dark');
+      document.documentElement.classList.add('wa-dark');
       localStorage.removeItem('tabidachi-theme');
     }
   };
@@ -37,7 +37,7 @@
       var btn = document.getElementById('copy-btn');
       if (btn) {
         var orig = btn.innerHTML;
-        btn.innerHTML = '<sl-icon name="check2"></sl-icon> Copied!';
+        btn.innerHTML = '<wa-icon name="check"></wa-icon> Copied!';
         setTimeout(function () { btn.innerHTML = orig; }, 2000);
       }
     }).catch(function () {

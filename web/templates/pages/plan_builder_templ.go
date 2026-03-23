@@ -43,7 +43,7 @@ func PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[st
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><sl-icon name=\"arrow-left\"></sl-icon> Back</a><h1 class=\"page-title\">Plan New Trip with AI</h1></div><div class=\"wizard-steps\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><wa-icon name=\"arrow-left\"></wa-icon> Back</a><h1 class=\"page-title\">Plan New Trip with AI</h1></div><div class=\"wizard-steps\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -255,7 +255,7 @@ func planStep1(csrfToken string, data map[string]string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\"><p class=\"field-hint\">Helps AI suggest routing from your origin.</p></div><div class=\"field\"><sl-radio-group name=\"intensity\" label=\"Trip intensity\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\"><p class=\"field-hint\">Helps AI suggest routing from your origin.</p></div><div class=\"field\"><wa-radio-group name=\"intensity\" label=\"Trip intensity\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -268,7 +268,7 @@ func planStep1(csrfToken string, data map[string]string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\"><sl-radio-button value=\"maximize\">Maximize sightseeing</sl-radio-button> <sl-radio-button value=\"balanced\">Balanced</sl-radio-button> <sl-radio-button value=\"relaxed\">Relaxed</sl-radio-button></sl-radio-group><p class=\"field-hint\">Calibrates the number and pace of activities the AI plans per day.</p></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Next <sl-icon name=\"arrow-right\"></sl-icon></button></div></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\"><wa-radio value=\"maximize\" appearance=\"button\">Maximize sightseeing</wa-radio> <wa-radio value=\"balanced\" appearance=\"button\">Balanced</wa-radio> <wa-radio value=\"relaxed\" appearance=\"button\">Relaxed</wa-radio></wa-radio-group><p class=\"field-hint\">Calibrates the number and pace of activities the AI plans per day.</p></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Next <wa-icon name=\"arrow-right\"></wa-icon></button></div></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -414,7 +414,7 @@ func planStep2(csrfToken string, data map[string]string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "</textarea></div><div class=\"optional-fields\"><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_nice_to_haves\" hx-get=\"/trips/new/plan/field?field=nice_to_haves\" hx-include=\"[name='show_nice_to_haves']\" hx-target=\"#opt-nice-to-haves\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Nice-to-haves</label><div id=\"opt-nice-to-haves\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_things_to_avoid\" hx-get=\"/trips/new/plan/field?field=things_to_avoid\" hx-include=\"[name='show_things_to_avoid']\" hx-target=\"#opt-things-to-avoid\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Things to avoid</label><div id=\"opt-things-to-avoid\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_max_travel_time\" hx-get=\"/trips/new/plan/field?field=max_travel_time\" hx-include=\"[name='show_max_travel_time']\" hx-target=\"#opt-max-travel-time\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Max comfortable travel time between stops</label><div id=\"opt-max-travel-time\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_poi_interests\" hx-get=\"/trips/new/plan/field?field=poi_interests\" hx-include=\"[name='show_poi_interests']\" hx-target=\"#opt-poi-interests\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Suggest points of interest along the route</label><p class=\"field-hint\">Describe specific interests, accessibility needs, dietary requirements, etc. AI will suggest matching POIs en route.</p><div id=\"opt-poi-interests\"></div></div></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Generate prompt <sl-icon name=\"stars\"></sl-icon></button></div></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "</textarea></div><div class=\"optional-fields\"><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_nice_to_haves\" hx-get=\"/trips/new/plan/field?field=nice_to_haves\" hx-include=\"[name='show_nice_to_haves']\" hx-target=\"#opt-nice-to-haves\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Nice-to-haves</label><div id=\"opt-nice-to-haves\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_things_to_avoid\" hx-get=\"/trips/new/plan/field?field=things_to_avoid\" hx-include=\"[name='show_things_to_avoid']\" hx-target=\"#opt-things-to-avoid\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Things to avoid</label><div id=\"opt-things-to-avoid\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_max_travel_time\" hx-get=\"/trips/new/plan/field?field=max_travel_time\" hx-include=\"[name='show_max_travel_time']\" hx-target=\"#opt-max-travel-time\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Max comfortable travel time between stops</label><div id=\"opt-max-travel-time\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_poi_interests\" hx-get=\"/trips/new/plan/field?field=poi_interests\" hx-include=\"[name='show_poi_interests']\" hx-target=\"#opt-poi-interests\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Suggest points of interest along the route</label><p class=\"field-hint\">Describe specific interests, accessibility needs, dietary requirements, etc. AI will suggest matching POIs en route.</p><div id=\"opt-poi-interests\"></div></div></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Generate prompt <wa-icon name=\"wand-magic-sparkles\"></wa-icon></button></div></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -499,7 +499,7 @@ func planStep3(csrfToken string, prompt string) templ.Component {
 			templ_7745c5c3_Var29 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 3 — Your AI planning prompt</h2><div class=\"prompt-instructions\"><ol class=\"instruction-steps\"><li>Copy the prompt below and paste it into your preferred AI (ChatGPT, Claude, Gemini, etc.)</li><li>Answer any follow-up questions the AI asks to further personalize your trip</li><li>Confirm the day-by-day summary the AI shows you — request changes if needed</li><li>Once you're happy, tell the AI to output the JSON (e.g. \"generate JSON\")</li><li>Click <strong>Import the result</strong> below and paste the JSON</li></ol></div><div class=\"prompt-box-wrapper\"><div class=\"prompt-box-header\"><span class=\"prompt-box-label\">Prompt to copy</span> <button class=\"btn btn-sm btn-ghost\" onclick=\"copyPrompt()\" id=\"copy-btn\"><sl-icon name=\"clipboard\"></sl-icon> Copy prompt</button></div><pre class=\"prompt-box\" id=\"prompt-text\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 3 — Your AI planning prompt</h2><div class=\"prompt-instructions\"><ol class=\"instruction-steps\"><li>Copy the prompt below and paste it into your preferred AI (ChatGPT, Claude, Gemini, etc.)</li><li>Answer any follow-up questions the AI asks to further personalize your trip</li><li>Confirm the day-by-day summary the AI shows you — request changes if needed</li><li>Once you're happy, tell the AI to output the JSON (e.g. \"generate JSON\")</li><li>Click <strong>Import the result</strong> below and paste the JSON</li></ol></div><div class=\"prompt-box-wrapper\"><div class=\"prompt-box-header\"><span class=\"prompt-box-label\">Prompt to copy</span> <button class=\"btn btn-sm btn-ghost\" onclick=\"copyPrompt()\" id=\"copy-btn\"><wa-icon name=\"clipboard\"></wa-icon> Copy prompt</button></div><pre class=\"prompt-box\" id=\"prompt-text\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -512,7 +512,7 @@ func planStep3(csrfToken string, prompt string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "</pre></div><div class=\"form-actions\"><a href=\"/trips/new/plan\" class=\"btn btn-ghost\">Start over</a> <a href=\"/trips/new/import\" class=\"btn btn-primary\"><sl-icon name=\"file-earmark-arrow-down\"></sl-icon> Import the result</a></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "</pre></div><div class=\"form-actions\"><a href=\"/trips/new/plan\" class=\"btn btn-ghost\">Start over</a> <a href=\"/trips/new/import\" class=\"btn btn-primary\"><wa-icon name=\"file-arrow-down\"></wa-icon> Import the result</a></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

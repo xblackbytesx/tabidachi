@@ -68,7 +68,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><div class=\"trip-view-hero-nav\"><a href=\"/\" class=\"btn btn-ghost btn-sm\"><sl-icon name=\"arrow-left\"></sl-icon> All trips</a><div class=\"trip-view-hero-actions\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><div class=\"trip-view-hero-nav\"><a href=\"/\" class=\"btn btn-ghost btn-sm\"><wa-icon name=\"arrow-left\"></wa-icon> All trips</a><div class=\"trip-view-hero-actions\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -91,7 +91,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" class=\"btn btn-ghost btn-sm\" hx-boost=\"false\"><sl-icon name=\"download\"></sl-icon> Export</a> <a href=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" class=\"btn btn-ghost btn-sm\" hx-boost=\"false\"><wa-icon name=\"download\"></wa-icon> Export</a> <a href=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -104,7 +104,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" class=\"btn btn-ghost btn-sm\"><sl-icon name=\"pencil\"></sl-icon> Edit</a></div></div><div class=\"trip-view-hero-body\"><h1 class=\"trip-view-title\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" class=\"btn btn-ghost btn-sm\"><wa-icon name=\"pencil\"></wa-icon> Edit</a></div></div><div class=\"trip-view-hero-body\"><h1 class=\"trip-view-title\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -117,14 +117,14 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</h1><div class=\"trip-view-meta\"><span><sl-icon name=\"calendar3\"></sl-icon> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</h1><div class=\"trip-view-meta\"><span><wa-icon name=\"calendar-days\"></wa-icon> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var7 string
 				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(format.Time(ctx, trip.StartDate))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_view.templ`, Line: 36, Col: 84}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_view.templ`, Line: 36, Col: 88}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 				if templ_7745c5c3_Err != nil {
@@ -137,7 +137,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 				var templ_7745c5c3_Var8 string
 				templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(format.Time(ctx, trip.EndDate))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_view.templ`, Line: 36, Col: 123}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_view.templ`, Line: 36, Col: 127}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 				if templ_7745c5c3_Err != nil {
@@ -148,7 +148,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				if trip.HomeLocation != "" {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<span><sl-icon name=\"house\"></sl-icon> ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "<span><wa-icon name=\"house\"></wa-icon> ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -167,7 +167,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 					}
 				}
 				if trip.Timezone != "" && trip.Timezone != "UTC" {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<span><sl-icon name=\"globe\"></sl-icon> ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<span><wa-icon name=\"globe\"></wa-icon> ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -190,7 +190,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<a href=\"/\" class=\"trip-view-back\"><sl-icon name=\"arrow-left\"></sl-icon> All trips</a><div class=\"trip-view-title-row\"><h1 class=\"trip-view-title\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<a href=\"/\" class=\"trip-view-back\"><wa-icon name=\"arrow-left\"></wa-icon> All trips</a><div class=\"trip-view-title-row\"><h1 class=\"trip-view-title\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -213,14 +213,14 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 						return templ_7745c5c3_Err
 					}
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</div><div class=\"trip-view-meta\"><span><sl-icon name=\"calendar3\"></sl-icon> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "</div><div class=\"trip-view-meta\"><span><wa-icon name=\"calendar-days\"></wa-icon> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var12 string
 				templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(format.Time(ctx, trip.StartDate))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_view.templ`, Line: 55, Col: 82}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_view.templ`, Line: 55, Col: 86}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 				if templ_7745c5c3_Err != nil {
@@ -233,7 +233,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 				var templ_7745c5c3_Var13 string
 				templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(format.Time(ctx, trip.EndDate))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_view.templ`, Line: 55, Col: 121}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_view.templ`, Line: 55, Col: 125}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 				if templ_7745c5c3_Err != nil {
@@ -244,7 +244,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				if trip.HomeLocation != "" {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "<span><sl-icon name=\"house\"></sl-icon> ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "<span><wa-icon name=\"house\"></wa-icon> ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -263,7 +263,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 					}
 				}
 				if trip.Timezone != "" && trip.Timezone != "UTC" {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "<span><sl-icon name=\"globe\"></sl-icon> ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "<span><wa-icon name=\"globe\"></wa-icon> ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -294,7 +294,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\" class=\"btn btn-ghost btn-sm\" hx-boost=\"false\"><sl-icon name=\"download\"></sl-icon> Export</a> <a href=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\" class=\"btn btn-ghost btn-sm\" hx-boost=\"false\"><wa-icon name=\"download\"></wa-icon> Export</a> <a href=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -307,7 +307,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\" class=\"btn btn-ghost btn-sm\"><sl-icon name=\"pencil\"></sl-icon> Edit</a></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\" class=\"btn btn-ghost btn-sm\"><wa-icon name=\"pencil\"></wa-icon> Edit</a></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -317,7 +317,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			if len(trip.Data.Legs) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<div class=\"empty-state\"><sl-icon name=\"map\" class=\"empty-icon\"></sl-icon><p>No itinerary yet. <a href=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<div class=\"empty-state\"><wa-icon name=\"map\" class=\"empty-icon\"></wa-icon><p>No itinerary yet. <a href=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -474,7 +474,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				if leg.Accommodation != nil {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, "<div class=\"accommodation-banner\"><sl-icon name=\"building\"></sl-icon> <span class=\"accomm-name\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, "<div class=\"accommodation-banner\"><wa-icon name=\"building\"></wa-icon> <span class=\"accomm-name\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -552,7 +552,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 					}
 				}
 				if leg.Notes != "" {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "<sl-details class=\"leg-notes\"><span slot=\"summary\"><sl-icon name=\"info-circle\"></sl-icon> Leg notes</span><p class=\"notes-text\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "<wa-details class=\"leg-notes\"><span slot=\"summary\"><wa-icon name=\"circle-info\"></wa-icon> Leg notes</span><p class=\"notes-text\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -565,7 +565,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "</p></sl-details> ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 56, "</p></wa-details> ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -581,7 +581,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 					return templ_7745c5c3_Err
 				}
 				if legIdx < len(trip.Data.Legs)-1 {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "<div class=\"leg-connector\"><sl-icon name=\"arrow-down-circle\" class=\"leg-connector-icon\"></sl-icon> <span class=\"leg-connector-label\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "<div class=\"leg-connector\"><wa-icon name=\"circle-arrow-down\" class=\"leg-connector-icon\"></wa-icon> <span class=\"leg-connector-label\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -600,7 +600,7 @@ func TripView(csrfToken string, trip *domain.Trip) templ.Component {
 					}
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "</div></div><dialog id=\"event-lightbox\" class=\"event-lightbox-dialog\" aria-label=\"Event photo viewer\"><button class=\"event-lightbox-close\" onclick=\"document.getElementById('event-lightbox').close()\" aria-label=\"Close lightbox\"><sl-icon name=\"x-lg\"></sl-icon></button> <img id=\"event-lightbox-img\" src=\"\" alt=\"Event photo\" class=\"event-lightbox-img\"></dialog><script>\n\t\t\tdocument.addEventListener('DOMContentLoaded', function() {\n\t\t\t\tscrollToToday();\n\t\t\t});\n\t\t\tfunction openEventLightbox(btn) {\n\t\t\t\tvar img = document.getElementById('event-lightbox-img');\n\t\t\t\timg.src = btn.dataset.fullUrl;\n\t\t\t\timg.alt = btn.getAttribute('aria-label') || 'Event photo';\n\t\t\t\tdocument.getElementById('event-lightbox').showModal();\n\t\t\t}\n\t\t</script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "</div></div><dialog id=\"event-lightbox\" class=\"event-lightbox-dialog\" aria-label=\"Event photo viewer\"><button class=\"event-lightbox-close\" onclick=\"document.getElementById('event-lightbox').close()\" aria-label=\"Close lightbox\"><wa-icon name=\"xmark\"></wa-icon></button> <img id=\"event-lightbox-img\" src=\"\" alt=\"Event photo\" class=\"event-lightbox-img\"></dialog><script>\n\t\t\tdocument.addEventListener('DOMContentLoaded', function() {\n\t\t\t\tscrollToToday();\n\t\t\t});\n\t\t\tfunction openEventLightbox(btn) {\n\t\t\t\tvar img = document.getElementById('event-lightbox-img');\n\t\t\t\timg.src = btn.dataset.fullUrl;\n\t\t\t\timg.alt = btn.getAttribute('aria-label') || 'Event photo';\n\t\t\t\tdocument.getElementById('event-lightbox').showModal();\n\t\t\t}\n\t\t</script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -776,7 +776,7 @@ func daySection(trip *domain.Trip, day domain.Day) templ.Component {
 			}
 		}
 		if day.Notes != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "<span class=\"day-has-notes\"><sl-icon name=\"sticky\"></sl-icon></span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "<span class=\"day-has-notes\"><wa-icon name=\"note-sticky\"></wa-icon></span>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -786,7 +786,7 @@ func daySection(trip *domain.Trip, day domain.Day) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if day.Notes != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 76, "<sl-details class=\"day-notes\"><span slot=\"summary\"><sl-icon name=\"sticky\"></sl-icon> Day notes</span><p class=\"notes-text\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 76, "<wa-details class=\"day-notes\"><span slot=\"summary\"><wa-icon name=\"note-sticky\"></wa-icon> Day notes</span><p class=\"notes-text\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -799,7 +799,7 @@ func daySection(trip *domain.Trip, day domain.Day) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 77, "</p></sl-details>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 77, "</p></wa-details>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -935,12 +935,12 @@ func eventCard(event domain.Event) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if event.Type == "accommodation" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 88, "<sl-icon name=\"building\"></sl-icon>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 88, "<wa-icon name=\"building\"></wa-icon>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 89, "<sl-icon name=\"geo-alt\"></sl-icon>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 89, "<wa-icon name=\"location-dot\"></wa-icon>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -976,13 +976,13 @@ func eventCard(event domain.Event) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 93, "\" target=\"_blank\" rel=\"noopener\" class=\"event-link\" aria-label=\"Open link\"><sl-icon name=\"box-arrow-up-right\"></sl-icon></a> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 93, "\" target=\"_blank\" rel=\"noopener\" class=\"event-link\" aria-label=\"Open link\"><wa-icon name=\"up-right-from-square\"></wa-icon></a> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
 		if event.TicketRequired {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 94, "<span class=\"badge badge-ticket\"><sl-icon name=\"ticket-perforated\"></sl-icon> Ticket</span> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 94, "<span class=\"badge badge-ticket\"><wa-icon name=\"ticket\"></wa-icon> Ticket</span> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1036,7 +1036,7 @@ func eventCard(event domain.Event) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if event.Location != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 101, "<div class=\"event-location\"><sl-icon name=\"pin-map\"></sl-icon> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 101, "<div class=\"event-location\"><wa-icon name=\"map-pin\"></wa-icon> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1088,7 +1088,7 @@ func eventCard(event domain.Event) templ.Component {
 			}
 		}
 		if event.Address != "" && event.Address != event.Location {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 106, "<div class=\"event-address\"><sl-icon name=\"signpost-2\"></sl-icon> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 106, "<div class=\"event-address\"><wa-icon name=\"signs-post\"></wa-icon> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1162,7 +1162,7 @@ func eventCard(event domain.Event) templ.Component {
 			}
 		}
 		if event.BookingReference != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 115, "<div class=\"event-ref\"><sl-icon name=\"ticket\"></sl-icon> Ref: ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 115, "<div class=\"event-ref\"><wa-icon name=\"ticket\"></wa-icon> Ref: ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1246,7 +1246,7 @@ func transitConnector(event domain.Event) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 121, "\"><div class=\"transit-line\"></div><div class=\"transit-content\"><div class=\"transit-icon-wrap\"><sl-icon name=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 121, "\"><div class=\"transit-line\"></div><div class=\"transit-content\"><div class=\"transit-icon-wrap\"><wa-icon name=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1259,7 +1259,7 @@ func transitConnector(event domain.Event) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 122, "\" class=\"transit-icon\"></sl-icon></div><div class=\"transit-info\"><div class=\"transit-title\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 122, "\" class=\"transit-icon\"></wa-icon></div><div class=\"transit-info\"><div class=\"transit-title\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1290,7 +1290,7 @@ func transitConnector(event domain.Event) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 125, "\" target=\"_blank\" rel=\"noopener\" class=\"event-link\" aria-label=\"Open link\"><sl-icon name=\"box-arrow-up-right\"></sl-icon></a>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 125, "\" target=\"_blank\" rel=\"noopener\" class=\"event-link\" aria-label=\"Open link\"><wa-icon name=\"up-right-from-square\"></wa-icon></a>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1369,7 +1369,7 @@ func transitConnector(event domain.Event) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 134, "</span> <sl-icon name=\"arrow-right\"></sl-icon> <span class=\"transit-to\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 134, "</span> <wa-icon name=\"arrow-right\"></wa-icon> <span class=\"transit-to\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1486,7 +1486,7 @@ func transitConnector(event domain.Event) templ.Component {
 			}
 		}
 		if event.Duration != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 147, "<span class=\"transit-duration\"><sl-icon name=\"clock\"></sl-icon> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 147, "<span class=\"transit-duration\"><wa-icon name=\"clock\"></wa-icon> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

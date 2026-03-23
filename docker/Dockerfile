@@ -7,8 +7,8 @@ WORKDIR /app
 # Front-end assets
 COPY web/package.json ./web/
 RUN npm install --prefix ./web && \
-    mkdir -p web/static/vendor/shoelace && \
-    cp -r web/node_modules/@shoelace-style/shoelace/cdn/. web/static/vendor/shoelace/ && \
+    mkdir -p web/static/vendor/webawesome && \
+    cp -r web/node_modules/@awesome.me/webawesome/dist-cdn/. web/static/vendor/webawesome/ && \
     cp web/node_modules/htmx.org/dist/htmx.min.js web/static/vendor/htmx.min.js && \
     cp web/node_modules/sortablejs/Sortable.min.js web/static/vendor/sortable.min.js && \
     rm -rf web/node_modules

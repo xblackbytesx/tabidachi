@@ -49,12 +49,12 @@ func Dashboard(csrfToken string, trips []*domain.Trip) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><h1 class=\"page-title\">My Trips</h1><a href=\"/trips/new\" class=\"btn btn-primary\"><sl-icon name=\"plus-lg\"></sl-icon> New trip</a></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><h1 class=\"page-title\">My Trips</h1><a href=\"/trips/new\" class=\"btn btn-primary\"><wa-icon name=\"plus\"></wa-icon> New trip</a></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if len(trips) == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"empty-state\"><sl-icon name=\"map\" class=\"empty-icon\"></sl-icon><h2>No trips yet</h2><p>Start by creating your first itinerary.</p><a href=\"/trips/new\" class=\"btn btn-primary\">Plan a trip</a></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"empty-state\"><wa-icon name=\"map\" class=\"empty-icon\"></wa-icon><h2>No trips yet</h2><p>Start by creating your first itinerary.</p><a href=\"/trips/new\" class=\"btn btn-primary\">Plan a trip</a></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -177,7 +177,7 @@ func TripCard(trip *domain.Trip) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</div><div class=\"trip-card-meta\"><span class=\"trip-dates\"><sl-icon name=\"calendar3\"></sl-icon> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</div><div class=\"trip-card-meta\"><span class=\"trip-dates\"><wa-icon name=\"calendar-days\"></wa-icon> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -208,7 +208,7 @@ func TripCard(trip *domain.Trip) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if trip.HomeLocation != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<span class=\"trip-home\"><sl-icon name=\"house\"></sl-icon> ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<span class=\"trip-home\"><wa-icon name=\"house\"></wa-icon> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -226,7 +226,7 @@ func TripCard(trip *domain.Trip) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<span class=\"trip-legs\"><sl-icon name=\"geo-alt\"></sl-icon> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<span class=\"trip-legs\"><wa-icon name=\"location-dot\"></wa-icon> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
