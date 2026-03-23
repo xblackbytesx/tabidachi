@@ -211,6 +211,9 @@ templ eventCard(event domain.Event) {
 					if event.URL != "" {
 						<a href={ templ.SafeURL(event.URL) } target="_blank" rel="noopener" class="event-link" aria-label="Open link"><sl-icon name="box-arrow-up-right"></sl-icon></a>
 					}
+					if event.TicketRequired {
+						<span class="badge badge-ticket"><sl-icon name="ticket-perforated"></sl-icon> Ticket</span>
+					}
 					if event.Optional {
 						<span class="badge badge-optional">Optional</span>
 					}
@@ -225,14 +228,23 @@ templ eventCard(event domain.Event) {
 				</div>
 				if event.Location != "" {
 					<div class="event-location">
-						<sl-icon name="pin-map"></sl-icon> { event.Location }
+						<sl-icon name="pin-map"></sl-icon>
 						if format.MapsURL(event.Latitude, event.Longitude, event.Address, event.Location) != "" {
-							<a href={ templ.SafeURL(format.MapsURL(event.Latitude, event.Longitude, event.Address, event.Location)) } target="_blank" rel="noopener" class="event-nav-link" aria-label="Open in Google Maps"><sl-icon name="geo-alt-fill"></sl-icon></a>
+							<a href={ templ.SafeURL(format.MapsURL(event.Latitude, event.Longitude, event.Address, event.Location)) } target="_blank" rel="noopener" class="stealth-link">{ event.Location }</a>
+						} else {
+							{ event.Location }
 						}
 					</div>
 				}
 				if event.Address != "" && event.Address != event.Location {
-					<div class="event-address"><sl-icon name="signpost-2"></sl-icon> { event.Address }</div>
+					<div class="event-address">
+						<sl-icon name="signpost-2"></sl-icon>
+						if format.MapsURL(event.Latitude, event.Longitude, event.Address, "") != "" {
+							<a href={ templ.SafeURL(format.MapsURL(event.Latitude, event.Longitude, event.Address, "")) } target="_blank" rel="noopener" class="stealth-link">{ event.Address }</a>
+						} else {
+							{ event.Address }
+						}
+					</div>
 				}
 				if event.Type == "accommodation" {
 					<div class="event-accomm-type">
@@ -272,22 +284,24 @@ templ transitConnector(event domain.Event) {
 				if event.Departure != nil && event.Arrival != nil {
 					<div class="transit-route">
 						<span class="transit-from">
-							{ event.Departure.Location }
+							if format.MapsURL(event.Departure.Latitude, event.Departure.Longitude, "", event.Departure.Location) != "" {
+								<a href={ templ.SafeURL(format.MapsURL(event.Departure.Latitude, event.Departure.Longitude, "", event.Departure.Location)) } target="_blank" rel="noopener" class="stealth-link">{ event.Departure.Location }</a>
+							} else {
+								{ event.Departure.Location }
+							}
 							if event.Departure.Code != "" {
 								<span class="transit-code">({ event.Departure.Code })</span>
-							}
-							if format.MapsURL(event.Departure.Latitude, event.Departure.Longitude, "", event.Departure.Location) != "" {
-								<a href={ templ.SafeURL(format.MapsURL(event.Departure.Latitude, event.Departure.Longitude, "", event.Departure.Location)) } target="_blank" rel="noopener" class="transit-nav-link" aria-label="Navigate to departure"><sl-icon name="geo-alt-fill"></sl-icon></a>
 							}
 						</span>
 						<sl-icon name="arrow-right"></sl-icon>
 						<span class="transit-to">
-							{ event.Arrival.Location }
+							if format.MapsURL(event.Arrival.Latitude, event.Arrival.Longitude, "", event.Arrival.Location) != "" {
+								<a href={ templ.SafeURL(format.MapsURL(event.Arrival.Latitude, event.Arrival.Longitude, "", event.Arrival.Location)) } target="_blank" rel="noopener" class="stealth-link">{ event.Arrival.Location }</a>
+							} else {
+								{ event.Arrival.Location }
+							}
 							if event.Arrival.Code != "" {
 								<span class="transit-code">({ event.Arrival.Code })</span>
-							}
-							if format.MapsURL(event.Arrival.Latitude, event.Arrival.Longitude, "", event.Arrival.Location) != "" {
-								<a href={ templ.SafeURL(format.MapsURL(event.Arrival.Latitude, event.Arrival.Longitude, "", event.Arrival.Location)) } target="_blank" rel="noopener" class="transit-nav-link" aria-label="Navigate to arrival"><sl-icon name="geo-alt-fill"></sl-icon></a>
 							}
 						</span>
 					</div>
