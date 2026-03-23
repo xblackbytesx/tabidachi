@@ -76,7 +76,11 @@ func StayInfo(checkIn, checkOut string) string {
 	if inTime.IsZero() || outTime.IsZero() {
 		return checkIn + " – " + checkOut
 	}
-	nights := int(outTime.Sub(inTime).Hours() / 24)
+	// Compare calendar dates, not duration — check-in 15:00 to check-out 11:00
+	// is less than 24h per night but still counts as the correct number of nights.
+	inDate := time.Date(inTime.Year(), inTime.Month(), inTime.Day(), 0, 0, 0, 0, time.UTC)
+	outDate := time.Date(outTime.Year(), outTime.Month(), outTime.Day(), 0, 0, 0, 0, time.UTC)
+	nights := int(outDate.Sub(inDate).Hours() / 24)
 	nightLabel := "night"
 	if nights != 1 {
 		nightLabel = "nights"
