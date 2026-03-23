@@ -739,6 +739,11 @@ sl-details.day-notes {
 .event-icon { color: var(--color-text-muted); font-size: 14px; flex-shrink: 0; }
 .event-title { font-weight: 600; font-size: 15px; }
 .event-location { font-size: 13px; color: var(--color-text-muted); display: flex; align-items: center; gap: 4px; margin-top: 3px; }
+.event-address { font-size: 12px; color: var(--color-text-muted); display: flex; align-items: center; gap: 4px; margin-top: 2px; opacity: 0.8; }
+.event-nav-link, .transit-nav-link { color: var(--color-text-muted); opacity: 0.6; transition: opacity 0.15s; margin-left: 2px; }
+.event-nav-link:hover, .transit-nav-link:hover { opacity: 1; color: var(--sl-color-primary-600); }
+.event-link { color: var(--color-text-muted); opacity: 0.6; transition: opacity 0.15s; margin-left: 4px; font-size: 12px; }
+.event-link:hover { opacity: 1; color: var(--sl-color-primary-600); }
 .event-ref { font-size: 13px; color: var(--color-text-muted); display: flex; align-items: center; gap: 4px; margin-top: 3px; }
 .event-notes { font-size: 14px; color: var(--color-text-muted); margin-top: 7px; line-height: 1.55; }
 .event-accomm-type { margin-top: 6px; display: flex; gap: 6px; }

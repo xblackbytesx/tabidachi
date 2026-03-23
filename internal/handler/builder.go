@@ -317,11 +317,15 @@ func (h *BuilderHandler) AddEvent(c echo.Context) error {
 		Duration:  c.FormValue("duration"),
 		Notes:     c.FormValue("notes"),
 		Optional:  c.FormValue("optional") == "on",
+		URL:       c.FormValue("url"),
 	}
 
 	switch eventType {
 	case "activity":
 		event.Location = c.FormValue("location")
+		event.Address = c.FormValue("address")
+		event.Latitude = c.FormValue("latitude")
+		event.Longitude = c.FormValue("longitude")
 		event.TicketRequired = c.FormValue("ticket_required") == "on"
 		event.BookingReference = c.FormValue("booking_reference")
 	case "transit":
@@ -331,12 +335,22 @@ func (h *BuilderHandler) AddEvent(c echo.Context) error {
 		depLoc := c.FormValue("departure_location")
 		depCode := c.FormValue("departure_code")
 		if depLoc != "" {
-			event.Departure = &domain.TransitPoint{Location: depLoc, Code: depCode}
+			event.Departure = &domain.TransitPoint{
+				Location:  depLoc,
+				Code:      depCode,
+				Latitude:  c.FormValue("departure_latitude"),
+				Longitude: c.FormValue("departure_longitude"),
+			}
 		}
 		arrLoc := c.FormValue("arrival_location")
 		arrCode := c.FormValue("arrival_code")
 		if arrLoc != "" {
-			event.Arrival = &domain.TransitPoint{Location: arrLoc, Code: arrCode}
+			event.Arrival = &domain.TransitPoint{
+				Location:  arrLoc,
+				Code:      arrCode,
+				Latitude:  c.FormValue("arrival_latitude"),
+				Longitude: c.FormValue("arrival_longitude"),
+			}
 		}
 	case "accommodation":
 		event.CheckIn = c.FormValue("check_in") == "on"
@@ -391,6 +405,110 @@ func (h *BuilderHandler) UpdateDay(c echo.Context) error {
 		))
 	}
 	return redirect(c, "/trips/"+trip.ID.String()+"/edit")
+}
+
+// UpdateEvent updates an existing event in a day.
+func (h *BuilderHandler) UpdateEvent(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+	evtIdx, err := strconv.Atoi(c.Param("eventIdx"))
+	if err != nil || evtIdx < 0 || evtIdx >= len(trip.Data.Legs[legIdx].Days[dayIdx].Events) {
+		return c.String(http.StatusBadRequest, "invalid event index")
+	}
+
+	eventType := c.FormValue("event_type")
+	title := c.FormValue("title")
+	if title == "" || eventType == "" {
+		return c.String(http.StatusBadRequest, "event_type and title are required")
+	}
+	if len(title) > 500 || len(c.FormValue("notes")) > 5000 || len(c.FormValue("location")) > 500 {
+		return c.String(http.StatusBadRequest, "field value too long")
+	}
+
+	startTime := c.FormValue("start_time")
+	endTime := c.FormValue("end_time")
+	if !validateTimeFormat(startTime) {
+		return c.String(http.StatusBadRequest, "invalid start time format (expected HH:MM)")
+	}
+	if !validateTimeFormat(endTime) {
+		return c.String(http.StatusBadRequest, "invalid end time format (expected HH:MM)")
+	}
+
+	existing := &trip.Data.Legs[legIdx].Days[dayIdx].Events[evtIdx]
+	existing.Type = eventType
+	existing.Title = title
+	existing.StartTime = startTime
+	existing.EndTime = endTime
+	existing.Duration = c.FormValue("duration")
+	existing.Notes = c.FormValue("notes")
+	existing.Optional = c.FormValue("optional") == "on"
+	existing.URL = c.FormValue("url")
+
+	// Reset type-specific fields before repopulating
+	existing.Location = ""
+	existing.Address = ""
+	existing.Latitude = ""
+	existing.Longitude = ""
+	existing.TicketRequired = false
+	existing.BookingReference = ""
+	existing.TransportMode = ""
+	existing.Departure = nil
+	existing.Arrival = nil
+	existing.Carrier = ""
+	existing.FlightNumber = ""
+	existing.CheckIn = false
+	existing.CheckOut = false
+
+	switch eventType {
+	case "activity":
+		existing.Location = c.FormValue("location")
+		existing.Address = c.FormValue("address")
+		existing.Latitude = c.FormValue("latitude")
+		existing.Longitude = c.FormValue("longitude")
+		existing.TicketRequired = c.FormValue("ticket_required") == "on"
+		existing.BookingReference = c.FormValue("booking_reference")
+	case "transit":
+		existing.TransportMode = c.FormValue("transport_mode")
+		existing.Carrier = c.FormValue("carrier")
+		existing.FlightNumber = c.FormValue("flight_number")
+		existing.Duration = c.FormValue("duration")
+		depLoc := c.FormValue("departure_location")
+		depCode := c.FormValue("departure_code")
+		if depLoc != "" {
+			existing.Departure = &domain.TransitPoint{
+				Location:  depLoc,
+				Code:      depCode,
+				Latitude:  c.FormValue("departure_latitude"),
+				Longitude: c.FormValue("departure_longitude"),
+			}
+		}
+		arrLoc := c.FormValue("arrival_location")
+		arrCode := c.FormValue("arrival_code")
+		if arrLoc != "" {
+			existing.Arrival = &domain.TransitPoint{
+				Location:  arrLoc,
+				Code:      arrCode,
+				Latitude:  c.FormValue("arrival_latitude"),
+				Longitude: c.FormValue("arrival_longitude"),
+			}
+		}
+	case "accommodation":
+		existing.CheckIn = c.FormValue("check_in") == "on"
+		existing.CheckOut = c.FormValue("check_out") == "on"
+	}
+
+	return h.saveAndRedirect(c, trip)
 }
 
 // DeleteEvent removes an event from a day.

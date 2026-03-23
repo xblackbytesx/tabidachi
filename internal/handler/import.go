@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/xblackbytesx/tabidachi/internal/domain"
@@ -172,8 +174,56 @@ func validateTripData(data *domain.TripData) error {
 				if len(event.Notes) > 5000 {
 					return fmt.Errorf("Leg %d, day %d, event %d notes are too long (max 5000 characters).", i+1, j+1, k+1)
 				}
+				if err := validateCoords(event.Latitude, event.Longitude); err != nil {
+					return fmt.Errorf("Leg %d, day %d, event %d: %w.", i+1, j+1, k+1, err)
+				}
+				if len(event.URL) > maxStringLen {
+					return fmt.Errorf("Leg %d, day %d, event %d URL is too long.", i+1, j+1, k+1)
+				}
+				if event.URL != "" && !strings.HasPrefix(event.URL, "http://") && !strings.HasPrefix(event.URL, "https://") {
+					return fmt.Errorf("Leg %d, day %d, event %d URL must start with http:// or https://.", i+1, j+1, k+1)
+				}
+				if len(event.Address) > maxStringLen {
+					return fmt.Errorf("Leg %d, day %d, event %d address is too long.", i+1, j+1, k+1)
+				}
+				if event.Departure != nil {
+					if err := validateCoords(event.Departure.Latitude, event.Departure.Longitude); err != nil {
+						return fmt.Errorf("Leg %d, day %d, event %d departure: %w.", i+1, j+1, k+1, err)
+					}
+				}
+				if event.Arrival != nil {
+					if err := validateCoords(event.Arrival.Latitude, event.Arrival.Longitude); err != nil {
+						return fmt.Errorf("Leg %d, day %d, event %d arrival: %w.", i+1, j+1, k+1, err)
+					}
+				}
 			}
 		}
+	}
+	return nil
+}
+
+// validateCoords checks that latitude and longitude are either both empty or both
+// valid decimal numbers within range.
+func validateCoords(lat, lng string) error {
+	if lat == "" && lng == "" {
+		return nil
+	}
+	if (lat == "") != (lng == "") {
+		return fmt.Errorf("latitude and longitude must both be provided or both empty")
+	}
+	latF, err := strconv.ParseFloat(lat, 64)
+	if err != nil {
+		return fmt.Errorf("invalid latitude %q", lat)
+	}
+	lngF, err := strconv.ParseFloat(lng, 64)
+	if err != nil {
+		return fmt.Errorf("invalid longitude %q", lng)
+	}
+	if latF < -90 || latF > 90 {
+		return fmt.Errorf("latitude must be between -90 and 90")
+	}
+	if lngF < -180 || lngF > 180 {
+		return fmt.Errorf("longitude must be between -180 and 180")
 	}
 	return nil
 }

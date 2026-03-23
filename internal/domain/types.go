@@ -94,6 +94,10 @@ type Event struct {
 
 	// activity fields
 	Location         string `json:"location,omitempty"`
+	Address          string `json:"address,omitempty"`
+	Latitude         string `json:"latitude,omitempty"`
+	Longitude        string `json:"longitude,omitempty"`
+	URL              string `json:"url,omitempty"`
 	TicketRequired   bool   `json:"ticketRequired,omitempty"`
 	BookingReference string `json:"bookingReference,omitempty"`
 
@@ -115,8 +119,10 @@ type Event struct {
 }
 
 type TransitPoint struct {
-	Location string `json:"location"`
-	Code     string `json:"code,omitempty"`
+	Location  string `json:"location"`
+	Code      string `json:"code,omitempty"`
+	Latitude  string `json:"latitude,omitempty"`
+	Longitude string `json:"longitude,omitempty"`
 }
 
 // APIToken represents a personal access token for API authentication.
