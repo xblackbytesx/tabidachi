@@ -132,17 +132,6 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 			</button>
 			<img id="event-lightbox-img" src="" alt="Event photo" class="event-lightbox-img"/>
 		</dialog>
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				scrollToToday();
-			});
-			function openEventLightbox(btn) {
-				var img = document.getElementById('event-lightbox-img');
-				img.src = btn.dataset.fullUrl;
-				img.alt = btn.getAttribute('aria-label') || 'Event photo';
-				document.getElementById('event-lightbox').showModal();
-			}
-		</script>
 	}
 }
 

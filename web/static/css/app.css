@@ -1011,6 +1011,7 @@ wa-details.day-notes {
 
 /* SortableJS states */
 .sortable-ghost { opacity: 0.3; }
+.sortable-drag { opacity: 0.5; }
 .sortable-chosen {
   background: var(--color-surface-raised);
   border-radius: var(--radius-sm);
@@ -1270,6 +1271,32 @@ wa-details.day-notes {
   color: var(--color-text-muted);
   margin-block-end: var(--space-500);
   font-size: var(--text-md);
+}
+
+.radio-pills {
+  display: inline-flex;
+  gap: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+.radio-pill {
+  padding: var(--space-200) var(--space-400);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  background: var(--color-surface-raised);
+  color: var(--color-text-muted);
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+}
+.radio-pill + .radio-pill {
+  border-inline-start: 1px solid var(--color-border);
+}
+.radio-pill input { position: absolute; opacity: 0; pointer-events: none; }
+.radio-pill:hover { background: var(--color-surface-hover); }
+.radio-pill:has(:checked) {
+  background: var(--color-accent);
+  color: #fff;
 }
 
 .token-form {
@@ -1565,3 +1592,8 @@ wa-details.day-notes {
   .app-main { padding: var(--space-1200) var(--space-1600); }
   .trip-view { max-inline-size: 60rem; }
 }
+
+/* -----------------------------------------------------------------
+   Utilities
+   ----------------------------------------------------------------- */
+.mb-400 { margin-block-end: var(--space-400); }

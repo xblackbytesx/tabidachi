@@ -179,11 +179,20 @@ templ dateFormatSection(csrfToken string, dateFormat string) {
 			hx-swap="outerHTML show:window:top"
 		>
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
-			<wa-radio-group name="date_format" value={ dateFormatOrDefault(dateFormat) } style="margin-bottom: 16px;">
-				<wa-radio value="dmy" appearance="button">2 Jan 2026</wa-radio>
-				<wa-radio value="mdy" appearance="button">Jan 2, 2026</wa-radio>
-				<wa-radio value="iso" appearance="button">2026-01-02</wa-radio>
-			</wa-radio-group>
+			<div class="radio-pills mb-400">
+				<label class="radio-pill">
+					<input type="radio" name="date_format" value="dmy" checked?={ dateFormatOrDefault(dateFormat) == "dmy" }/>
+					2 Jan 2026
+				</label>
+				<label class="radio-pill">
+					<input type="radio" name="date_format" value="mdy" checked?={ dateFormatOrDefault(dateFormat) == "mdy" }/>
+					Jan 2, 2026
+				</label>
+				<label class="radio-pill">
+					<input type="radio" name="date_format" value="iso" checked?={ dateFormatOrDefault(dateFormat) == "iso" }/>
+					2026-01-02
+				</label>
+			</div>
 			<br/>
 			<button type="submit" class="btn btn-primary btn-sm">Save</button>
 		</form>

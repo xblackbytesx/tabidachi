@@ -79,6 +79,16 @@
   };
 
   // ============================================================
+  // Trip view: open event photo lightbox
+  // ============================================================
+  window.openEventLightbox = function (btn) {
+    var img = document.getElementById('event-lightbox-img');
+    img.src = btn.dataset.fullUrl;
+    img.alt = btn.getAttribute('aria-label') || 'Event photo';
+    document.getElementById('event-lightbox').showModal();
+  };
+
+  // ============================================================
   // Builder: event type field switching
   // ============================================================
   window.onEventTypeChangeByAttr = function (select) {
@@ -142,6 +152,9 @@
   // ============================================================
   document.addEventListener('DOMContentLoaded', function () {
     initSortableEvents();
+    if (document.getElementById('timeline')) {
+      scrollToToday();
+    }
     // Inject the freshest CSRF token from #csrf-live into every HTMX request.
     document.addEventListener('htmx:configRequest', function (evt) {
       var el = document.getElementById('csrf-live');

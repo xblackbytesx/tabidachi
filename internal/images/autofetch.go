@@ -16,9 +16,14 @@ type TripStorer interface {
 	UpdateLegImage(ctx context.Context, id, userID uuid.UUID, legIdx int, imageURL, credit string) error
 }
 
+// autoFetchSem limits the number of concurrent AutoFetch goroutines.
+var autoFetchSem = make(chan struct{}, 5)
+
 // AutoFetch fetches cover images for a trip and all its legs in the background.
 // Call as: go images.AutoFetch(tripStore, imageService, tripID, userID)
 func AutoFetch(trips TripStorer, svc *Service, tripID, userID uuid.UUID) {
+	autoFetchSem <- struct{}{} // acquire slot
+	defer func() { <-autoFetchSem }()
 	defer func() {
 		if r := recover(); r != nil {
 			slog.Error("autofetch: panic recovered", "tripID", tripID, "panic", r)

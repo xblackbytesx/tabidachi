@@ -5,6 +5,6 @@
   "dependencies": {
     "@awesome.me/webawesome": "^3.3.1",
     "htmx.org": "2.0.8",
-    "sortablejs": "1.15.6"
+    "sortablejs": "1.15.7"
   }
 }

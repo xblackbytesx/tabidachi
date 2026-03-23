@@ -39,7 +39,9 @@ func SetUserID(w http.ResponseWriter, r *http.Request, userID string) error {
 	if old, err := getSession(r); err == nil {
 		old.Values = map[interface{}]interface{}{}
 		old.Options.MaxAge = -1
-		_ = old.Save(r, w)
+		if err := old.Save(r, w); err != nil {
+			slog.Warn("session: invalidate old: save failed", "err", err)
+		}
 	}
 	// Create a fresh session with the new user ID.
 	sess, err := getSession(r)
@@ -121,7 +123,9 @@ func GetFlash(w http.ResponseWriter, r *http.Request) string {
 	if len(flashes) == 0 {
 		return ""
 	}
-	_ = sess.Save(r, w)
+	if err := sess.Save(r, w); err != nil {
+		slog.Warn("session: clear flash: save failed", "err", err)
+	}
 	if msg, ok := flashes[0].(string); ok {
 		return msg
 	}
