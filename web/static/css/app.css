@@ -1050,7 +1050,11 @@ wa-details.day-notes {
 .add-day-btn { margin-block-start: var(--space-200); }
 
 /* Event type fields in dialog */
-.event-type-fields { margin-block-start: 0; }
+.event-type-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-500);
+}
 
 /* Optional fields (plan builder) */
 .optional-fields { display: flex; flex-direction: column; gap: var(--space-200); margin-block-start: var(--space-200); }
