@@ -244,16 +244,6 @@ templ eventCard(event domain.Event) {
 						}
 					</div>
 				}
-				if event.Address != "" && event.Address != event.Location {
-					<div class="event-address">
-						@components.Icon("signs-post")
-						if format.MapsURL(event.Latitude, event.Longitude, event.Address, "") != "" {
-							<a href={ templ.SafeURL(format.MapsURL(event.Latitude, event.Longitude, event.Address, "")) } target="_blank" rel="noopener" class="stealth-link">{ event.Address }</a>
-						} else {
-							{ event.Address }
-						}
-					</div>
-				}
 				if event.Type == "accommodation" {
 					<div class="event-accomm-type">
 						if event.CheckIn {
