@@ -1,5 +1,7 @@
 package layouts
 
+import "github.com/xblackbytesx/tabidachi/web/templates/components"
+
 templ Base(title string, csrfToken string) {
 	<!DOCTYPE html>
 	<html lang="en" class="dark">
@@ -8,7 +10,6 @@ templ Base(title string, csrfToken string) {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>{ title } — Tabidachi</title>
 			<meta name="csrf-token" content={ csrfToken }/>
-			<link rel="stylesheet" href="/static/vendor/fontawesome/all.min.css"/>
 			<link rel="stylesheet" href="/static/css/app.css"/>
 			<script src="/static/vendor/htmx.min.js" defer></script>
 			<script src="/static/vendor/sortable.min.js" defer></script>
@@ -41,21 +42,21 @@ templ Sidebar(csrfToken string) {
 			<span class="logo-text">Tabidachi</span>
 		</a>
 		<ul class="sidebar-nav">
-			<li><a href="/" class="nav-item"><i class="fa-solid fa-house" aria-hidden="true"></i> Trips</a></li>
-			<li><a href="/trips/new" class="nav-item"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> New Trip</a></li>
-			<li><a href="/settings" class="nav-item"><i class="fa-solid fa-gear" aria-hidden="true"></i> Settings</a></li>
+			<li><a href="/" class="nav-item">@components.Icon("house") Trips</a></li>
+			<li><a href="/trips/new" class="nav-item">@components.Icon("circle-plus") New Trip</a></li>
+			<li><a href="/settings" class="nav-item">@components.Icon("gear") Settings</a></li>
 		</ul>
 		<div class="sidebar-footer">
 			<button type="button" class="nav-item nav-btn" onclick="toggleTheme()">
-				<i class="fa-solid fa-sun theme-icon-light" aria-hidden="true"></i>
-				<i class="fa-solid fa-moon theme-icon-dark" aria-hidden="true"></i>
+				@components.IconC("sun", "theme-icon-light")
+				@components.IconC("moon", "theme-icon-dark")
 				<span class="theme-label-light">Light mode</span>
 				<span class="theme-label-dark">Dark mode</span>
 			</button>
 			<form method="POST" action="/logout" hx-boost="false">
 				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 				<button type="submit" class="nav-item nav-btn">
-					<i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sign out
+					@components.Icon("right-from-bracket") Sign out
 				</button>
 			</form>
 		</div>
@@ -69,7 +70,6 @@ templ Auth(title string, csrfToken string) {
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>{ title } — Tabidachi</title>
-			<link rel="stylesheet" href="/static/vendor/fontawesome/all.min.css"/>
 			<link rel="stylesheet" href="/static/css/app.css"/>
 		</head>
 		<body class="auth-body">

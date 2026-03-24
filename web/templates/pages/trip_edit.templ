@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"github.com/xblackbytesx/tabidachi/internal/domain"
 	"github.com/xblackbytesx/tabidachi/internal/format"
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
 	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
 )
 
@@ -12,11 +13,11 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 	@layouts.Base("Edit "+trip.Title, csrfToken) {
 		<div class="page-header">
 			<a href={ templ.SafeURL("/trips/" + trip.ID.String()) } class="btn btn-ghost btn-sm">
-				<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> View timeline
+				@components.Icon("arrow-left") View timeline
 			</a>
 			<h1 class="page-title">Edit: { trip.Title }</h1>
 			<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/export") } class="btn btn-ghost btn-sm" hx-boost="false">
-				<i class="fa-solid fa-download" aria-hidden="true"></i> Export JSON
+				@components.Icon("download") Export JSON
 			</a>
 		</div>
 		<!-- Metadata form -->
@@ -63,7 +64,7 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 			<div class="form-section-header">
 				<h2 class="form-section-title">Legs &amp; days</h2>
 				<button class="btn btn-sm btn-primary" data-dialog="add-leg-dialog" onclick="openDataDialog(this); return false;">
-					<i class="fa-solid fa-plus" aria-hidden="true"></i> Add leg
+					@components.Icon("plus") Add leg
 				</button>
 			</div>
 			if len(trip.Data.Legs) == 0 {
@@ -80,7 +81,7 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 			<form method="POST" action={ templ.SafeURL("/trips/" + trip.ID.String() + "/legs") } class="form-stack">
 				<div class="modal-header">
 					<h2>Add Leg</h2>
-					<button type="button" class="modal-close" data-dialog="add-leg-dialog" onclick="closeDataDialog(this)" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+					<button type="button" class="modal-close" data-dialog="add-leg-dialog" onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
 				</div>
 				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 				<div class="field">
@@ -115,7 +116,7 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 }
 
 templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
-	<details class="leg-builder-section" open>
+	<details class="leg-builder-section">
 		<summary class="leg-summary">
 			<span class="leg-num-badge">{ fmt.Sprintf("%d", leg.Sequence) }</span>
 			<span class="leg-summary-title">{ leg.Destination }</span>
@@ -129,7 +130,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 				<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/delete") } style="display:inline">
 					<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 					<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this leg and all its days?')">
-						<i class="fa-solid fa-trash" aria-hidden="true"></i> Delete leg
+						@components.Icon("trash") Delete leg
 					</button>
 				</form>
 				<button
@@ -137,7 +138,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 					data-dialog={ fmt.Sprintf("accomm-dialog-%d", legIdx) }
 					onclick="openDataDialog(this); return false;"
 				>
-					<i class="fa-solid fa-building" aria-hidden="true"></i>
+					@components.Icon("building")
 					if leg.Accommodation != nil {
 						Edit accommodation
 					} else {
@@ -147,7 +148,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 			</div>
 			if leg.Accommodation != nil {
 				<div class="accomm-preview">
-					<i class="fa-solid fa-building" aria-hidden="true"></i>
+					@components.Icon("building")
 					<strong>{ leg.Accommodation.Name }</strong>
 					if leg.Accommodation.Neighborhood != "" {
 						<span>{ leg.Accommodation.Neighborhood }</span>
@@ -169,7 +170,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 				data-dialog={ fmt.Sprintf("add-day-dialog-%d", legIdx) }
 				onclick="openDataDialog(this); return false;"
 			>
-				<i class="fa-solid fa-circle-plus" aria-hidden="true"></i> Add day
+				@components.Icon("circle-plus") Add day
 			</button>
 			@LegImagePreview(csrfToken, tripID, strconv.Itoa(legIdx), leg.CoverImageURL, leg.CoverImageCredit)
 		</div>
@@ -179,7 +180,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 		<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/accommodation") } class="form-stack">
 			<div class="modal-header">
 				<h2>Accommodation</h2>
-				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("accomm-dialog-%d", legIdx) } onclick="closeDataDialog(this)" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("accomm-dialog-%d", legIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
 			</div>
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 			<div class="field">
@@ -223,7 +224,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 		<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days") } class="form-stack">
 			<div class="modal-header">
 				<h2>Add Day</h2>
-				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("add-day-dialog-%d", legIdx) } onclick="closeDataDialog(this)" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("add-day-dialog-%d", legIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
 			</div>
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 			<div class="field-row">
@@ -277,18 +278,18 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 					onclick="toggleDayEdit(this); return false;"
 					title="Edit day"
 					aria-label="Edit day"
-				><i class="fa-solid fa-pencil" aria-hidden="true"></i></button>
+				>@components.Icon("pencil")</button>
 				<button
 					class="btn btn-xs btn-ghost"
 					data-dialog={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) }
 					onclick="openDataDialog(this); return false;"
 				>
-					<i class="fa-solid fa-plus" aria-hidden="true"></i> Event
+					@components.Icon("plus") Event
 				</button>
 				<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/delete") } style="display:inline">
 					<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 					<button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Delete this day?')" aria-label="Delete day">
-						<i class="fa-solid fa-trash" aria-hidden="true"></i>
+						@components.Icon("trash")
 					</button>
 				</form>
 			</div>
@@ -339,9 +340,9 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 				if event.Type == "activity" {
 					<div class="event-builder-group sortable-item" data-event-idx={ strconv.Itoa(evtIdx) }>
 						<div class="event-preview-row">
-							<span class="drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical" aria-hidden="true"></i></span>
+							<span class="drag-handle" title="Drag to reorder">@components.Icon("grip-vertical")</span>
 							<span class="event-preview-type">
-								<i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+								@components.Icon("location-dot")
 							</span>
 							<span class="event-preview-title">{ event.Title }</span>
 							if event.StartTime != "" {
@@ -353,7 +354,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 								onclick="openDataDialog(this); return false;"
 								title="Edit event"
 								aria-label="Edit event"
-							><i class="fa-solid fa-pencil" aria-hidden="true"></i></button>
+							>@components.Icon("pencil")</button>
 							<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
 								<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 								<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event" onclick="return confirm('Delete this event?')">×</button>
@@ -363,12 +364,12 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 					</div>
 				} else {
 					<div class="event-preview-row sortable-item" data-event-idx={ strconv.Itoa(evtIdx) }>
-						<span class="drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical" aria-hidden="true"></i></span>
+						<span class="drag-handle" title="Drag to reorder">@components.Icon("grip-vertical")</span>
 						<span class={ "event-preview-type", templ.KV("event-preview-transit", event.Type == "transit"), templ.KV("event-preview-accommodation", event.Type == "accommodation") }>
 							if event.Type == "transit" {
-								<i class={ "fa-solid fa-" + domain.TransportIcon(event.TransportMode) } aria-hidden="true"></i>
+								@components.Icon(domain.TransportIcon(event.TransportMode))
 							} else {
-								<i class="fa-solid fa-building" aria-hidden="true"></i>
+								@components.Icon("building")
 							}
 						</span>
 						<span class="event-preview-title">{ event.Title }</span>
@@ -381,7 +382,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 							onclick="openDataDialog(this); return false;"
 							title="Edit event"
 							aria-label="Edit event"
-						><i class="fa-solid fa-pencil" aria-hidden="true"></i></button>
+						>@components.Icon("pencil")</button>
 						<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
 							<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 							<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event" onclick="return confirm('Delete this event?')">×</button>
@@ -405,7 +406,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 		>
 			<div class="modal-header">
 				<h2>Add Event</h2>
-				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) } onclick="closeDataDialog(this)" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
 			</div>
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 			<div class="field-row">
@@ -621,7 +622,7 @@ templ editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, e
 		>
 			<div class="modal-header">
 				<h2>Edit Event</h2>
-				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) } onclick="closeDataDialog(this)" aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
 			</div>
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 			<div class="field-row">

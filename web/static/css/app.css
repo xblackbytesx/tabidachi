@@ -92,6 +92,15 @@
 }
 :focus:not(:focus-visible) { outline: none; }
 
+/* Inline SVG icon base */
+.icon {
+  display: inline-block;
+  vertical-align: -0.125em;
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text);
@@ -218,7 +227,7 @@ a:hover { color: var(--color-accent-hover); text-decoration: underline; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.nav-item i {
+.nav-item .icon {
   font-size: var(--text-xl);
 }
 .nav-item:hover {
@@ -1071,6 +1080,7 @@ details.day-notes {
   padding: var(--space-600);
   max-inline-size: min(36rem, 95vw);
   inline-size: 100%;
+  margin: auto;
   box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
 }
 .modal-dialog::backdrop {
@@ -1574,7 +1584,7 @@ details.leg-builder-section > summary::-webkit-details-marker {
     padding: var(--space-300) var(--space-300);
     font-size: var(--text-md);
   }
-  .nav-item i {
+  .nav-item .icon {
     font-size: var(--text-xl);
   }
 

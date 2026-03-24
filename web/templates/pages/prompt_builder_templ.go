@@ -8,7 +8,10 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
+import (
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
+	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
+)
 
 func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[string]string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -43,7 +46,15 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><i class=\"fa-solid fa-arrow-left\" aria-hidden=\"true\"></i> Back</a><h1 class=\"page-title\">Convert Existing Itinerary</h1></div><div class=\"wizard-steps\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.Icon("arrow-left").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "Back</a><h1 class=\"page-title\">Convert Existing Itinerary</h1></div><div class=\"wizard-steps\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -52,7 +63,7 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -65,7 +76,7 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><span class=\"step-num\">1</span> <span class=\"step-label\">Your itinerary</span></div><div class=\"wizard-step-divider\"></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"><span class=\"step-num\">1</span> <span class=\"step-label\">Your itinerary</span></div><div class=\"wizard-step-divider\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -74,7 +85,7 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -87,7 +98,7 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"><span class=\"step-num\">2</span> <span class=\"step-label\">What to include</span></div><div class=\"wizard-step-divider\"></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"><span class=\"step-num\">2</span> <span class=\"step-label\">What to include</span></div><div class=\"wizard-step-divider\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -96,7 +107,7 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<div class=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -109,7 +120,7 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\"><span class=\"step-num\">3</span> <span class=\"step-label\">Your prompt</span></div></div><div id=\"wizard-content\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\"><span class=\"step-num\">3</span> <span class=\"step-label\">Your prompt</span></div></div><div id=\"wizard-content\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -129,7 +140,7 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -164,59 +175,59 @@ func promptStep1(csrfToken string, data map[string]string) templ.Component {
 			templ_7745c5c3_Var9 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 1 — Paste your itinerary</h2><p class=\"form-help\">Paste your existing itinerary text below — booking confirmations, travel agent docs, copy-pasted emails, anything. The AI will extract the logistics.</p><form method=\"POST\" action=\"/trips/new/convert\" hx-post=\"/trips/new/convert\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 1 — Paste your itinerary</h2><p class=\"form-help\">Paste your existing itinerary text below — booking confirmations, travel agent docs, copy-pasted emails, anything. The AI will extract the logistics.</p><form method=\"POST\" action=\"/trips/new/convert\" hx-post=\"/trips/new/convert\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 52, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 55, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\"> <input type=\"hidden\" name=\"step\" value=\"1\"><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\" for=\"from_date\">From date (optional)</label> <input class=\"field-input\" type=\"date\" id=\"from_date\" name=\"from_date\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\"> <input type=\"hidden\" name=\"step\" value=\"1\"><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\" for=\"from_date\">From date (optional)</label> <input class=\"field-input\" type=\"date\" id=\"from_date\" name=\"from_date\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "from_date"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 57, Col: 110}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 60, Col: 110}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\"></div><div class=\"field\"><label class=\"field-label\" for=\"to_date\">To date (optional)</label> <input class=\"field-input\" type=\"date\" id=\"to_date\" name=\"to_date\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\"></div><div class=\"field\"><label class=\"field-label\" for=\"to_date\">To date (optional)</label> <input class=\"field-input\" type=\"date\" id=\"to_date\" name=\"to_date\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "to_date"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 61, Col: 104}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 64, Col: 104}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\"></div></div><div class=\"field\"><label class=\"field-label\" for=\"itinerary_text\">Itinerary text <span class=\"required\">*</span></label> <textarea class=\"field-textarea field-textarea-xl\" id=\"itinerary_text\" name=\"itinerary_text\" required placeholder=\"Paste your full itinerary here — flights, trains, hotels, activities...\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\"></div></div><div class=\"field\"><label class=\"field-label\" for=\"itinerary_text\">Itinerary text <span class=\"required\">*</span></label> <textarea class=\"field-textarea field-textarea-xl\" id=\"itinerary_text\" name=\"itinerary_text\" required placeholder=\"Paste your full itinerary here — flights, trains, hotels, activities...\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "itinerary_text"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 72, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 75, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</textarea></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Next <i class=\"fa-solid fa-arrow-right\" aria-hidden=\"true\"></i></button></div></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</textarea></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Next @components.Icon(\"arrow-right\")</button></div></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -245,59 +256,59 @@ func promptStep2(csrfToken string, data map[string]string) templ.Component {
 			templ_7745c5c3_Var14 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 2 — What's in your itinerary?</h2><p class=\"form-help\">Check everything that your source text contains. This helps the AI focus on the right details.</p><form method=\"POST\" action=\"/trips/new/convert\" hx-post=\"/trips/new/convert\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 2 — What's in your itinerary?</h2><p class=\"form-help\">Check everything that your source text contains. This helps the AI focus on the right details.</p><form method=\"POST\" action=\"/trips/new/convert\" hx-post=\"/trips/new/convert\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var15 string
 		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 94, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 97, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\"> <input type=\"hidden\" name=\"step\" value=\"2\"> <input type=\"hidden\" name=\"itinerary_text\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\"> <input type=\"hidden\" name=\"step\" value=\"2\"> <input type=\"hidden\" name=\"itinerary_text\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var16 string
 		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "itinerary_text"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 96, Col: 85}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 99, Col: 85}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\"> <input type=\"hidden\" name=\"from_date\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\"> <input type=\"hidden\" name=\"from_date\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var17 string
 		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "from_date"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 97, Col: 75}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 100, Col: 75}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\"> <input type=\"hidden\" name=\"to_date\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"> <input type=\"hidden\" name=\"to_date\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var18 string
 		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "to_date"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 98, Col: 71}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 101, Col: 71}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"><div class=\"checkbox-grid\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"flights\" checked> Flights</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"trains\" checked> Trains &amp; bullet trains</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"local_transit\" checked> Local transit (subway, bus, tram)</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"accommodations\" checked> Accommodations</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"activities\" checked> Scheduled activities</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"booking_refs\" checked> Booking references</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"timings\" checked> Departure &amp; arrival times</label></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Generate prompt <i class=\"fa-solid fa-wand-magic-sparkles\" aria-hidden=\"true\"></i></button></div></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "\"><div class=\"checkbox-grid\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"flights\" checked> Flights</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"trains\" checked> Trains &amp; bullet trains</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"local_transit\" checked> Local transit (subway, bus, tram)</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"accommodations\" checked> Accommodations</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"activities\" checked> Scheduled activities</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"booking_refs\" checked> Booking references</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"timings\" checked> Departure &amp; arrival times</label></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Generate prompt @components.Icon(\"wand-magic-sparkles\")</button></div></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -326,20 +337,36 @@ func promptStep3(csrfToken string, prompt string) templ.Component {
 			templ_7745c5c3_Var19 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 3 — Your AI prompt</h2><div class=\"prompt-instructions\"><ol class=\"instruction-steps\"><li>Copy the prompt below and paste it into your preferred AI (ChatGPT, Claude, Gemini, etc.)</li><li>Answer any clarification questions the AI asks</li><li>Confirm the summary table the AI shows you</li><li>Copy the JSON the AI outputs</li><li>Click <strong>Import the result</strong> below and paste the JSON</li></ol></div><div class=\"prompt-box-wrapper\"><div class=\"prompt-box-header\"><span class=\"prompt-box-label\">Prompt to copy</span> <button class=\"btn btn-sm btn-ghost\" onclick=\"copyPrompt()\" id=\"copy-btn\"><i class=\"fa-solid fa-clipboard\" aria-hidden=\"true\"></i> Copy prompt</button></div><pre class=\"prompt-box\" id=\"prompt-text\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 3 — Your AI prompt</h2><div class=\"prompt-instructions\"><ol class=\"instruction-steps\"><li>Copy the prompt below and paste it into your preferred AI (ChatGPT, Claude, Gemini, etc.)</li><li>Answer any clarification questions the AI asks</li><li>Confirm the summary table the AI shows you</li><li>Copy the JSON the AI outputs</li><li>Click <strong>Import the result</strong> below and paste the JSON</li></ol></div><div class=\"prompt-box-wrapper\"><div class=\"prompt-box-header\"><span class=\"prompt-box-label\">Prompt to copy</span> <button class=\"btn btn-sm btn-ghost\" onclick=\"copyPrompt()\" id=\"copy-btn\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = components.Icon("clipboard").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "Copy prompt</button></div><pre class=\"prompt-box\" id=\"prompt-text\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var20 string
 		templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(prompt)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 148, Col: 52}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/prompt_builder.templ`, Line: 151, Col: 52}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</pre></div><div class=\"form-actions\"><a href=\"/trips/new/convert\" class=\"btn btn-ghost\">Start over</a> <a href=\"/trips/new/import\" class=\"btn btn-primary\"><i class=\"fa-solid fa-file-arrow-down\" aria-hidden=\"true\"></i> Import the result</a></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "</pre></div><div class=\"form-actions\"><a href=\"/trips/new/convert\" class=\"btn btn-ghost\">Start over</a> <a href=\"/trips/new/import\" class=\"btn btn-primary\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = components.Icon("file-arrow-down").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "Import the result</a></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

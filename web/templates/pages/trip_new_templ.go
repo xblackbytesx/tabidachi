@@ -8,7 +8,10 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
+import (
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
+	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
+)
 
 func TripNew(csrfToken string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -43,7 +46,47 @@ func TripNew(csrfToken string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/\" class=\"btn btn-ghost btn-sm\"><i class=\"fa-solid fa-arrow-left\" aria-hidden=\"true\"></i> Back</a><h1 class=\"page-title\">New Trip</h1></div><p class=\"page-subtitle\">How would you like to create your itinerary?</p><div class=\"method-grid\"><a href=\"/trips/new/scratch\" class=\"method-card\"><i class=\"fa-solid fa-pen-to-square method-icon\" aria-hidden=\"true\"></i><h2 class=\"method-title\">Build manually</h2><p class=\"method-desc\">Create your trip step by step — add legs, days, and events by hand.</p></a> <a href=\"/trips/new/import\" class=\"method-card\"><i class=\"fa-solid fa-file-code method-icon\" aria-hidden=\"true\"></i><h2 class=\"method-title\">Import JSON</h2><p class=\"method-desc\">Paste or upload a JSON itinerary following the Tabidachi schema.</p></a> <a href=\"/trips/new/convert\" class=\"method-card\"><i class=\"fa-solid fa-arrows-rotate method-icon\" aria-hidden=\"true\"></i><h2 class=\"method-title\">Convert existing itinerary</h2><p class=\"method-desc\">Have a booking doc, email, or spreadsheet? We'll generate an AI prompt to convert it to Tabidachi JSON.</p></a> <a href=\"/trips/new/plan\" class=\"method-card method-card-featured\"><i class=\"fa-solid fa-wand-magic-sparkles method-icon\" aria-hidden=\"true\"></i><h2 class=\"method-title\">Plan with AI</h2><p class=\"method-desc\">Describe where you want to go — AI builds a personalised itinerary prompt for you.</p><span class=\"method-badge\">Recommended</span></a></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/\" class=\"btn btn-ghost btn-sm\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.Icon("arrow-left").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "Back</a><h1 class=\"page-title\">New Trip</h1></div><p class=\"page-subtitle\">How would you like to create your itinerary?</p><div class=\"method-grid\"><a href=\"/trips/new/scratch\" class=\"method-card\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.IconC("pen-to-square", "method-icon").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<h2 class=\"method-title\">Build manually</h2><p class=\"method-desc\">Create your trip step by step — add legs, days, and events by hand.</p></a> <a href=\"/trips/new/import\" class=\"method-card\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.IconC("file-code", "method-icon").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<h2 class=\"method-title\">Import JSON</h2><p class=\"method-desc\">Paste or upload a JSON itinerary following the Tabidachi schema.</p></a> <a href=\"/trips/new/convert\" class=\"method-card\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.IconC("arrows-rotate", "method-icon").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<h2 class=\"method-title\">Convert existing itinerary</h2><p class=\"method-desc\">Have a booking doc, email, or spreadsheet? We'll generate an AI prompt to convert it to Tabidachi JSON.</p></a> <a href=\"/trips/new/plan\" class=\"method-card method-card-featured\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.IconC("wand-magic-sparkles", "method-icon").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<h2 class=\"method-title\">Plan with AI</h2><p class=\"method-desc\">Describe where you want to go — AI builds a personalised itinerary prompt for you.</p><span class=\"method-badge\">Recommended</span></a></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

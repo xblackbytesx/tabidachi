@@ -1,0 +1,15 @@
+package components
+
+// Icon renders an inline SVG icon by name.
+templ Icon(name string) {
+	<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true">
+		@templ.Raw(GetIconPaths(name))
+	</svg>
+}
+
+// IconC renders an inline SVG icon with an additional CSS class on the SVG element.
+templ IconC(name string, class string) {
+	<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={ "icon " + class } aria-hidden="true">
+		@templ.Raw(GetIconPaths(name))
+	</svg>
+}

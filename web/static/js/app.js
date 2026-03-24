@@ -2,6 +2,8 @@
 (function () {
   'use strict';
 
+  var CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+
   // ============================================================
   // Theme toggle (light / dark)
   // ============================================================
@@ -37,7 +39,7 @@
       var btn = document.getElementById('copy-btn');
       if (btn) {
         var orig = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i> Copied!';
+        btn.innerHTML = CHECK_SVG + ' Copied!';
         setTimeout(function () { btn.innerHTML = orig; }, 2000);
       }
     }).catch(function () {
@@ -86,7 +88,7 @@
       var btn = document.getElementById('copy-token-btn');
       if (btn) {
         var orig = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i> Copied!';
+        btn.innerHTML = CHECK_SVG + ' Copied!';
         setTimeout(function () { btn.innerHTML = orig; }, 2000);
       }
     });

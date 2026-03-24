@@ -135,7 +135,7 @@ type APIToken struct {
 	LastUsedAt  *time.Time
 }
 
-// TransportIcon maps a transport mode string to a Font Awesome icon name.
+// TransportIcon maps a transport mode string to an icon name.
 func TransportIcon(mode string) string {
 	icons := map[string]string{
 		"flight":     "plane",

@@ -1,11 +1,14 @@
 package pages
 
-import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
+import (
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
+	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
+)
 
 templ TripImport(csrfToken string, flash string) {
 	@layouts.Base("Import Trip", csrfToken) {
 		<div class="page-header">
-			<a href="/trips/new" class="btn btn-ghost btn-sm"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</a>
+			<a href="/trips/new" class="btn btn-ghost btn-sm">@components.Icon("arrow-left") Back</a>
 			<h1 class="page-title">Import Trip</h1>
 		</div>
 		<div class="form-card">
