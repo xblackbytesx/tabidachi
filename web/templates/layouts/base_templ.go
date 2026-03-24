@@ -29,7 +29,7 @@ func Base(title string, csrfToken string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\" class=\"wa-dark\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\" class=\"dark\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -55,20 +55,20 @@ func Base(title string, csrfToken string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><link rel=\"stylesheet\" href=\"/static/vendor/webawesome/styles/themes/default.css\"><link rel=\"stylesheet\" href=\"/static/css/app.css\"><script type=\"module\" src=\"/static/vendor/webawesome/webawesome.loader.js\"></script><script src=\"/static/vendor/htmx.min.js\" defer></script><script src=\"/static/vendor/sortable.min.js\" defer></script></head><body hx-headers=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><link rel=\"stylesheet\" href=\"/static/vendor/fontawesome/all.min.css\"><link rel=\"stylesheet\" href=\"/static/css/app.css\"><script src=\"/static/vendor/htmx.min.js\" defer></script><script src=\"/static/vendor/sortable.min.js\" defer></script></head><body hx-headers=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(`{"X-CSRF-Token":"` + csrfToken + `"}`)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 18, Col: 54}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 17, Col: 54}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" hx-boost=\"true\" hx-select=\"#main-content\" hx-target=\"#main-content\" hx-swap=\"outerHTML show:window:top\"><script>if(localStorage.getItem('tabidachi-theme')==='light'){document.documentElement.classList.remove('wa-dark');}</script><a href=\"#main-content\" class=\"skip-to-content\">Skip to content</a><div class=\"app-layout\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" hx-boost=\"true\" hx-select=\"#main-content\" hx-target=\"#main-content\" hx-swap=\"outerHTML show:window:top\"><script>if(localStorage.getItem('tabidachi-theme')==='light'){document.documentElement.classList.remove('dark');}</script><a href=\"#main-content\" class=\"skip-to-content\">Skip to content</a><div class=\"app-layout\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -83,7 +83,7 @@ func Base(title string, csrfToken string) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 29, Col: 58}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 28, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -126,20 +126,20 @@ func Sidebar(csrfToken string) templ.Component {
 			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<nav class=\"app-sidebar\" aria-label=\"Main navigation\"><a href=\"/\" class=\"sidebar-logo\"><span class=\"logo-icon\">✈</span> <span class=\"logo-text\">Tabidachi</span></a><ul class=\"sidebar-nav\"><li><a href=\"/\" class=\"nav-item\"><wa-icon name=\"house\"></wa-icon> Trips</a></li><li><a href=\"/trips/new\" class=\"nav-item\"><wa-icon name=\"circle-plus\"></wa-icon> New Trip</a></li><li><a href=\"/settings\" class=\"nav-item\"><wa-icon name=\"gear\"></wa-icon> Settings</a></li></ul><div class=\"sidebar-footer\"><button type=\"button\" class=\"nav-item nav-btn\" onclick=\"toggleTheme()\"><wa-icon name=\"sun\" class=\"theme-icon-light\"></wa-icon> <wa-icon name=\"moon\" class=\"theme-icon-dark\"></wa-icon> <span class=\"theme-label-light\">Light mode</span> <span class=\"theme-label-dark\">Dark mode</span></button><form method=\"POST\" action=\"/logout\" hx-boost=\"false\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<nav class=\"app-sidebar\" aria-label=\"Main navigation\"><a href=\"/\" class=\"sidebar-logo\"><span class=\"logo-icon\">✈</span> <span class=\"logo-text\">Tabidachi</span></a><ul class=\"sidebar-nav\"><li><a href=\"/\" class=\"nav-item\"><i class=\"fa-solid fa-house\" aria-hidden=\"true\"></i> Trips</a></li><li><a href=\"/trips/new\" class=\"nav-item\"><i class=\"fa-solid fa-circle-plus\" aria-hidden=\"true\"></i> New Trip</a></li><li><a href=\"/settings\" class=\"nav-item\"><i class=\"fa-solid fa-gear\" aria-hidden=\"true\"></i> Settings</a></li></ul><div class=\"sidebar-footer\"><button type=\"button\" class=\"nav-item nav-btn\" onclick=\"toggleTheme()\"><i class=\"fa-solid fa-sun theme-icon-light\" aria-hidden=\"true\"></i> <i class=\"fa-solid fa-moon theme-icon-dark\" aria-hidden=\"true\"></i> <span class=\"theme-label-light\">Light mode</span> <span class=\"theme-label-dark\">Dark mode</span></button><form method=\"POST\" action=\"/logout\" hx-boost=\"false\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 57, Col: 68}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 56, Col: 68}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\"> <button type=\"submit\" class=\"nav-item nav-btn\"><wa-icon name=\"right-from-bracket\"></wa-icon> Sign out</button></form></div></nav>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "\"> <button type=\"submit\" class=\"nav-item nav-btn\"><i class=\"fa-solid fa-right-from-bracket\" aria-hidden=\"true\"></i> Sign out</button></form></div></nav>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -168,20 +168,20 @@ func Auth(title string, csrfToken string) templ.Component {
 			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<!doctype html><html lang=\"en\" class=\"wa-dark\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<!doctype html><html lang=\"en\" class=\"dark\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var9 string
 		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 72, Col: 17}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/layouts/base.templ`, Line: 71, Col: 17}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, " — Tabidachi</title><link rel=\"stylesheet\" href=\"/static/vendor/webawesome/styles/themes/default.css\"><link rel=\"stylesheet\" href=\"/static/css/app.css\"><script type=\"module\" src=\"/static/vendor/webawesome/webawesome.loader.js\"></script></head><body class=\"auth-body\"><script>if(localStorage.getItem('tabidachi-theme')==='light'){document.documentElement.classList.remove('wa-dark');}</script><div class=\"auth-container\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, " — Tabidachi</title><link rel=\"stylesheet\" href=\"/static/vendor/fontawesome/all.min.css\"><link rel=\"stylesheet\" href=\"/static/css/app.css\"></head><body class=\"auth-body\"><script>if(localStorage.getItem('tabidachi-theme')==='light'){document.documentElement.classList.remove('dark');}</script><div class=\"auth-container\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

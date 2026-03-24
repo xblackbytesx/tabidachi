@@ -23,7 +23,7 @@ Tabidachi is a self-hosted travel itinerary manager. Build and organise trips wi
 - **Import / Export** — round-trip via a documented JSON schema
 - **JSON API** — read-only `/api/v1/` endpoints secured with personal access tokens (PATs) — powers the [official mobile app](#mobile-apps)
 - **Single-user or multi-account** — each account only sees its own trips
-- **Dark theme** — built with Web Awesome web components on an OLED-black palette
+- **Dark theme** — OLED-black palette with Font Awesome icons and native HTML components
 
 ---
 
@@ -55,7 +55,7 @@ Tabidachi is a self-hosted travel itinerary manager. Build and organise trips wi
 | Language | Go |
 | Web framework | Echo |
 | Templating | templ (SSR) |
-| Frontend | HTMX + Web Awesome |
+| Frontend | HTMX + Font Awesome |
 | Database | PostgreSQL |
 | Auth | gorilla/sessions + gorilla/csrf |
 | Migrations | golang-migrate |
@@ -84,7 +84,7 @@ cd tabidachi
 make dev
 ```
 
-The first build pulls base images, installs npm dependencies (Web Awesome + HTMX), and starts the app. Once you see `starting server addr=:8080` in the logs, open:
+The first build pulls base images, installs npm dependencies (Font Awesome + HTMX), and starts the app. Once you see `starting server addr=:8080` in the logs, open:
 
 ```
 http://localhost:8080
@@ -259,7 +259,7 @@ tabidachi/
 │   ├── middleware/    # auth, API token auth, request logger
 │   └── repository/   # database access (TripStore, UserStore, TokenStore)
 └── web/
-    ├── static/        # CSS, JS, vendor assets (Web Awesome, HTMX)
+    ├── static/        # CSS, JS, vendor assets (Font Awesome, HTMX)
     └── templates/     # templ components (layouts, pages)
 ```
 

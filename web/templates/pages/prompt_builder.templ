@@ -5,7 +5,7 @@ import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
 templ PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[string]string) {
 	@layouts.Base("Convert Existing Itinerary", csrfToken) {
 		<div class="page-header">
-			<a href="/trips/new" class="btn btn-ghost btn-sm"><wa-icon name="arrow-left"></wa-icon> Back</a>
+			<a href="/trips/new" class="btn btn-ghost btn-sm"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</a>
 			<h1 class="page-title">Convert Existing Itinerary</h1>
 		</div>
 		<div class="wizard-steps">
@@ -72,7 +72,7 @@ templ promptStep1(csrfToken string, data map[string]string) {
 				>{ dataVal(data, "itinerary_text") }</textarea>
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary">Next <wa-icon name="arrow-right"></wa-icon></button>
+				<button type="submit" class="btn btn-primary">Next <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
 			</div>
 		</form>
 	</div>
@@ -120,7 +120,7 @@ templ promptStep2(csrfToken string, data map[string]string) {
 				</label>
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary">Generate prompt <wa-icon name="wand-magic-sparkles"></wa-icon></button>
+				<button type="submit" class="btn btn-primary">Generate prompt <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></button>
 			</div>
 		</form>
 	</div>
@@ -142,7 +142,7 @@ templ promptStep3(csrfToken string, prompt string) {
 			<div class="prompt-box-header">
 				<span class="prompt-box-label">Prompt to copy</span>
 				<button class="btn btn-sm btn-ghost" onclick="copyPrompt()" id="copy-btn">
-					<wa-icon name="clipboard"></wa-icon> Copy prompt
+					<i class="fa-solid fa-clipboard" aria-hidden="true"></i> Copy prompt
 				</button>
 			</div>
 			<pre class="prompt-box" id="prompt-text">{ prompt }</pre>
@@ -150,7 +150,7 @@ templ promptStep3(csrfToken string, prompt string) {
 		<div class="form-actions">
 			<a href="/trips/new/convert" class="btn btn-ghost">Start over</a>
 			<a href="/trips/new/import" class="btn btn-primary">
-				<wa-icon name="file-arrow-down"></wa-icon> Import the result
+				<i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i> Import the result
 			</a>
 		</div>
 	</div>

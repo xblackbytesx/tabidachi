@@ -15,8 +15,9 @@ RUN go mod download
 COPY . .
 
 # Vendor frontend assets after COPY to avoid overlay directory shadowing
-RUN mkdir -p web/static/vendor/webawesome && \
-    cp -r /tmp/web/node_modules/@awesome.me/webawesome/dist-cdn/. web/static/vendor/webawesome/ && \
+RUN mkdir -p web/static/vendor/fontawesome && \
+    cp /tmp/web/node_modules/@fortawesome/fontawesome-free/css/all.min.css web/static/vendor/fontawesome/ && \
+    cp -r /tmp/web/node_modules/@fortawesome/fontawesome-free/webfonts web/static/vendor/fontawesome/webfonts && \
     cp /tmp/web/node_modules/htmx.org/dist/htmx.min.js web/static/vendor/htmx.min.js && \
     cp /tmp/web/node_modules/sortablejs/Sortable.min.js web/static/vendor/sortable.min.js
 

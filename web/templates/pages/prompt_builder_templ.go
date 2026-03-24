@@ -43,7 +43,7 @@ func PromptBuilder(csrfToken string, step int, generatedPrompt string, data map[
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><wa-icon name=\"arrow-left\"></wa-icon> Back</a><h1 class=\"page-title\">Convert Existing Itinerary</h1></div><div class=\"wizard-steps\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><i class=\"fa-solid fa-arrow-left\" aria-hidden=\"true\"></i> Back</a><h1 class=\"page-title\">Convert Existing Itinerary</h1></div><div class=\"wizard-steps\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -216,7 +216,7 @@ func promptStep1(csrfToken string, data map[string]string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</textarea></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Next <wa-icon name=\"arrow-right\"></wa-icon></button></div></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</textarea></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Next <i class=\"fa-solid fa-arrow-right\" aria-hidden=\"true\"></i></button></div></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -297,7 +297,7 @@ func promptStep2(csrfToken string, data map[string]string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"><div class=\"checkbox-grid\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"flights\" checked> Flights</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"trains\" checked> Trains &amp; bullet trains</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"local_transit\" checked> Local transit (subway, bus, tram)</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"accommodations\" checked> Accommodations</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"activities\" checked> Scheduled activities</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"booking_refs\" checked> Booking references</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"timings\" checked> Departure &amp; arrival times</label></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Generate prompt <wa-icon name=\"wand-magic-sparkles\"></wa-icon></button></div></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"><div class=\"checkbox-grid\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"flights\" checked> Flights</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"trains\" checked> Trains &amp; bullet trains</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"local_transit\" checked> Local transit (subway, bus, tram)</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"accommodations\" checked> Accommodations</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"activities\" checked> Scheduled activities</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"booking_refs\" checked> Booking references</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"timings\" checked> Departure &amp; arrival times</label></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Generate prompt <i class=\"fa-solid fa-wand-magic-sparkles\" aria-hidden=\"true\"></i></button></div></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -326,7 +326,7 @@ func promptStep3(csrfToken string, prompt string) templ.Component {
 			templ_7745c5c3_Var19 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 3 — Your AI prompt</h2><div class=\"prompt-instructions\"><ol class=\"instruction-steps\"><li>Copy the prompt below and paste it into your preferred AI (ChatGPT, Claude, Gemini, etc.)</li><li>Answer any clarification questions the AI asks</li><li>Confirm the summary table the AI shows you</li><li>Copy the JSON the AI outputs</li><li>Click <strong>Import the result</strong> below and paste the JSON</li></ol></div><div class=\"prompt-box-wrapper\"><div class=\"prompt-box-header\"><span class=\"prompt-box-label\">Prompt to copy</span> <button class=\"btn btn-sm btn-ghost\" onclick=\"copyPrompt()\" id=\"copy-btn\"><wa-icon name=\"clipboard\"></wa-icon> Copy prompt</button></div><pre class=\"prompt-box\" id=\"prompt-text\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 3 — Your AI prompt</h2><div class=\"prompt-instructions\"><ol class=\"instruction-steps\"><li>Copy the prompt below and paste it into your preferred AI (ChatGPT, Claude, Gemini, etc.)</li><li>Answer any clarification questions the AI asks</li><li>Confirm the summary table the AI shows you</li><li>Copy the JSON the AI outputs</li><li>Click <strong>Import the result</strong> below and paste the JSON</li></ol></div><div class=\"prompt-box-wrapper\"><div class=\"prompt-box-header\"><span class=\"prompt-box-label\">Prompt to copy</span> <button class=\"btn btn-sm btn-ghost\" onclick=\"copyPrompt()\" id=\"copy-btn\"><i class=\"fa-solid fa-clipboard\" aria-hidden=\"true\"></i> Copy prompt</button></div><pre class=\"prompt-box\" id=\"prompt-text\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -339,7 +339,7 @@ func promptStep3(csrfToken string, prompt string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</pre></div><div class=\"form-actions\"><a href=\"/trips/new/convert\" class=\"btn btn-ghost\">Start over</a> <a href=\"/trips/new/import\" class=\"btn btn-primary\"><wa-icon name=\"file-arrow-down\"></wa-icon> Import the result</a></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</pre></div><div class=\"form-actions\"><a href=\"/trips/new/convert\" class=\"btn btn-ghost\">Start over</a> <a href=\"/trips/new/import\" class=\"btn btn-primary\"><i class=\"fa-solid fa-file-arrow-down\" aria-hidden=\"true\"></i> Import the result</a></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

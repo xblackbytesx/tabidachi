@@ -43,7 +43,7 @@ func TripScratch(csrfToken string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><wa-icon name=\"arrow-left\"></wa-icon> Back</a><h1 class=\"page-title\">New Trip</h1></div><div class=\"form-card\"><form method=\"POST\" action=\"/trips\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><i class=\"fa-solid fa-arrow-left\" aria-hidden=\"true\"></i> Back</a><h1 class=\"page-title\">New Trip</h1></div><div class=\"form-card\"><form method=\"POST\" action=\"/trips\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

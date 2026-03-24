@@ -6,12 +6,12 @@
   // Theme toggle (light / dark)
   // ============================================================
   window.toggleTheme = function () {
-    var isDark = document.documentElement.classList.contains('wa-dark');
+    var isDark = document.documentElement.classList.contains('dark');
     if (isDark) {
-      document.documentElement.classList.remove('wa-dark');
+      document.documentElement.classList.remove('dark');
       localStorage.setItem('tabidachi-theme', 'light');
     } else {
-      document.documentElement.classList.add('wa-dark');
+      document.documentElement.classList.add('dark');
       localStorage.removeItem('tabidachi-theme');
     }
   };
@@ -37,7 +37,7 @@
       var btn = document.getElementById('copy-btn');
       if (btn) {
         var orig = btn.innerHTML;
-        btn.innerHTML = '<wa-icon name="check"></wa-icon> Copied!';
+        btn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i> Copied!';
         setTimeout(function () { btn.innerHTML = orig; }, 2000);
       }
     }).catch(function () {
@@ -56,7 +56,7 @@
     var id = el.getAttribute('data-dialog');
     if (id) {
       var dlg = document.getElementById(id);
-      if (dlg) dlg.show();
+      if (dlg) dlg.showModal();
     }
     return false;
   };
@@ -65,8 +65,31 @@
     var id = el.getAttribute('data-dialog');
     if (id) {
       var dlg = document.getElementById(id);
-      if (dlg) dlg.hide();
+      if (dlg) dlg.close();
     }
+  };
+
+  // Close modal dialog on backdrop click
+  document.addEventListener('click', function (e) {
+    if (e.target.tagName === 'DIALOG' && e.target.classList.contains('modal-dialog')) {
+      e.target.close();
+    }
+  });
+
+  // ============================================================
+  // Settings: copy token to clipboard
+  // ============================================================
+  window.copyToken = function () {
+    var el = document.getElementById('new-token-value');
+    if (!el) return;
+    navigator.clipboard.writeText(el.textContent).then(function () {
+      var btn = document.getElementById('copy-token-btn');
+      if (btn) {
+        var orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i> Copied!';
+        setTimeout(function () { btn.innerHTML = orig; }, 2000);
+      }
+    });
   };
 
   // ============================================================

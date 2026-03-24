@@ -43,7 +43,7 @@ func TripImport(csrfToken string, flash string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><wa-icon name=\"arrow-left\"></wa-icon> Back</a><h1 class=\"page-title\">Import Trip</h1></div><div class=\"form-card\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><i class=\"fa-solid fa-arrow-left\" aria-hidden=\"true\"></i> Back</a><h1 class=\"page-title\">Import Trip</h1></div><div class=\"form-card\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
