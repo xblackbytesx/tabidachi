@@ -3,6 +3,7 @@ package pages
 import (
 	"github.com/xblackbytesx/tabidachi/internal/domain"
 	"github.com/xblackbytesx/tabidachi/internal/format"
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
 	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
 )
 
@@ -41,19 +42,13 @@ templ Settings(csrfToken string, tokens []*domain.APIToken, errMsg string, dateF
 					>
 						<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 						<div class="token-form-row">
-							<wa-input
-								name="name"
-								label="Token name"
-								placeholder="e.g. Android phone"
-								autocomplete="off"
-								with-clear
-								required
-								class="token-name-input"
-							></wa-input>
-							<wa-button type="submit" variant="primary" class="token-submit-btn">
-								<wa-icon slot="start" name="key"></wa-icon>
-								Generate token
-							</wa-button>
+							<div class="field token-name-input">
+								<label class="field-label" for="token-name">Token name</label>
+								<input class="field-input" type="text" id="token-name" name="name" placeholder="e.g. Android phone" autocomplete="off" required/>
+							</div>
+							<button type="submit" class="btn btn-primary token-submit-btn">
+								@components.Icon("key") Generate token
+							</button>
 						</div>
 					</form>
 					@tokenList(csrfToken, tokens)
@@ -113,7 +108,9 @@ templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken
 						</p>
 						<div class="token-reveal-value">
 							<code id="new-token-value">{ rawToken }</code>
-							<wa-copy-button from="new-token-value" copy-label="Copy token" success-label="Copied!"></wa-copy-button>
+							<button type="button" class="btn btn-sm btn-ghost" onclick="copyToken()" id="copy-token-btn">
+								@components.Icon("clipboard") Copy token
+							</button>
 						</div>
 					</div>
 					<form
@@ -126,19 +123,13 @@ templ SettingsWithNewToken(csrfToken string, tokens []*domain.APIToken, rawToken
 					>
 						<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 						<div class="token-form-row">
-							<wa-input
-								name="name"
-								label="Token name"
-								placeholder="e.g. Android phone"
-								autocomplete="off"
-								with-clear
-								required
-								class="token-name-input"
-							></wa-input>
-							<wa-button type="submit" variant="primary" class="token-submit-btn">
-								<wa-icon slot="start" name="key"></wa-icon>
-								Generate token
-							</wa-button>
+							<div class="field token-name-input">
+								<label class="field-label" for="token-name">Token name</label>
+								<input class="field-input" type="text" id="token-name" name="name" placeholder="e.g. Android phone" autocomplete="off" required/>
+							</div>
+							<button type="submit" class="btn btn-primary token-submit-btn">
+								@components.Icon("key") Generate token
+							</button>
 						</div>
 					</form>
 					@tokenList(csrfToken, tokens)

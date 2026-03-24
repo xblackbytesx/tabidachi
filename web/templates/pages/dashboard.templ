@@ -5,6 +5,7 @@ import (
 	"strings"
 	"github.com/xblackbytesx/tabidachi/internal/domain"
 	"github.com/xblackbytesx/tabidachi/internal/format"
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
 	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
 )
 
@@ -13,12 +14,12 @@ templ Dashboard(csrfToken string, trips []*domain.Trip) {
 		<div class="page-header">
 			<h1 class="page-title">My Trips</h1>
 			<a href="/trips/new" class="btn btn-primary">
-				<wa-icon name="plus"></wa-icon> New trip
+				@components.Icon("plus") New trip
 			</a>
 		</div>
 		if len(trips) == 0 {
 			<div class="empty-state">
-				<wa-icon name="map" class="empty-icon"></wa-icon>
+				@components.IconC("map", "empty-icon")
 				<h2>No trips yet</h2>
 				<p>Start by creating your first itinerary.</p>
 				<a href="/trips/new" class="btn btn-primary">Plan a trip</a>
@@ -49,17 +50,17 @@ templ TripCard(trip *domain.Trip) {
 			</div>
 			<div class="trip-card-meta">
 				<span class="trip-dates">
-					<wa-icon name="calendar-days"></wa-icon>
+					@components.Icon("calendar-days")
 					{ format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }
 				</span>
 				if trip.HomeLocation != "" {
 					<span class="trip-home">
-						<wa-icon name="house"></wa-icon>
+						@components.Icon("house")
 						{ trip.HomeLocation }
 					</span>
 				}
 				<span class="trip-legs">
-					<wa-icon name="location-dot"></wa-icon>
+					@components.Icon("location-dot")
 					{ fmt.Sprintf("%d leg(s)", len(trip.Data.Legs)) }
 				</span>
 			</div>

@@ -15,8 +15,7 @@ RUN go mod download
 COPY . .
 
 # Vendor frontend assets after COPY to avoid overlay directory shadowing
-RUN mkdir -p web/static/vendor/webawesome && \
-    cp -r /tmp/web/node_modules/@awesome.me/webawesome/dist-cdn/. web/static/vendor/webawesome/ && \
+RUN mkdir -p web/static/vendor && \
     cp /tmp/web/node_modules/htmx.org/dist/htmx.min.js web/static/vendor/htmx.min.js && \
     cp /tmp/web/node_modules/sortablejs/Sortable.min.js web/static/vendor/sortable.min.js
 

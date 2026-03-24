@@ -1,32 +1,35 @@
 package pages
 
-import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
+import (
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
+	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
+)
 
 templ TripNew(csrfToken string) {
 	@layouts.Base("New Trip", csrfToken) {
 		<div class="page-header">
-			<a href="/" class="btn btn-ghost btn-sm"><wa-icon name="arrow-left"></wa-icon> Back</a>
+			<a href="/" class="btn btn-ghost btn-sm">@components.Icon("arrow-left") Back</a>
 			<h1 class="page-title">New Trip</h1>
 		</div>
 		<p class="page-subtitle">How would you like to create your itinerary?</p>
 		<div class="method-grid">
 			<a href="/trips/new/scratch" class="method-card">
-				<wa-icon name="pen-to-square" class="method-icon"></wa-icon>
+				@components.IconC("pen-to-square", "method-icon")
 				<h2 class="method-title">Build manually</h2>
 				<p class="method-desc">Create your trip step by step — add legs, days, and events by hand.</p>
 			</a>
 			<a href="/trips/new/import" class="method-card">
-				<wa-icon name="file-code" class="method-icon"></wa-icon>
+				@components.IconC("file-code", "method-icon")
 				<h2 class="method-title">Import JSON</h2>
 				<p class="method-desc">Paste or upload a JSON itinerary following the Tabidachi schema.</p>
 			</a>
 			<a href="/trips/new/convert" class="method-card">
-				<wa-icon name="arrows-rotate" class="method-icon"></wa-icon>
+				@components.IconC("arrows-rotate", "method-icon")
 				<h2 class="method-title">Convert existing itinerary</h2>
 				<p class="method-desc">Have a booking doc, email, or spreadsheet? We'll generate an AI prompt to convert it to Tabidachi JSON.</p>
 			</a>
 			<a href="/trips/new/plan" class="method-card method-card-featured">
-				<wa-icon name="wand-magic-sparkles" class="method-icon"></wa-icon>
+				@components.IconC("wand-magic-sparkles", "method-icon")
 				<h2 class="method-title">Plan with AI</h2>
 				<p class="method-desc">Describe where you want to go — AI builds a personalised itinerary prompt for you.</p>
 				<span class="method-badge">Recommended</span>

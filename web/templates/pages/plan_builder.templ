@@ -1,11 +1,14 @@
 package pages
 
-import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
+import (
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
+	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
+)
 
 templ PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[string]string) {
 	@layouts.Base("Plan with AI", csrfToken) {
 		<div class="page-header">
-			<a href="/trips/new" class="btn btn-ghost btn-sm"><wa-icon name="arrow-left"></wa-icon> Back</a>
+			<a href="/trips/new" class="btn btn-ghost btn-sm">@components.Icon("arrow-left") Back</a>
 			<h1 class="page-title">Plan New Trip with AI</h1>
 		</div>
 		<div class="wizard-steps">
@@ -88,16 +91,26 @@ templ planStep1(csrfToken string, data map[string]string) {
 				<input class="field-input" type="text" id="home_city" name="home_city" placeholder="e.g. London" value={ dataVal(data, "home_city") }/>
 				<p class="field-hint">Helps AI suggest routing from your origin.</p>
 			</div>
-			<div class="field">
-				<wa-radio-group name="intensity" label="Trip intensity" value={ intensityOrDefault(data) }>
-					<wa-radio value="maximize" appearance="button">Maximize sightseeing</wa-radio>
-					<wa-radio value="balanced" appearance="button">Balanced</wa-radio>
-					<wa-radio value="relaxed" appearance="button">Relaxed</wa-radio>
-				</wa-radio-group>
+			<fieldset class="field">
+				<legend class="field-label">Trip intensity</legend>
+				<div class="radio-pills">
+					<label class="radio-pill">
+						<input type="radio" name="intensity" value="maximize" checked?={ intensityOrDefault(data) == "maximize" }/>
+						Maximize sightseeing
+					</label>
+					<label class="radio-pill">
+						<input type="radio" name="intensity" value="balanced" checked?={ intensityOrDefault(data) == "balanced" }/>
+						Balanced
+					</label>
+					<label class="radio-pill">
+						<input type="radio" name="intensity" value="relaxed" checked?={ intensityOrDefault(data) == "relaxed" }/>
+						Relaxed
+					</label>
+				</div>
 				<p class="field-hint">Calibrates the number and pace of activities the AI plans per day.</p>
-			</div>
+			</fieldset>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary">Next <wa-icon name="arrow-right"></wa-icon></button>
+				<button type="submit" class="btn btn-primary">Next @components.Icon("arrow-right")</button>
 			</div>
 		</form>
 	</div>
@@ -201,7 +214,7 @@ templ planStep2(csrfToken string, data map[string]string) {
 				</div>
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary">Generate prompt <wa-icon name="wand-magic-sparkles"></wa-icon></button>
+				<button type="submit" class="btn btn-primary">Generate prompt @components.Icon("wand-magic-sparkles")</button>
 			</div>
 		</form>
 	</div>
@@ -259,7 +272,7 @@ templ planStep3(csrfToken string, prompt string) {
 			<div class="prompt-box-header">
 				<span class="prompt-box-label">Prompt to copy</span>
 				<button class="btn btn-sm btn-ghost" onclick="copyPrompt()" id="copy-btn">
-					<wa-icon name="clipboard"></wa-icon> Copy prompt
+					@components.Icon("clipboard") Copy prompt
 				</button>
 			</div>
 			<pre class="prompt-box" id="prompt-text">{ prompt }</pre>
@@ -267,7 +280,7 @@ templ planStep3(csrfToken string, prompt string) {
 		<div class="form-actions">
 			<a href="/trips/new/plan" class="btn btn-ghost">Start over</a>
 			<a href="/trips/new/import" class="btn btn-primary">
-				<wa-icon name="file-arrow-down"></wa-icon> Import the result
+				@components.Icon("file-arrow-down") Import the result
 			</a>
 		</div>
 	</div>

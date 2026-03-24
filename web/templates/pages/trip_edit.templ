@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"github.com/xblackbytesx/tabidachi/internal/domain"
 	"github.com/xblackbytesx/tabidachi/internal/format"
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
 	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
 )
 
@@ -12,11 +13,11 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 	@layouts.Base("Edit "+trip.Title, csrfToken) {
 		<div class="page-header">
 			<a href={ templ.SafeURL("/trips/" + trip.ID.String()) } class="btn btn-ghost btn-sm">
-				<wa-icon name="arrow-left"></wa-icon> View timeline
+				@components.Icon("arrow-left") View timeline
 			</a>
 			<h1 class="page-title">Edit: { trip.Title }</h1>
 			<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/export") } class="btn btn-ghost btn-sm" hx-boost="false">
-				<wa-icon name="download"></wa-icon> Export JSON
+				@components.Icon("download") Export JSON
 			</a>
 		</div>
 		<!-- Metadata form -->
@@ -63,7 +64,7 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 			<div class="form-section-header">
 				<h2 class="form-section-title">Legs &amp; days</h2>
 				<button class="btn btn-sm btn-primary" data-dialog="add-leg-dialog" onclick="openDataDialog(this); return false;">
-					<wa-icon name="plus"></wa-icon> Add leg
+					@components.Icon("plus") Add leg
 				</button>
 			</div>
 			if len(trip.Data.Legs) == 0 {
@@ -76,8 +77,12 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 			</div>
 		</div>
 		<!-- Add Leg Dialog -->
-		<wa-dialog label="Add Leg" id="add-leg-dialog">
+		<dialog id="add-leg-dialog" class="modal-dialog">
 			<form method="POST" action={ templ.SafeURL("/trips/" + trip.ID.String() + "/legs") } class="form-stack">
+				<div class="modal-header">
+					<h2>Add Leg</h2>
+					<button type="button" class="modal-close" data-dialog="add-leg-dialog" onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
+				</div>
 				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 				<div class="field">
 					<label class="field-label">Destination <span class="required">*</span></label>
@@ -101,31 +106,31 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 					<label class="field-label">Logistics notes</label>
 					<textarea class="field-textarea" name="notes" placeholder="Actionable notes (e.g. JR Pass covers this leg)"></textarea>
 				</div>
-				<div slot="footer" class="dialog-footer">
-					<wa-button variant="neutral" data-dialog="add-leg-dialog" onclick="closeDataDialog(this)">Cancel</wa-button>
+				<div class="dialog-footer">
+					<button type="button" class="btn btn-ghost" data-dialog="add-leg-dialog" onclick="closeDataDialog(this)">Cancel</button>
 					<button type="submit" class="btn btn-primary">Add leg</button>
 				</div>
 			</form>
-		</wa-dialog>
+		</dialog>
 	}
 }
 
 templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
-	<wa-details class="leg-builder-section">
-		<div slot="summary" class="leg-summary">
+	<details class="leg-builder-section">
+		<summary class="leg-summary">
 			<span class="leg-num-badge">{ fmt.Sprintf("%d", leg.Sequence) }</span>
 			<span class="leg-summary-title">{ leg.Destination }</span>
 			if leg.Region != "" {
 				<span class="leg-summary-region">{ leg.Region }</span>
 			}
 			<span class="leg-summary-dates">{ leg.StartDate } — { leg.EndDate }</span>
-		</div>
+		</summary>
 		<div class="leg-builder-content">
 			<div class="leg-actions">
 				<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/delete") } style="display:inline">
 					<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 					<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this leg and all its days?')">
-						<wa-icon name="trash"></wa-icon> Delete leg
+						@components.Icon("trash") Delete leg
 					</button>
 				</form>
 				<button
@@ -133,7 +138,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 					data-dialog={ fmt.Sprintf("accomm-dialog-%d", legIdx) }
 					onclick="openDataDialog(this); return false;"
 				>
-					<wa-icon name="building"></wa-icon>
+					@components.Icon("building")
 					if leg.Accommodation != nil {
 						Edit accommodation
 					} else {
@@ -143,7 +148,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 			</div>
 			if leg.Accommodation != nil {
 				<div class="accomm-preview">
-					<wa-icon name="building"></wa-icon>
+					@components.Icon("building")
 					<strong>{ leg.Accommodation.Name }</strong>
 					if leg.Accommodation.Neighborhood != "" {
 						<span>{ leg.Accommodation.Neighborhood }</span>
@@ -165,14 +170,18 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 				data-dialog={ fmt.Sprintf("add-day-dialog-%d", legIdx) }
 				onclick="openDataDialog(this); return false;"
 			>
-				<wa-icon name="circle-plus"></wa-icon> Add day
+				@components.Icon("circle-plus") Add day
 			</button>
 			@LegImagePreview(csrfToken, tripID, strconv.Itoa(legIdx), leg.CoverImageURL, leg.CoverImageCredit)
 		</div>
-	</wa-details>
+	</details>
 	<!-- Accommodation dialog -->
-	<wa-dialog label="Accommodation" id={ fmt.Sprintf("accomm-dialog-%d", legIdx) }>
+	<dialog id={ fmt.Sprintf("accomm-dialog-%d", legIdx) } class="modal-dialog">
 		<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/accommodation") } class="form-stack">
+			<div class="modal-header">
+				<h2>Accommodation</h2>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("accomm-dialog-%d", legIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
+			</div>
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 			<div class="field">
 				<label class="field-label">Hotel / accommodation name</label>
@@ -200,19 +209,23 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 				<label class="field-label">Booking reference</label>
 				<input class="field-input" type="text" name="booking_reference" value={ accommodationVal(leg.Accommodation, "ref") }/>
 			</div>
-			<div slot="footer" class="dialog-footer">
+			<div class="dialog-footer">
 				if leg.Accommodation != nil {
 					<button type="button" class="btn btn-xs btn-ghost btn-danger" onclick="if(confirm('Remove accommodation?')){var f=this.closest('form');f.noValidate=true;f.querySelector('[name=name]').value='';f.submit()}">Remove accommodation</button>
 				}
 				<span class="dialog-footer-spacer"></span>
-				<wa-button variant="neutral" data-dialog={ fmt.Sprintf("accomm-dialog-%d", legIdx) } onclick="closeDataDialog(this)">Cancel</wa-button>
+				<button type="button" class="btn btn-ghost" data-dialog={ fmt.Sprintf("accomm-dialog-%d", legIdx) } onclick="closeDataDialog(this)">Cancel</button>
 				<button type="submit" class="btn btn-primary">Save</button>
 			</div>
 		</form>
-	</wa-dialog>
+	</dialog>
 	<!-- Add Day dialog -->
-	<wa-dialog label="Add Day" id={ fmt.Sprintf("add-day-dialog-%d", legIdx) }>
+	<dialog id={ fmt.Sprintf("add-day-dialog-%d", legIdx) } class="modal-dialog">
 		<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days") } class="form-stack">
+			<div class="modal-header">
+				<h2>Add Day</h2>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("add-day-dialog-%d", legIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
+			</div>
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 			<div class="field-row">
 				<div class="field">
@@ -239,12 +252,12 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 				<label class="field-label">Notes</label>
 				<textarea class="field-textarea" name="notes" placeholder="Actionable logistics notes"></textarea>
 			</div>
-			<div slot="footer" class="dialog-footer">
-				<wa-button variant="neutral" data-dialog={ fmt.Sprintf("add-day-dialog-%d", legIdx) } onclick="closeDataDialog(this)">Cancel</wa-button>
+			<div class="dialog-footer">
+				<button type="button" class="btn btn-ghost" data-dialog={ fmt.Sprintf("add-day-dialog-%d", legIdx) } onclick="closeDataDialog(this)">Cancel</button>
 				<button type="submit" class="btn btn-primary">Add day</button>
 			</div>
 		</form>
-	</wa-dialog>
+	</dialog>
 }
 
 templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day domain.Day, dayIdx int) {
@@ -265,18 +278,18 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 					onclick="toggleDayEdit(this); return false;"
 					title="Edit day"
 					aria-label="Edit day"
-				><wa-icon name="pencil"></wa-icon></button>
+				>@components.Icon("pencil")</button>
 				<button
 					class="btn btn-xs btn-ghost"
 					data-dialog={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) }
 					onclick="openDataDialog(this); return false;"
 				>
-					<wa-icon name="plus"></wa-icon> Event
+					@components.Icon("plus") Event
 				</button>
 				<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/delete") } style="display:inline">
 					<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 					<button type="submit" class="btn btn-xs btn-danger" onclick="return confirm('Delete this day?')" aria-label="Delete day">
-						<wa-icon name="trash"></wa-icon>
+						@components.Icon("trash")
 					</button>
 				</form>
 			</div>
@@ -327,9 +340,9 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 				if event.Type == "activity" {
 					<div class="event-builder-group sortable-item" data-event-idx={ strconv.Itoa(evtIdx) }>
 						<div class="event-preview-row">
-							<span class="drag-handle" title="Drag to reorder"><wa-icon name="grip-vertical"></wa-icon></span>
+							<span class="drag-handle" title="Drag to reorder">@components.Icon("grip-vertical")</span>
 							<span class="event-preview-type">
-								<wa-icon name="location-dot"></wa-icon>
+								@components.Icon("location-dot")
 							</span>
 							<span class="event-preview-title">{ event.Title }</span>
 							if event.StartTime != "" {
@@ -341,7 +354,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 								onclick="openDataDialog(this); return false;"
 								title="Edit event"
 								aria-label="Edit event"
-							><wa-icon name="pencil"></wa-icon></button>
+							>@components.Icon("pencil")</button>
 							<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
 								<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 								<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event" onclick="return confirm('Delete this event?')">×</button>
@@ -351,12 +364,12 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 					</div>
 				} else {
 					<div class="event-preview-row sortable-item" data-event-idx={ strconv.Itoa(evtIdx) }>
-						<span class="drag-handle" title="Drag to reorder"><wa-icon name="grip-vertical"></wa-icon></span>
+						<span class="drag-handle" title="Drag to reorder">@components.Icon("grip-vertical")</span>
 						<span class={ "event-preview-type", templ.KV("event-preview-transit", event.Type == "transit"), templ.KV("event-preview-accommodation", event.Type == "accommodation") }>
 							if event.Type == "transit" {
-								<wa-icon name={ domain.TransportIcon(event.TransportMode) }></wa-icon>
+								@components.Icon(domain.TransportIcon(event.TransportMode))
 							} else {
-								<wa-icon name="building"></wa-icon>
+								@components.Icon("building")
 							}
 						</span>
 						<span class="event-preview-title">{ event.Title }</span>
@@ -369,7 +382,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 							onclick="openDataDialog(this); return false;"
 							title="Edit event"
 							aria-label="Edit event"
-						><wa-icon name="pencil"></wa-icon></button>
+						>@components.Icon("pencil")</button>
 						<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
 							<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 							<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event" onclick="return confirm('Delete this event?')">×</button>
@@ -384,13 +397,17 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 		@editEventDialog(csrfToken, tripID, legIdx, dayIdx, evtIdx, event)
 	}
 	<!-- Add Event dialog -->
-	<wa-dialog label="Add Event" id={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) }>
+	<dialog id={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) } class="modal-dialog">
 		<form
 			method="POST"
 			action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events") }
 			class="form-stack"
 			id={ fmt.Sprintf("event-form-%d-%d", legIdx, dayIdx) }
 		>
+			<div class="modal-header">
+				<h2>Add Event</h2>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
+			</div>
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 			<div class="field-row">
 				<div class="field">
@@ -542,16 +559,12 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 			<label class="checkbox-item">
 				<input type="checkbox" name="optional"/> Optional event
 			</label>
-			<div slot="footer" class="dialog-footer">
-				<wa-button
-					variant="neutral"
-					data-dialog={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) }
-					onclick="closeDataDialog(this)"
-				>Cancel</wa-button>
+			<div class="dialog-footer">
+				<button type="button" class="btn btn-ghost" data-dialog={ fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx) } onclick="closeDataDialog(this)">Cancel</button>
 				<button type="submit" class="btn btn-primary">Add event</button>
 			</div>
 		</form>
-	</wa-dialog>
+	</dialog>
 }
 
 func colorOrDefault(color string) string {
@@ -600,13 +613,17 @@ func accommodationVal(a *domain.Accommodation, field string) string {
 }
 
 templ editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, evtIdx int, event domain.Event) {
-	<wa-dialog label="Edit Event" id={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) }>
+	<dialog id={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) } class="modal-dialog">
 		<form
 			method="POST"
 			action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx)) }
 			class="form-stack"
 			id={ fmt.Sprintf("edit-event-form-%d-%d-%d", legIdx, dayIdx, evtIdx) }
 		>
+			<div class="modal-header">
+				<h2>Edit Event</h2>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
+			</div>
 			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 			<div class="field-row">
 				<div class="field">
@@ -758,16 +775,12 @@ templ editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, e
 			<label class="checkbox-item">
 				<input type="checkbox" name="optional" checked?={ event.Optional }/> Optional event
 			</label>
-			<div slot="footer" class="dialog-footer">
-				<wa-button
-					variant="neutral"
-					data-dialog={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) }
-					onclick="closeDataDialog(this)"
-				>Cancel</wa-button>
+			<div class="dialog-footer">
+				<button type="button" class="btn btn-ghost" data-dialog={ fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx) } onclick="closeDataDialog(this)">Cancel</button>
 				<button type="submit" class="btn btn-primary">Save event</button>
 			</div>
 		</form>
-	</wa-dialog>
+	</dialog>
 }
 
 // editEventTypeDisplay returns "display:none" if the event type doesn't match the section type,

@@ -3,7 +3,6 @@
   "private": true,
   "description": "Front-end dependencies for Tabidachi (no bundler — files are copied to web/static at build time)",
   "dependencies": {
-    "@awesome.me/webawesome": "^3.3.1",
     "htmx.org": "2.0.8",
     "sortablejs": "1.15.7"
   }

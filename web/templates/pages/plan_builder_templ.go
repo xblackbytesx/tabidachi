@@ -8,7 +8,10 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
+import (
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
+	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
+)
 
 func PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[string]string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -43,7 +46,15 @@ func PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[st
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\"><wa-icon name=\"arrow-left\"></wa-icon> Back</a><h1 class=\"page-title\">Plan New Trip with AI</h1></div><div class=\"wizard-steps\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"page-header\"><a href=\"/trips/new\" class=\"btn btn-ghost btn-sm\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = components.Icon("arrow-left").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "Back</a><h1 class=\"page-title\">Plan New Trip with AI</h1></div><div class=\"wizard-steps\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -52,7 +63,7 @@ func PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[st
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -65,7 +76,7 @@ func PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[st
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><span class=\"step-num\">1</span> <span class=\"step-label\">Trip basics</span></div><div class=\"wizard-step-divider\"></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"><span class=\"step-num\">1</span> <span class=\"step-label\">Trip basics</span></div><div class=\"wizard-step-divider\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -74,7 +85,7 @@ func PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[st
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -87,7 +98,7 @@ func PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[st
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"><span class=\"step-num\">2</span> <span class=\"step-label\">Personalize</span></div><div class=\"wizard-step-divider\"></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"><span class=\"step-num\">2</span> <span class=\"step-label\">Personalize</span></div><div class=\"wizard-step-divider\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -96,7 +107,7 @@ func PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[st
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<div class=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div class=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -109,7 +120,7 @@ func PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[st
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\"><span class=\"step-num\">3</span> <span class=\"step-label\">Your prompt</span></div></div><div id=\"wizard-content\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\"><span class=\"step-num\">3</span> <span class=\"step-label\">Your prompt</span></div></div><div id=\"wizard-content\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -129,7 +140,7 @@ func PlanBuilder(csrfToken string, step int, generatedPrompt string, data map[st
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -164,111 +175,128 @@ func planStep1(csrfToken string, data map[string]string) templ.Component {
 			templ_7745c5c3_Var9 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 1 — Trip basics</h2><p class=\"form-help\">Tell us where and when you're going. We'll use this to build a personalised planning prompt.</p><form method=\"POST\" action=\"/trips/new/plan\" hx-post=\"/trips/new/plan\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 1 — Trip basics</h2><p class=\"form-help\">Tell us where and when you're going. We'll use this to build a personalised planning prompt.</p><form method=\"POST\" action=\"/trips/new/plan\" hx-post=\"/trips/new/plan\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 52, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 55, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\"> <input type=\"hidden\" name=\"step\" value=\"1\"><div class=\"field\"><label class=\"field-label\" for=\"destinations\">Destinations <span class=\"required\">*</span></label> <textarea class=\"field-textarea\" id=\"destinations\" name=\"destinations\" required placeholder=\"e.g. Tokyo → Kyoto → Osaka, or just a single destination\" rows=\"3\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\"> <input type=\"hidden\" name=\"step\" value=\"1\"><div class=\"field\"><label class=\"field-label\" for=\"destinations\">Destinations <span class=\"required\">*</span></label> <textarea class=\"field-textarea\" id=\"destinations\" name=\"destinations\" required placeholder=\"e.g. Tokyo → Kyoto → Osaka, or just a single destination\" rows=\"3\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "destinations"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 63, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 66, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</textarea></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\" for=\"start_date\">Start date <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"date\" id=\"start_date\" name=\"start_date\" required value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</textarea></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\" for=\"start_date\">Start date <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"date\" id=\"start_date\" name=\"start_date\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "start_date"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 68, Col: 122}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 71, Col: 122}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\"></div><div class=\"field\"><label class=\"field-label\" for=\"end_date\">End date <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"date\" id=\"end_date\" name=\"end_date\" required value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\"></div><div class=\"field\"><label class=\"field-label\" for=\"end_date\">End date <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"date\" id=\"end_date\" name=\"end_date\" required value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "end_date"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 72, Col: 116}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 75, Col: 116}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\" for=\"travellers_count\">Number of travellers <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"number\" id=\"travellers_count\" name=\"travellers_count\" required min=\"1\" placeholder=\"2\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\" for=\"travellers_count\">Number of travellers <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"number\" id=\"travellers_count\" name=\"travellers_count\" required min=\"1\" placeholder=\"2\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var14 string
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "travellers_count"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 78, Col: 166}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 81, Col: 166}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\"></div><div class=\"field\"><label class=\"field-label\" for=\"travellers_ages\">Ages of travellers <span class=\"field-optional\">(optional)</span></label> <input class=\"field-input\" type=\"text\" id=\"travellers_ages\" name=\"travellers_ages\" placeholder=\"e.g. 35, 34, 8\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\"></div><div class=\"field\"><label class=\"field-label\" for=\"travellers_ages\">Ages of travellers <span class=\"field-optional\">(optional)</span></label> <input class=\"field-input\" type=\"text\" id=\"travellers_ages\" name=\"travellers_ages\" placeholder=\"e.g. 35, 34, 8\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var15 string
 		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "travellers_ages"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 82, Col: 157}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 85, Col: 157}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "\"><p class=\"field-hint\">Helps AI calibrate pace and activities.</p></div></div><div class=\"field\"><label class=\"field-label\" for=\"home_city\">Home city <span class=\"field-optional\">(optional)</span></label> <input class=\"field-input\" type=\"text\" id=\"home_city\" name=\"home_city\" placeholder=\"e.g. London\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\"><p class=\"field-hint\">Helps AI calibrate pace and activities.</p></div></div><div class=\"field\"><label class=\"field-label\" for=\"home_city\">Home city <span class=\"field-optional\">(optional)</span></label> <input class=\"field-input\" type=\"text\" id=\"home_city\" name=\"home_city\" placeholder=\"e.g. London\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var16 string
 		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "home_city"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 88, Col: 135}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 91, Col: 135}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\"><p class=\"field-hint\">Helps AI suggest routing from your origin.</p></div><div class=\"field\"><wa-radio-group name=\"intensity\" label=\"Trip intensity\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\"><p class=\"field-hint\">Helps AI suggest routing from your origin.</p></div><fieldset class=\"field\"><legend class=\"field-label\">Trip intensity</legend><div class=\"radio-pills\"><label class=\"radio-pill\"><input type=\"radio\" name=\"intensity\" value=\"maximize\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var17 string
-		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(intensityOrDefault(data))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 92, Col: 92}
+		if intensityOrDefault(data) == "maximize" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "> Maximize sightseeing</label> <label class=\"radio-pill\"><input type=\"radio\" name=\"intensity\" value=\"balanced\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\"><wa-radio value=\"maximize\" appearance=\"button\">Maximize sightseeing</wa-radio> <wa-radio value=\"balanced\" appearance=\"button\">Balanced</wa-radio> <wa-radio value=\"relaxed\" appearance=\"button\">Relaxed</wa-radio></wa-radio-group><p class=\"field-hint\">Calibrates the number and pace of activities the AI plans per day.</p></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Next <wa-icon name=\"arrow-right\"></wa-icon></button></div></form></div>")
+		if intensityOrDefault(data) == "balanced" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "> Balanced</label> <label class=\"radio-pill\"><input type=\"radio\" name=\"intensity\" value=\"relaxed\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if intensityOrDefault(data) == "relaxed" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "> Relaxed</label></div><p class=\"field-hint\">Calibrates the number and pace of activities the AI plans per day.</p></fieldset><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Next @components.Icon(\"arrow-right\")</button></div></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -292,129 +320,129 @@ func planStep2(csrfToken string, data map[string]string) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var18 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var18 == nil {
-			templ_7745c5c3_Var18 = templ.NopComponent
+		templ_7745c5c3_Var17 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var17 == nil {
+			templ_7745c5c3_Var17 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 2 — Personalize</h2><p class=\"form-help\">Fine-tune the AI's approach. Check optional fields to expand them.</p><form method=\"POST\" action=\"/trips/new/plan\" hx-post=\"/trips/new/plan\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 2 — Personalize</h2><p class=\"form-help\">Fine-tune the AI's approach. Check optional fields to expand them.</p><form method=\"POST\" action=\"/trips/new/plan\" hx-post=\"/trips/new/plan\" hx-target=\"#wizard-content\" hx-swap=\"outerHTML\" hx-select=\"#wizard-content\" class=\"form-stack\"><input type=\"hidden\" name=\"gorilla.csrf.Token\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var18 string
+		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 132, Col: 67}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "\"> <input type=\"hidden\" name=\"step\" value=\"2\"> <input type=\"hidden\" name=\"destinations\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var19 string
-		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
+		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "destinations"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 119, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 134, Col: 81}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "\"> <input type=\"hidden\" name=\"step\" value=\"2\"> <input type=\"hidden\" name=\"destinations\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "\"> <input type=\"hidden\" name=\"start_date\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var20 string
-		templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "destinations"))
+		templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "start_date"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 121, Col: 81}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 135, Col: 77}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\"> <input type=\"hidden\" name=\"start_date\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "\"> <input type=\"hidden\" name=\"end_date\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var21 string
-		templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "start_date"))
+		templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "end_date"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 122, Col: 77}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 136, Col: 73}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "\"> <input type=\"hidden\" name=\"end_date\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "\"> <input type=\"hidden\" name=\"home_city\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var22 string
-		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "end_date"))
+		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "home_city"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 123, Col: 73}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 137, Col: 75}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "\"> <input type=\"hidden\" name=\"home_city\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "\"> <input type=\"hidden\" name=\"travellers_count\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var23 string
-		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "home_city"))
+		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "travellers_count"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 124, Col: 75}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 138, Col: 89}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\"> <input type=\"hidden\" name=\"travellers_count\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "\"> <input type=\"hidden\" name=\"travellers_ages\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var24 string
-		templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "travellers_count"))
+		templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "travellers_ages"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 125, Col: 89}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 139, Col: 87}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 24, "\"> <input type=\"hidden\" name=\"travellers_ages\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "\"> <input type=\"hidden\" name=\"intensity\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var25 string
-		templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "travellers_ages"))
+		templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "intensity"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 126, Col: 87}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 140, Col: 75}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, "\"> <input type=\"hidden\" name=\"intensity\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\"><div class=\"field\"><label class=\"field-label\" for=\"must_sees\">Must-sees <span class=\"required\">*</span></label><p class=\"field-hint\">What absolutely cannot be missed?</p><textarea class=\"field-textarea\" id=\"must_sees\" name=\"must_sees\" required placeholder=\"e.g. Mount Fuji day trip, Fushimi Inari at dawn, Dotonbori at night...\" rows=\"4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var26 string
-		templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "intensity"))
+		templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "must_sees"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 127, Col: 75}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 151, Col: 33}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 26, "\"><div class=\"field\"><label class=\"field-label\" for=\"must_sees\">Must-sees <span class=\"required\">*</span></label><p class=\"field-hint\">What absolutely cannot be missed?</p><textarea class=\"field-textarea\" id=\"must_sees\" name=\"must_sees\" required placeholder=\"e.g. Mount Fuji day trip, Fushimi Inari at dawn, Dotonbori at night...\" rows=\"4\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var27 string
-		templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(dataVal(data, "must_sees"))
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 138, Col: 33}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "</textarea></div><div class=\"optional-fields\"><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_nice_to_haves\" hx-get=\"/trips/new/plan/field?field=nice_to_haves\" hx-include=\"[name='show_nice_to_haves']\" hx-target=\"#opt-nice-to-haves\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Nice-to-haves</label><div id=\"opt-nice-to-haves\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_things_to_avoid\" hx-get=\"/trips/new/plan/field?field=things_to_avoid\" hx-include=\"[name='show_things_to_avoid']\" hx-target=\"#opt-things-to-avoid\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Things to avoid</label><div id=\"opt-things-to-avoid\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_max_travel_time\" hx-get=\"/trips/new/plan/field?field=max_travel_time\" hx-include=\"[name='show_max_travel_time']\" hx-target=\"#opt-max-travel-time\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Max comfortable travel time between stops</label><div id=\"opt-max-travel-time\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_poi_interests\" hx-get=\"/trips/new/plan/field?field=poi_interests\" hx-include=\"[name='show_poi_interests']\" hx-target=\"#opt-poi-interests\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Suggest points of interest along the route</label><p class=\"field-hint\">Describe specific interests, accessibility needs, dietary requirements, etc. AI will suggest matching POIs en route.</p><div id=\"opt-poi-interests\"></div></div></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Generate prompt <wa-icon name=\"wand-magic-sparkles\"></wa-icon></button></div></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "</textarea></div><div class=\"optional-fields\"><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_nice_to_haves\" hx-get=\"/trips/new/plan/field?field=nice_to_haves\" hx-include=\"[name='show_nice_to_haves']\" hx-target=\"#opt-nice-to-haves\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Nice-to-haves</label><div id=\"opt-nice-to-haves\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_things_to_avoid\" hx-get=\"/trips/new/plan/field?field=things_to_avoid\" hx-include=\"[name='show_things_to_avoid']\" hx-target=\"#opt-things-to-avoid\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Things to avoid</label><div id=\"opt-things-to-avoid\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_max_travel_time\" hx-get=\"/trips/new/plan/field?field=max_travel_time\" hx-include=\"[name='show_max_travel_time']\" hx-target=\"#opt-max-travel-time\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Max comfortable travel time between stops</label><div id=\"opt-max-travel-time\"></div></div><div class=\"opt-toggle-row\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"show_poi_interests\" hx-get=\"/trips/new/plan/field?field=poi_interests\" hx-include=\"[name='show_poi_interests']\" hx-target=\"#opt-poi-interests\" hx-trigger=\"change\" hx-swap=\"innerHTML\" hx-select=\".opt-field-wrap\"> Suggest points of interest along the route</label><p class=\"field-hint\">Describe specific interests, accessibility needs, dietary requirements, etc. AI will suggest matching POIs en route.</p><div id=\"opt-poi-interests\"></div></div></div><div class=\"form-actions\"><button type=\"submit\" class=\"btn btn-primary\">Generate prompt @components.Icon(\"wand-magic-sparkles\")</button></div></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -438,39 +466,39 @@ func PlanOptionalField(field string, show bool) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var28 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var28 == nil {
-			templ_7745c5c3_Var28 = templ.NopComponent
+		templ_7745c5c3_Var27 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var27 == nil {
+			templ_7745c5c3_Var27 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 28, "<div class=\"opt-field-wrap\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<div class=\"opt-field-wrap\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if show {
 			if field == "nice_to_haves" {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "<textarea class=\"field-textarea field-textarea-sm opt-field\" name=\"nice_to_haves\" placeholder=\"e.g. Nishiki Market, teamLab Borderless, a ryokan night...\" rows=\"3\"></textarea>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "<textarea class=\"field-textarea field-textarea-sm opt-field\" name=\"nice_to_haves\" placeholder=\"e.g. Nishiki Market, teamLab Borderless, a ryokan night...\" rows=\"3\"></textarea>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			} else if field == "things_to_avoid" {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 30, "<textarea class=\"field-textarea field-textarea-sm opt-field\" name=\"things_to_avoid\" placeholder=\"e.g. tourist trap restaurants, overnight buses, crowded theme parks...\" rows=\"3\"></textarea>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "<textarea class=\"field-textarea field-textarea-sm opt-field\" name=\"things_to_avoid\" placeholder=\"e.g. tourist trap restaurants, overnight buses, crowded theme parks...\" rows=\"3\"></textarea>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			} else if field == "max_travel_time" {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<input class=\"field-input opt-field\" type=\"text\" name=\"max_travel_time\" placeholder=\"e.g. 2 hours by train, no overnight travel\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "<input class=\"field-input opt-field\" type=\"text\" name=\"max_travel_time\" placeholder=\"e.g. 2 hours by train, no overnight travel\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			} else if field == "poi_interests" {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "<textarea class=\"field-textarea field-textarea-sm opt-field\" name=\"poi_interests\" placeholder=\"e.g. wheelchair accessible only, vegetarian dining, historical temples over modern attractions...\" rows=\"3\"></textarea>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "<textarea class=\"field-textarea field-textarea-sm opt-field\" name=\"poi_interests\" placeholder=\"e.g. wheelchair accessible only, vegetarian dining, historical temples over modern attractions...\" rows=\"3\"></textarea>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -494,25 +522,41 @@ func planStep3(csrfToken string, prompt string) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var29 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var29 == nil {
-			templ_7745c5c3_Var29 = templ.NopComponent
+		templ_7745c5c3_Var28 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var28 == nil {
+			templ_7745c5c3_Var28 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 3 — Your AI planning prompt</h2><div class=\"prompt-instructions\"><ol class=\"instruction-steps\"><li>Copy the prompt below and paste it into your preferred AI (ChatGPT, Claude, Gemini, etc.)</li><li>Answer any follow-up questions the AI asks to further personalize your trip</li><li>Confirm the day-by-day summary the AI shows you — request changes if needed</li><li>Once you're happy, tell the AI to output the JSON (e.g. \"generate JSON\")</li><li>Click <strong>Import the result</strong> below and paste the JSON</li></ol></div><div class=\"prompt-box-wrapper\"><div class=\"prompt-box-header\"><span class=\"prompt-box-label\">Prompt to copy</span> <button class=\"btn btn-sm btn-ghost\" onclick=\"copyPrompt()\" id=\"copy-btn\"><wa-icon name=\"clipboard\"></wa-icon> Copy prompt</button></div><pre class=\"prompt-box\" id=\"prompt-text\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "<div class=\"form-card\"><h2 class=\"form-section-title\">Step 3 — Your AI planning prompt</h2><div class=\"prompt-instructions\"><ol class=\"instruction-steps\"><li>Copy the prompt below and paste it into your preferred AI (ChatGPT, Claude, Gemini, etc.)</li><li>Answer any follow-up questions the AI asks to further personalize your trip</li><li>Confirm the day-by-day summary the AI shows you — request changes if needed</li><li>Once you're happy, tell the AI to output the JSON (e.g. \"generate JSON\")</li><li>Click <strong>Import the result</strong> below and paste the JSON</li></ol></div><div class=\"prompt-box-wrapper\"><div class=\"prompt-box-header\"><span class=\"prompt-box-label\">Prompt to copy</span> <button class=\"btn btn-sm btn-ghost\" onclick=\"copyPrompt()\" id=\"copy-btn\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var30 string
-		templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(prompt)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 265, Col: 52}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
+		templ_7745c5c3_Err = components.Icon("clipboard").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "</pre></div><div class=\"form-actions\"><a href=\"/trips/new/plan\" class=\"btn btn-ghost\">Start over</a> <a href=\"/trips/new/import\" class=\"btn btn-primary\"><wa-icon name=\"file-arrow-down\"></wa-icon> Import the result</a></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "Copy prompt</button></div><pre class=\"prompt-box\" id=\"prompt-text\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var29 string
+		templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(prompt)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/plan_builder.templ`, Line: 278, Col: 52}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "</pre></div><div class=\"form-actions\"><a href=\"/trips/new/plan\" class=\"btn btn-ghost\">Start over</a> <a href=\"/trips/new/import\" class=\"btn btn-primary\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = components.Icon("file-arrow-down").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "Import the result</a></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

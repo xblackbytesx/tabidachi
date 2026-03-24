@@ -19,7 +19,7 @@ services:
     volumes:
       - ..:/app
       # Anonymous volume shadows the bind-mount for the vendor directory so
-      # the Web Awesome + HTMX files baked into the image during `docker build`
+      # the Font Awesome + HTMX files baked into the image during `docker build`
       # are never overwritten by the host bind-mount.
       - /app/web/static/vendor
       - tabidachi_uploads_dev:/app/data/uploads
