@@ -4,10 +4,10 @@ import "net/url"
 
 // MapsURL builds a Google Maps search URL using a fallback chain:
 //  1. Coordinates (most precise)
-//  2. Address (street-level)
-//  3. Location name (search)
+//  2. Address (street-level search)
 //
-// Returns "" if all inputs are empty.
+// The location name is display-only and not used as a search query.
+// Returns "" if neither coordinates nor address are available.
 func MapsURL(lat, lng, address, location string) string {
 	const base = "https://www.google.com/maps/search/?api=1&query="
 	if lat != "" && lng != "" {
@@ -15,9 +15,6 @@ func MapsURL(lat, lng, address, location string) string {
 	}
 	if address != "" {
 		return base + url.QueryEscape(address)
-	}
-	if location != "" {
-		return base + url.QueryEscape(location)
 	}
 	return ""
 }

@@ -425,12 +425,12 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 			<!-- Activity fields -->
 			<div class="event-type-fields" data-type="activity">
 				<div class="field">
-					<label class="field-label">Location</label>
+					<label class="field-label">Location name</label>
 					<input class="field-input" type="text" name="location" placeholder="Venue or place name"/>
 				</div>
 				<div class="field">
-					<label class="field-label">Address</label>
-					<input class="field-input" type="text" name="address" placeholder="Street address for navigation"/>
+					<label class="field-label">Address / search query</label>
+					<input class="field-input" type="text" name="address" placeholder="Address or search term for Maps"/>
 				</div>
 				<div class="field-row">
 					<div class="field">
@@ -641,12 +641,12 @@ templ editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, e
 			<!-- Activity fields -->
 			<div class="event-type-fields" data-type="activity" style={ editEventTypeDisplay(event.Type, "activity") }>
 				<div class="field">
-					<label class="field-label">Location</label>
+					<label class="field-label">Location name</label>
 					<input class="field-input" type="text" name="location" placeholder="Venue or place name" value={ event.Location }/>
 				</div>
 				<div class="field">
-					<label class="field-label">Address</label>
-					<input class="field-input" type="text" name="address" placeholder="Street address for navigation" value={ event.Address }/>
+					<label class="field-label">Address / search query</label>
+					<input class="field-input" type="text" name="address" placeholder="Address or search term for Maps" value={ event.Address }/>
 				</div>
 				<div class="field-row">
 					<div class="field">
