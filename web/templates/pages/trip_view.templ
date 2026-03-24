@@ -34,12 +34,21 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 					<div class="trip-view-hero-body">
 						<h1 class="trip-view-title">{ trip.Title }</h1>
 						<div class="trip-view-meta">
-							<span>@components.Icon("calendar-days") { format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }</span>
+							<span>
+								@components.Icon("calendar-days")
+								{ format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }
+							</span>
 							if trip.HomeLocation != "" {
-								<span>@components.Icon("house") { trip.HomeLocation }</span>
+								<span>
+									@components.Icon("house")
+									{ trip.HomeLocation }
+								</span>
 							}
 							if trip.Timezone != "" && trip.Timezone != "UTC" {
-								<span>@components.Icon("globe") { trip.Timezone }</span>
+								<span>
+									@components.Icon("globe")
+									{ trip.Timezone }
+								</span>
 							}
 						</div>
 					</div>
@@ -53,12 +62,21 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 					}
 				</div>
 				<div class="trip-view-meta">
-					<span>@components.Icon("calendar-days") { format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }</span>
+					<span>
+						@components.Icon("calendar-days")
+						{ format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }
+					</span>
 					if trip.HomeLocation != "" {
-						<span>@components.Icon("house") { trip.HomeLocation }</span>
+						<span>
+							@components.Icon("house")
+							{ trip.HomeLocation }
+						</span>
 					}
 					if trip.Timezone != "" && trip.Timezone != "UTC" {
-						<span>@components.Icon("globe") { trip.Timezone }</span>
+						<span>
+							@components.Icon("globe")
+							{ trip.Timezone }
+						</span>
 					}
 				</div>
 				<div class="trip-view-actions">
@@ -306,7 +324,10 @@ templ transitConnector(event domain.Event) {
 						</span>
 					}
 					if event.Duration != "" {
-						<span class="transit-duration">@components.Icon("clock") { formatDuration(event.Duration) }</span>
+						<span class="transit-duration">
+							@components.Icon("clock")
+							{ formatDuration(event.Duration) }
+						</span>
 					}
 					if event.Carrier != "" {
 						<span class="transit-carrier">{ event.Carrier }</span>
