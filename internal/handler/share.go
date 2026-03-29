@@ -44,19 +44,15 @@ func (h *ShareHandler) View(c echo.Context) error {
 // ServeUpload handles GET /share/:token/uploads/* — serves trip images for share viewers.
 func (h *ShareHandler) ServeUpload(c echo.Context) error {
 	rawToken := c.Param("token")
-	share, err := h.shares.GetByRawToken(c.Request().Context(), rawToken)
-	if err != nil {
+	if _, err := h.shares.GetByRawToken(c.Request().Context(), rawToken); err != nil {
 		return c.String(http.StatusNotFound, "not found")
 	}
 
-	// The wildcard captures everything after /share/:token/uploads/
-	// Clean the path first to collapse any ".." segments before the prefix check,
-	// preventing cross-trip path traversal (e.g. <tripID>/../<otherID>/file.jpg).
+	// path.Clean collapses any ".." segments to prevent directory traversal attacks.
+	// Images are stored flat (uploads/{uuid}.jpg) rather than per-trip, so the token
+	// validation above is the authorization gate — no further path prefix check is possible.
 	filePath := strings.TrimPrefix(path.Clean("/"+c.Param("*")), "/")
-
-	// Path traversal protection: the requested file must be under the trip's own directory.
-	tripPrefix := share.TripID.String() + "/"
-	if !strings.HasPrefix(filePath, tripPrefix) {
+	if filePath == "" {
 		return c.String(http.StatusForbidden, "forbidden")
 	}
 
