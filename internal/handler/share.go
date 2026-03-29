@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
-	"path/filepath"
+	"path"
 	"strings"
 
 	"github.com/google/uuid"
@@ -35,7 +36,7 @@ func (h *ShareHandler) View(c echo.Context) error {
 		return c.String(http.StatusNotFound, "not found")
 	}
 
-	go h.shares.UpdateLastUsed(c.Request().Context(), share.ID)
+	go h.shares.UpdateLastUsed(context.Background(), share.ID)
 
 	return render(c, http.StatusOK, pages.ShareView(trip, rawToken))
 }
@@ -49,11 +50,13 @@ func (h *ShareHandler) ServeUpload(c echo.Context) error {
 	}
 
 	// The wildcard captures everything after /share/:token/uploads/
-	filePath := c.Param("*")
+	// Clean the path first to collapse any ".." segments before the prefix check,
+	// preventing cross-trip path traversal (e.g. <tripID>/../<otherID>/file.jpg).
+	filePath := strings.TrimPrefix(path.Clean("/"+c.Param("*")), "/")
 
 	// Path traversal protection: the requested file must be under the trip's own directory.
 	tripPrefix := share.TripID.String() + "/"
-	if !strings.HasPrefix(filepath.ToSlash(filePath), tripPrefix) {
+	if !strings.HasPrefix(filePath, tripPrefix) {
 		return c.String(http.StatusForbidden, "forbidden")
 	}
 
