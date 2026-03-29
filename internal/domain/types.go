@@ -125,6 +125,23 @@ type TransitPoint struct {
 	Longitude string `json:"longitude,omitempty"`
 }
 
+// TripShare represents a shareable link scoped to a single trip.
+type TripShare struct {
+	ID          uuid.UUID
+	TripID      uuid.UUID
+	UserID      uuid.UUID
+	Name        string
+	TokenHash   string
+	ExpiresAt   *time.Time
+	CreatedAt   time.Time
+	LastUsedAt  *time.Time
+}
+
+// IsExpired returns true if the share link has passed its expiry time.
+func (s *TripShare) IsExpired() bool {
+	return s.ExpiresAt != nil && time.Now().After(*s.ExpiresAt)
+}
+
 // APIToken represents a personal access token for API authentication.
 type APIToken struct {
 	ID          uuid.UUID

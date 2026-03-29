@@ -1,0 +1,275 @@
+package pages
+
+import (
+	"fmt"
+	"strings"
+	"github.com/xblackbytesx/tabidachi/internal/domain"
+	"github.com/xblackbytesx/tabidachi/internal/format"
+	"github.com/xblackbytesx/tabidachi/web/templates/components"
+	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
+)
+
+templ ShareView(trip *domain.Trip, shareToken string) {
+	@layouts.Public(trip.Title) {
+		<div class="trip-view">
+			if trip.CoverImageURL != "" {
+				<div class="trip-view-header trip-view-header-has-image"
+					style={ shareHeaderStyle(trip.CoverImageURL, shareToken) }
+				>
+					<div class="trip-view-hero-nav">
+						<div class="trip-view-hero-actions">
+							if trip.IsActive() {
+								<span class="badge badge-active badge-lg">Active now</span>
+							}
+						</div>
+					</div>
+					<div class="trip-view-hero-body">
+						<h1 class="trip-view-title">{ trip.Title }</h1>
+						<div class="trip-view-meta">
+							<span>
+								@components.Icon("calendar-days")
+								{ format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }
+							</span>
+							if trip.HomeLocation != "" {
+								<span>
+									@components.Icon("house")
+									{ trip.HomeLocation }
+								</span>
+							}
+							if trip.Timezone != "" && trip.Timezone != "UTC" {
+								<span>
+									@components.Icon("globe")
+									{ trip.Timezone }
+								</span>
+							}
+						</div>
+					</div>
+				</div>
+			} else {
+				<div class="trip-view-title-row">
+					<h1 class="trip-view-title">{ trip.Title }</h1>
+					if trip.IsActive() {
+						<span class="badge badge-active badge-lg">Active now</span>
+					}
+				</div>
+				<div class="trip-view-meta">
+					<span>
+						@components.Icon("calendar-days")
+						{ format.Time(ctx, trip.StartDate) } — { format.Time(ctx, trip.EndDate) }
+					</span>
+					if trip.HomeLocation != "" {
+						<span>
+							@components.Icon("house")
+							{ trip.HomeLocation }
+						</span>
+					}
+					if trip.Timezone != "" && trip.Timezone != "UTC" {
+						<span>
+							@components.Icon("globe")
+							{ trip.Timezone }
+						</span>
+					}
+				</div>
+			}
+			<div class="timeline" id="timeline">
+				if len(trip.Data.Legs) == 0 {
+					<div class="empty-state">
+						@components.IconC("map", "empty-icon")
+						<p>No itinerary yet.</p>
+					</div>
+				}
+				for legIdx, leg := range trip.Data.Legs {
+					<div class="leg-section" id={ fmt.Sprintf("leg-%d", legIdx) }>
+						<div class={ "leg-header", templ.KV("leg-header-has-image", leg.CoverImageURL != "") }
+							if leg.CoverImageURL != "" {
+								style={ shareLegHeaderStyle(leg.CoverImageURL, shareToken) }
+							}
+						>
+							<div class="leg-destination">
+								<span class="leg-num">Leg { fmt.Sprintf("%d", leg.Sequence) }</span>
+								<h2 class="leg-title">{ leg.Destination }</h2>
+								if leg.Region != "" {
+									<span class="leg-region">{ leg.Region }</span>
+								}
+							</div>
+							<div class="leg-dates">{ format.ShortDate(ctx, leg.StartDate) } — { format.ShortDate(ctx, leg.EndDate) }</div>
+						</div>
+						if leg.Accommodation != nil {
+							<div class="accommodation-banner">
+								@components.Icon("building")
+								<span class="accomm-name">{ leg.Accommodation.Name }</span>
+								if leg.Accommodation.Neighborhood != "" {
+									<span class="accomm-neighborhood">{ leg.Accommodation.Neighborhood }</span>
+								}
+								<span class="accomm-dates">
+									{ format.StayInfo(leg.Accommodation.CheckIn, leg.Accommodation.CheckOut) }
+								</span>
+								if leg.Accommodation.BookingReference != "" {
+									<span class="accomm-ref">Ref: { leg.Accommodation.BookingReference }</span>
+								}
+							</div>
+						}
+						if leg.Notes != "" {
+							<details class="leg-notes">
+								<summary>@components.Icon("circle-info") Leg notes</summary>
+								<p class="notes-text">{ leg.Notes }</p>
+							</details>
+						}
+						for _, day := range leg.Days {
+							@shareDaySection(trip, day, shareToken)
+						}
+					</div>
+					if legIdx < len(trip.Data.Legs)-1 {
+						<div class="leg-connector">
+							@components.IconC("circle-arrow-down", "leg-connector-icon")
+							<span class="leg-connector-label">{ trip.Data.Legs[legIdx+1].Destination }</span>
+						</div>
+					}
+				}
+			</div>
+		</div>
+		<dialog id="event-lightbox" class="event-lightbox-dialog" aria-label="Event photo viewer">
+			<button class="event-lightbox-close" onclick="document.getElementById('event-lightbox').close()" aria-label="Close lightbox">
+				@components.Icon("xmark")
+			</button>
+			<img id="event-lightbox-img" src="" alt="Event photo" class="event-lightbox-img"/>
+		</dialog>
+	}
+}
+
+templ shareDaySection(trip *domain.Trip, day domain.Day, shareToken string) {
+	<div
+		class={ "day-section", templ.KV("day-today", isToday(day.Date)) }
+		data-date={ day.Date }
+		id={ fmt.Sprintf("day-%s", day.Date) }
+	>
+		<div class="day-header">
+			<div class="day-header-left">
+				<span class="day-number">Day { fmt.Sprintf("%d", dayNumber(trip, day.Date)) }</span>
+				<span class="day-date">{ format.DayDate(ctx, day.Date) }</span>
+				if day.Label != "" {
+					<span class="day-label">{ day.Label }</span>
+				}
+			</div>
+			<div class="day-header-right">
+				if day.Type != "" && day.Type != "normal" {
+					<span class={ "badge badge-day-type", "badge-" + day.Type }>{ domain.DayTypeLabel(day.Type) }</span>
+				}
+				if isToday(day.Date) {
+					<span class="badge badge-today">Today</span>
+				}
+				if day.Notes != "" {
+					<span class="day-has-notes">@components.Icon("note-sticky")</span>
+				}
+			</div>
+		</div>
+		if day.Notes != "" {
+			<details class="day-notes">
+				<summary>@components.Icon("note-sticky") Day notes</summary>
+				<p class="notes-text">{ day.Notes }</p>
+			</details>
+		}
+		<div class="events-list">
+			for _, event := range day.Events {
+				if event.Type == "transit" {
+					@transitConnector(event)
+				} else {
+					@shareEventCard(event, shareToken)
+				}
+			}
+		</div>
+	</div>
+}
+
+templ shareEventCard(event domain.Event, shareToken string) {
+	<div class={ "event-card", "event-" + event.Type }>
+		<div class="event-card-inner">
+			if event.Type == "activity" && event.ImageThumbURL != "" {
+				<button class="event-thumb-btn" onclick="openEventLightbox(this)" data-full-url={ rewriteShareURL(event.ImageURL, shareToken) } aria-label={ "View photo of " + event.Title }>
+					<img src={ rewriteShareURL(event.ImageThumbURL, shareToken) } alt={ event.Title } class="event-thumb" loading="lazy"/>
+				</button>
+			}
+			<div class="event-body">
+				<div class="event-header">
+					<span class="event-icon">
+						if event.Type == "accommodation" {
+							@components.Icon("building")
+						} else {
+							@components.Icon("location-dot")
+						}
+					</span>
+					<span class="event-title">{ event.Title }</span>
+					if event.URL != "" {
+						<a href={ templ.SafeURL(event.URL) } target="_blank" rel="noopener" class="event-link" aria-label="Open link">@components.Icon("up-right-from-square")</a>
+					}
+					if event.TicketRequired {
+						<span class="badge badge-ticket">@components.Icon("ticket") Ticket</span>
+					}
+					if event.Optional {
+						<span class="badge badge-optional">Optional</span>
+					}
+					if event.StartTime != "" {
+						<span class="event-time">
+							{ event.StartTime }
+							if event.EndTime != "" {
+								<span class="event-time-sep">→</span>{ event.EndTime }
+							}
+						</span>
+					}
+				</div>
+				if event.Location != "" {
+					<div class="event-location">
+						@components.Icon("map-pin")
+						if format.MapsURL(event.Latitude, event.Longitude, event.Address, event.Location) != "" {
+							<a href={ templ.SafeURL(format.MapsURL(event.Latitude, event.Longitude, event.Address, event.Location)) } target="_blank" rel="noopener" class="stealth-link">{ event.Location }</a>
+						} else {
+							{ event.Location }
+						}
+					</div>
+				}
+				if event.Type == "accommodation" {
+					<div class="event-accomm-type">
+						if event.CheckIn {
+							<span class="badge badge-checkin">Check-in</span>
+						}
+						if event.CheckOut {
+							<span class="badge badge-checkout">Check-out</span>
+						}
+					</div>
+				}
+				if event.BookingReference != "" {
+					<div class="event-ref">@components.Icon("ticket") Ref: { event.BookingReference }</div>
+				}
+				if event.Notes != "" {
+					<div class="event-notes">{ event.Notes }</div>
+				}
+			</div>
+		</div>
+	</div>
+}
+
+// rewriteShareURL rewrites an /uploads/ URL to go through the share token route.
+func rewriteShareURL(url, shareToken string) string {
+	if !strings.HasPrefix(url, "/uploads/") {
+		return url
+	}
+	return "/share/" + shareToken + url
+}
+
+// shareHeaderStyle returns a safe CSS background-image style for the share view.
+func shareHeaderStyle(url, shareToken string) string {
+	if !strings.HasPrefix(url, "/uploads/") {
+		return ""
+	}
+	rewritten := "/share/" + shareToken + url
+	return "background-image: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%), url(" + rewritten + "); background-size: cover; background-position: center;"
+}
+
+// shareLegHeaderStyle returns a safe CSS background-image style for a leg in the share view.
+func shareLegHeaderStyle(url, shareToken string) string {
+	if !strings.HasPrefix(url, "/uploads/") {
+		return ""
+	}
+	rewritten := "/share/" + shareToken + url
+	return "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.7) 100%), url(" + rewritten + "); background-size: cover; background-position: center;"
+}

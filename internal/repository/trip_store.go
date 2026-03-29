@@ -76,6 +76,33 @@ func (s *TripStore) GetByID(ctx context.Context, id, userID uuid.UUID) (*domain.
 	return result, nil
 }
 
+// GetByIDAnon fetches a trip by ID without a user ownership check.
+// Only call this after a share token has been validated.
+func (s *TripStore) GetByIDAnon(ctx context.Context, id uuid.UUID) (*domain.Trip, error) {
+	result := &domain.Trip{}
+	var dataRaw []byte
+	err := s.pool.QueryRow(ctx,
+		`SELECT id, user_id, title, start_date, end_date,
+		        COALESCE(home_location,''), timezone, COALESCE(cover_color,''),
+		        data, created_at, updated_at,
+		        COALESCE(cover_image_url,''), COALESCE(cover_image_credit,'')
+		 FROM trips WHERE id = $1`,
+		id,
+	).Scan(
+		&result.ID, &result.UserID, &result.Title, &result.StartDate, &result.EndDate,
+		&result.HomeLocation, &result.Timezone, &result.CoverColor,
+		&dataRaw, &result.CreatedAt, &result.UpdatedAt,
+		&result.CoverImageURL, &result.CoverImageCredit,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("get trip anon: %w", err)
+	}
+	if err := json.Unmarshal(dataRaw, &result.Data); err != nil {
+		return nil, fmt.Errorf("unmarshal trip data: %w", err)
+	}
+	return result, nil
+}
+
 func (s *TripStore) List(ctx context.Context, userID uuid.UUID) ([]*domain.Trip, error) {
 	rows, err := s.pool.Query(ctx,
 		`SELECT id, user_id, title, start_date, end_date,

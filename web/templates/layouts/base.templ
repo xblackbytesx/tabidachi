@@ -63,6 +63,26 @@ templ Sidebar(csrfToken string) {
 	</nav>
 }
 
+// Public is a minimal layout for unauthenticated share views — no sidebar, no session.
+templ Public(title string) {
+	<!DOCTYPE html>
+	<html lang="en" class="dark">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title } — Tabidachi</title>
+			<link rel="stylesheet" href="/static/css/app.css"/>
+		</head>
+		<body class="share-body">
+			<script>if(localStorage.getItem('tabidachi-theme')==='light'){document.documentElement.classList.remove('dark');}</script>
+			<main class="share-main">
+				{ children... }
+			</main>
+			<script src="/static/js/app.js"></script>
+		</body>
+	</html>
+}
+
 templ Auth(title string, csrfToken string) {
 	<!DOCTYPE html>
 	<html lang="en" class="dark">
