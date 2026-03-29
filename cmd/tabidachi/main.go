@@ -69,6 +69,9 @@ func main() {
 
 	e := echo.New()
 	e.HideBanner = true
+	// Trust X-Forwarded-For only — the app runs exclusively behind a reverse proxy
+	// (Traefik) on an internal Docker network, so only the proxy can set this header.
+	e.IPExtractor = echo.ExtractIPFromXFFHeader()
 	e.Use(echomiddleware.Recover())
 	e.Use(appmiddleware.Logger())
 
@@ -78,6 +81,12 @@ func main() {
 			h.Set("X-Content-Type-Options", "nosniff")
 			h.Set("X-Frame-Options", "DENY")
 			h.Set("Referrer-Policy", "strict-origin-when-cross-origin")
+			h.Set("Content-Security-Policy",
+				"default-src 'self'; "+
+					"script-src 'self' 'unsafe-inline'; "+
+					"style-src 'self' 'unsafe-inline'; "+
+					"img-src 'self' data: blob:; "+
+					"connect-src 'self'")
 			if cfg.SecureCookies {
 				h.Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
 			}

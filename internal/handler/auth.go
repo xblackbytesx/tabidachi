@@ -17,32 +17,47 @@ import (
 	"golang.org/x/time/rate"
 )
 
-const maxLoginBuckets = 10000
+const maxRateBuckets = 10000
+
+type rateBucket struct {
+	limiter  *rate.Limiter
+	lastSeen time.Time
+}
 
 // loginLimiter enforces a per-IP rate limit on POST /login to slow brute-force attempts.
 // Each IP gets a burst of 5, refilling at 1 token/minute (5 attempts per minute max).
 var (
 	loginMu      sync.Mutex
-	loginBuckets = map[string]*loginBucket{}
+	loginBuckets = map[string]*rateBucket{}
 )
 
-type loginBucket struct {
-	limiter  *rate.Limiter
-	lastSeen time.Time
-}
+// registerLimiter enforces a per-IP rate limit on POST /register.
+// Stricter than login: 3 attempts per 10 minutes.
+var (
+	registerMu      sync.Mutex
+	registerBuckets = map[string]*rateBucket{}
+)
 
 func init() {
 	// Periodically evict stale entries to avoid unbounded map growth.
 	go func() {
 		for {
 			time.Sleep(10 * time.Minute)
+			now := time.Now()
 			loginMu.Lock()
 			for ip, b := range loginBuckets {
-				if time.Since(b.lastSeen) > 15*time.Minute {
+				if now.Sub(b.lastSeen) > 15*time.Minute {
 					delete(loginBuckets, ip)
 				}
 			}
 			loginMu.Unlock()
+			registerMu.Lock()
+			for ip, b := range registerBuckets {
+				if now.Sub(b.lastSeen) > 15*time.Minute {
+					delete(registerBuckets, ip)
+				}
+			}
+			registerMu.Unlock()
 		}
 	}()
 }
@@ -55,14 +70,32 @@ func loginLimiter(ip string) *rate.Limiter {
 		return b.limiter
 	}
 	// Cap map size to prevent unbounded memory growth under DDoS.
-	if len(loginBuckets) >= maxLoginBuckets {
+	if len(loginBuckets) >= maxRateBuckets {
 		return rate.NewLimiter(rate.Every(time.Minute), 5)
 	}
-	b := &loginBucket{
+	b := &rateBucket{
 		limiter:  rate.NewLimiter(rate.Every(time.Minute), 5),
 		lastSeen: time.Now(),
 	}
 	loginBuckets[ip] = b
+	return b.limiter
+}
+
+func registerLimiter(ip string) *rate.Limiter {
+	registerMu.Lock()
+	defer registerMu.Unlock()
+	if b, ok := registerBuckets[ip]; ok {
+		b.lastSeen = time.Now()
+		return b.limiter
+	}
+	if len(registerBuckets) >= maxRateBuckets {
+		return rate.NewLimiter(rate.Every(10*time.Minute), 3)
+	}
+	b := &rateBucket{
+		limiter:  rate.NewLimiter(rate.Every(10*time.Minute), 3),
+		lastSeen: time.Now(),
+	}
+	registerBuckets[ip] = b
 	return b.limiter
 }
 
@@ -125,6 +158,10 @@ func (h *AuthHandler) RegisterPost(c echo.Context) error {
 		return render(c, http.StatusForbidden, pages.Login(csrfToken(c), "Registration is not open on this instance."))
 	}
 
+	if !registerLimiter(c.RealIP()).Allow() {
+		return render(c, http.StatusTooManyRequests, pages.Register(csrfToken(c), "Too many registration attempts. Please wait before trying again."))
+	}
+
 	email := strings.TrimSpace(strings.ToLower(c.FormValue("email")))
 	displayName := strings.TrimSpace(c.FormValue("display_name"))
 	password := c.FormValue("password")
@@ -149,7 +186,7 @@ func (h *AuthHandler) RegisterPost(c echo.Context) error {
 	if err != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) && pgErr.Code == "23505" {
-			return render(c, http.StatusOK, pages.Register(csrfToken(c), "An account with that email already exists."))
+			return render(c, http.StatusOK, pages.Register(csrfToken(c), "Registration failed. Please try again."))
 		}
 		slog.Error("register: create user", "err", err)
 		return render(c, http.StatusOK, pages.Register(csrfToken(c), "An error occurred. Please try again."))
