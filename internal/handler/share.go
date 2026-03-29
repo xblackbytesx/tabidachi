@@ -130,7 +130,7 @@ func (h *ShareHandler) RevokeShare(c echo.Context) error {
 		return c.String(http.StatusNotFound, "not found")
 	}
 
-	if err := h.shares.Delete(c.Request().Context(), shareID, uid); err != nil {
+	if err := h.shares.Delete(c.Request().Context(), shareID, tripID, uid); err != nil {
 		slog.Error("revoke share", "err", err)
 	}
 
