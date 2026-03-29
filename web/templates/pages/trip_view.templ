@@ -10,7 +10,10 @@ import (
 	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
 )
 
-templ TripView(csrfToken string, trip *domain.Trip) {
+// TripView renders the owner's read/manage view of a trip including share management.
+// newShareToken is non-empty only immediately after a share link is generated.
+
+templ TripView(csrfToken string, trip *domain.Trip, shares []*domain.TripShare, newShareToken string) {
 	@layouts.Base(trip.Title, csrfToken) {
 		<div class="trip-view">
 			if trip.CoverImageURL != "" {
@@ -145,6 +148,7 @@ templ TripView(csrfToken string, trip *domain.Trip) {
 				}
 			</div>
 		</div>
+		@sharePanel(csrfToken, trip.ID.String(), shares, newShareToken)
 		<dialog id="event-lightbox" class="event-lightbox-dialog" aria-label="Event photo viewer">
 			<button class="event-lightbox-close" onclick="document.getElementById('event-lightbox').close()" aria-label="Close lightbox">
 				@components.Icon("xmark")
@@ -384,6 +388,95 @@ func formatDuration(iso string) string {
 		return iso
 	}
 	return result
+}
+
+templ sharePanel(csrfToken, tripID string, shares []*domain.TripShare, newShareToken string) {
+	<section class="share-panel">
+		<h2 class="share-panel-title">
+			@components.Icon("link")
+			Share links
+		</h2>
+		if newShareToken != "" {
+			<div class="token-reveal">
+				<p class="token-reveal-warning">
+					<strong>Copy this link now.</strong> The full URL will not be shown again.
+				</p>
+				<div class="token-reveal-value">
+					<code id="new-share-url" data-share-token={ newShareToken }>/share/{ newShareToken }</code>
+					<script>
+						(function() {
+							var el = document.getElementById('new-share-url');
+							if (el) el.textContent = window.location.origin + '/share/' + el.getAttribute('data-share-token');
+						})();
+					</script>
+					<button type="button" class="btn btn-sm btn-ghost" onclick="copyShareLink()" id="copy-share-btn">
+						@components.Icon("clipboard") Copy link
+					</button>
+				</div>
+			</div>
+		}
+		<form
+			method="POST"
+			action={ templ.SafeURL("/trips/" + tripID + "/shares") }
+			class="token-form"
+			hx-post={ "/trips/" + tripID + "/shares" }
+			hx-target="#main-content"
+			hx-swap="outerHTML show:.share-panel"
+		>
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<div class="token-form-row">
+				<div class="field token-name-input">
+					<label class="field-label" for="share-name">Link name</label>
+					<input class="field-input" type="text" id="share-name" name="name" placeholder="e.g. Family" autocomplete="off"/>
+				</div>
+				<button type="submit" class="btn btn-primary token-submit-btn">
+					@components.Icon("link") Create link
+				</button>
+			</div>
+		</form>
+		if len(shares) == 0 {
+			<p class="token-empty">No share links yet.</p>
+		} else {
+			<table class="token-table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Created</th>
+						<th>Last opened</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					for _, s := range shares {
+						<tr>
+							<td>{ s.Name }</td>
+							<td>{ format.Time(ctx, s.CreatedAt) }</td>
+							<td>
+								if s.LastUsedAt == nil {
+									<span class="text-muted">Never</span>
+								} else {
+									{ format.Time(ctx, *s.LastUsedAt) }
+								}
+							</td>
+							<td>
+								<form
+									method="POST"
+									action={ templ.SafeURL("/trips/" + tripID + "/shares/" + s.ID.String() + "/revoke") }
+									hx-post={ "/trips/" + tripID + "/shares/" + s.ID.String() + "/revoke" }
+									hx-target="#main-content"
+									hx-swap="outerHTML show:.share-panel"
+									hx-confirm="Revoke this link? Anyone using it will lose access."
+								>
+									<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+									<button type="submit" class="btn btn-sm btn-danger">Revoke</button>
+								</form>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		}
+	</section>
 }
 
 // tripHeaderStyle returns a safe inline style for the trip cover image.

@@ -95,6 +95,24 @@
   };
 
   // ============================================================
+  // Trip view: copy share link to clipboard
+  // ============================================================
+  window.copyShareLink = function () {
+    var el = document.getElementById('new-share-url');
+    if (!el) return;
+    var token = el.getAttribute('data-share-token');
+    var url = window.location.origin + '/share/' + token;
+    navigator.clipboard.writeText(url).then(function () {
+      var btn = document.getElementById('copy-share-btn');
+      if (btn) {
+        var orig = btn.innerHTML;
+        btn.innerHTML = CHECK_SVG + ' Copied!';
+        setTimeout(function () { btn.innerHTML = orig; }, 2000);
+      }
+    });
+  };
+
+  // ============================================================
   // Builder: inline day edit toggle
   // ============================================================
   window.toggleDayEdit = function (btn) {

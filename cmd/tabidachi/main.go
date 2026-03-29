@@ -53,11 +53,13 @@ func main() {
 	userStore := repository.NewUserStore(pool)
 	tripStore := repository.NewTripStore(pool)
 	tokenStore := repository.NewTokenStore(pool)
+	shareStore := repository.NewShareStore(pool)
 	imageSvc := images.NewService(cfg.PexelsAPIKey, cfg.UnsplashKey, cfg.UploadsDir)
 
 	authHandler := handler.NewAuthHandler(userStore, cfg.AllowRegistration)
 	dashHandler := handler.NewDashboardHandler(tripStore)
-	tripHandler := handler.NewTripHandler(tripStore, imageSvc)
+	tripHandler := handler.NewTripHandler(tripStore, shareStore, imageSvc)
+	shareHandler := handler.NewShareHandler(shareStore, tripStore, cfg.UploadsDir)
 	importHandler := handler.NewImportHandler(tripStore, imageSvc)
 	promptHandler := handler.NewPromptHandler()
 	builderHandler := handler.NewBuilderHandler(tripStore)
@@ -125,6 +127,10 @@ func main() {
 		return c.JSON(http.StatusOK, map[string]string{"status": "ok"})
 	})
 
+	// Public share routes (no auth, no CSRF)
+	e.GET("/share/:token", shareHandler.View)
+	e.GET("/share/:token/uploads/*", shareHandler.ServeUpload)
+
 	// Auth routes (public)
 	e.GET("/login", authHandler.LoginGet)
 	e.POST("/login", authHandler.LoginPost)
@@ -176,6 +182,10 @@ func main() {
 	protected.GET("/uploads/*", func(c echo.Context) error {
 		return echo.WrapHandler(http.StripPrefix("/uploads/", http.FileServer(http.Dir(cfg.UploadsDir))))(c)
 	})
+
+	// Share link management
+	protected.POST("/trips/:id/shares", shareHandler.CreateShare)
+	protected.POST("/trips/:id/shares/:shareId/revoke", shareHandler.RevokeShare)
 
 	// Settings & token management
 	protected.GET("/settings", settingsHandler.Get)

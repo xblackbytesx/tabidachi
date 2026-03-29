@@ -21,6 +21,7 @@ Tabidachi is a self-hosted travel itinerary manager. Build and organise trips wi
 - **Cover images** — auto-fetched from Pexels / Unsplash / Wikipedia, or set manually
 - **AI prompt wizards** — convert existing booking docs into Tabidachi JSON, or plan a new trip from scratch
 - **Import / Export** — round-trip via a documented JSON schema
+- **Trip sharing** — generate a secret share link per trip; recipients see a read-only view with no account required
 - **JSON API** — read-only `/api/v1/` endpoints secured with personal access tokens (PATs) — powers the [official mobile app](#mobile-apps)
 - **Single-user or multi-account** — each account only sees its own trips
 - **Dark theme** — OLED-black palette with Font Awesome icons and native HTML components
@@ -208,6 +209,16 @@ curl -H "Authorization: Bearer tbd_yourtoken" \
 ```
 
 The `coverImageUrl` field in responses is always an absolute URL, safe to use directly in a mobile app.
+
+---
+
+## Sharing a trip
+
+Open a trip and scroll to the **Share links** section at the bottom. Enter a name (e.g. "Family"), click **Create link**, and copy the full URL shown.
+
+Anyone with the link can view the trip — including the full itinerary and cover images — without an account. They cannot edit anything.
+
+You can create multiple links per trip (e.g. one per person or group) and revoke any of them individually at any time. A revoked link returns a 404 immediately.
 
 ---
 

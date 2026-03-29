@@ -27,11 +27,12 @@ func isValidHexColor(s string) bool {
 
 type TripHandler struct {
 	trips    *repository.TripStore
+	shares   *repository.ShareStore
 	imageSvc *images.Service
 }
 
-func NewTripHandler(trips *repository.TripStore, imageSvc *images.Service) *TripHandler {
-	return &TripHandler{trips: trips, imageSvc: imageSvc}
+func NewTripHandler(trips *repository.TripStore, shares *repository.ShareStore, imageSvc *images.Service) *TripHandler {
+	return &TripHandler{trips: trips, shares: shares, imageSvc: imageSvc}
 }
 
 func (h *TripHandler) NewOptions(c echo.Context) error {
@@ -123,7 +124,12 @@ func (h *TripHandler) View(c echo.Context) error {
 		return c.String(http.StatusNotFound, "trip not found")
 	}
 
-	return render(c, http.StatusOK, pages.TripView(csrfToken(c), trip))
+	shares, err := h.shares.ListByTrip(c.Request().Context(), tripID, uid)
+	if err != nil {
+		slog.Error("trip view: list shares", "err", err)
+	}
+
+	return render(c, http.StatusOK, pages.TripView(csrfToken(c), trip, shares, ""))
 }
 
 func (h *TripHandler) Edit(c echo.Context) error {

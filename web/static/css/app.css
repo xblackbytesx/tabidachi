@@ -2381,6 +2381,54 @@ details.leg-builder-section > summary::-webkit-details-marker {
 }
 
 /* -----------------------------------------------------------------
+   Share panel (trip view — owner share management)
+   ----------------------------------------------------------------- */
+
+.share-panel {
+    max-inline-size: 60rem;
+    margin-block-start: var(--space-1200);
+    padding-block-start: var(--space-800);
+    border-block-start: 1px solid var(--color-border);
+}
+
+.share-panel-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-200);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    margin-block-end: var(--space-400);
+}
+
+/* -----------------------------------------------------------------
+   Share view (public read-only layout)
+   ----------------------------------------------------------------- */
+
+.share-body {
+    min-block-size: 100vh;
+    background: var(--color-bg);
+    color: var(--color-text);
+}
+
+.share-main {
+    padding: var(--space-600) var(--space-500);
+    max-inline-size: 60rem;
+    margin-inline: auto;
+}
+
+@media (min-width: 48rem) {
+    .share-main {
+        padding: var(--space-800) var(--space-700);
+    }
+}
+
+@media (min-width: 87.5rem) {
+    .share-main {
+        padding: var(--space-1200) var(--space-1600);
+    }
+}
+
+/* -----------------------------------------------------------------
    Utilities
    ----------------------------------------------------------------- */
 .mb-400 {
