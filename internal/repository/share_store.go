@@ -93,11 +93,11 @@ func (s *ShareStore) ListByTrip(ctx context.Context, tripID, userID uuid.UUID) (
 	return shares, rows.Err()
 }
 
-// Delete removes a share link by ID, enforcing user ownership.
-func (s *ShareStore) Delete(ctx context.Context, shareID, userID uuid.UUID) error {
+// Delete removes a share link by ID, enforcing both trip and user ownership.
+func (s *ShareStore) Delete(ctx context.Context, shareID, tripID, userID uuid.UUID) error {
 	tag, err := s.pool.Exec(ctx,
-		`DELETE FROM trip_shares WHERE id = $1 AND user_id = $2`,
-		shareID, userID,
+		`DELETE FROM trip_shares WHERE id = $1 AND trip_id = $2 AND user_id = $3`,
+		shareID, tripID, userID,
 	)
 	if err != nil {
 		return fmt.Errorf("delete trip share: %w", err)

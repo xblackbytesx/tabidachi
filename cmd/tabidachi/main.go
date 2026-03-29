@@ -65,7 +65,7 @@ func main() {
 	builderHandler := handler.NewBuilderHandler(tripStore)
 	imageHandler := handler.NewImageHandler(tripStore, imageSvc)
 	settingsHandler := handler.NewSettingsHandler(tokenStore, userStore)
-	apiHandler := handler.NewAPIHandler(tripStore, cfg.AppBaseURL)
+	apiHandler := handler.NewAPIHandler(tripStore, shareStore, cfg.AppBaseURL)
 
 	e := echo.New()
 	e.HideBanner = true
@@ -130,6 +130,7 @@ func main() {
 	// Public share routes (no auth, no CSRF)
 	e.GET("/share/:token", shareHandler.View)
 	e.GET("/share/:token/uploads/*", shareHandler.ServeUpload)
+	e.GET("/api/v1/share/:token", apiHandler.GetSharedTrip)
 
 	// Auth routes (public)
 	e.GET("/login", authHandler.LoginGet)
