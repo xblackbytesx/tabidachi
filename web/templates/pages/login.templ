@@ -2,7 +2,7 @@ package pages
 
 import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
 
-templ Login(csrfToken string, flash string) {
+templ Login(csrfToken string, flash string, allowRegistration bool) {
 	@layouts.Auth("Sign in", csrfToken) {
 		<div class="auth-card">
 			<div class="auth-header">
@@ -25,7 +25,9 @@ templ Login(csrfToken string, flash string) {
 				</div>
 				<button type="submit" class="btn btn-primary btn-full">Sign in</button>
 			</form>
-			<p class="auth-switch">Don't have an account? <a href="/register">Create one</a></p>
+			if allowRegistration {
+				<p class="auth-switch">Don't have an account? <a href="/register">Create one</a></p>
+			}
 		</div>
 	}
 }

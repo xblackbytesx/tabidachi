@@ -110,12 +110,12 @@ func NewAuthHandler(users *repository.UserStore, allowRegistration bool) *AuthHa
 
 func (h *AuthHandler) LoginGet(c echo.Context) error {
 	flash := auth.GetFlash(c.Response().Writer, c.Request())
-	return render(c, http.StatusOK, pages.Login(csrfToken(c), flash))
+	return render(c, http.StatusOK, pages.Login(csrfToken(c), flash, h.allowRegistration))
 }
 
 func (h *AuthHandler) LoginPost(c echo.Context) error {
 	if !loginLimiter(c.RealIP()).Allow() {
-		return render(c, http.StatusTooManyRequests, pages.Login(csrfToken(c), "Too many login attempts. Please wait a minute before trying again."))
+		return render(c, http.StatusTooManyRequests, pages.Login(csrfToken(c), "Too many login attempts. Please wait a minute before trying again.", h.allowRegistration))
 	}
 
 	email := strings.TrimSpace(c.FormValue("email"))
@@ -124,19 +124,19 @@ func (h *AuthHandler) LoginPost(c echo.Context) error {
 	user, err := h.users.GetByEmail(c.Request().Context(), email)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return render(c, http.StatusOK, pages.Login(csrfToken(c), "Invalid email or password."))
+			return render(c, http.StatusOK, pages.Login(csrfToken(c), "Invalid email or password.", h.allowRegistration))
 		}
 		slog.Error("login: get user", "err", err)
-		return render(c, http.StatusOK, pages.Login(csrfToken(c), "An error occurred. Please try again."))
+		return render(c, http.StatusOK, pages.Login(csrfToken(c), "An error occurred. Please try again.", h.allowRegistration))
 	}
 
 	if !auth.CheckPassword(user.PasswordHash, password) {
-		return render(c, http.StatusOK, pages.Login(csrfToken(c), "Invalid email or password."))
+		return render(c, http.StatusOK, pages.Login(csrfToken(c), "Invalid email or password.", h.allowRegistration))
 	}
 
 	if err := auth.SetUserID(c.Response().Writer, c.Request(), user.ID.String()); err != nil {
 		slog.Error("login: set session", "err", err)
-		return render(c, http.StatusOK, pages.Login(csrfToken(c), "An error occurred. Please try again."))
+		return render(c, http.StatusOK, pages.Login(csrfToken(c), "An error occurred. Please try again.", h.allowRegistration))
 	}
 	if err := auth.SetDateFormat(c.Response().Writer, c.Request(), user.DateFormat); err != nil {
 		slog.Error("login: set date format session", "err", err)
@@ -147,7 +147,7 @@ func (h *AuthHandler) LoginPost(c echo.Context) error {
 
 func (h *AuthHandler) RegisterGet(c echo.Context) error {
 	if !h.allowRegistration {
-		return render(c, http.StatusForbidden, pages.Login(csrfToken(c), "Registration is not open on this instance."))
+		return render(c, http.StatusForbidden, pages.Login(csrfToken(c), "Registration is not open on this instance.", h.allowRegistration))
 	}
 	flash := auth.GetFlash(c.Response().Writer, c.Request())
 	return render(c, http.StatusOK, pages.Register(csrfToken(c), flash))
@@ -155,7 +155,7 @@ func (h *AuthHandler) RegisterGet(c echo.Context) error {
 
 func (h *AuthHandler) RegisterPost(c echo.Context) error {
 	if !h.allowRegistration {
-		return render(c, http.StatusForbidden, pages.Login(csrfToken(c), "Registration is not open on this instance."))
+		return render(c, http.StatusForbidden, pages.Login(csrfToken(c), "Registration is not open on this instance.", h.allowRegistration))
 	}
 
 	if !registerLimiter(c.RealIP()).Allow() {

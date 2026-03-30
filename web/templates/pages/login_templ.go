@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "github.com/xblackbytesx/tabidachi/web/templates/layouts"
 
-func Login(csrfToken string, flash string) templ.Component {
+func Login(csrfToken string, flash string, allowRegistration bool) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -79,7 +79,17 @@ func Login(csrfToken string, flash string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"><div class=\"field\"><label class=\"field-label\" for=\"email\">Email</label> <input class=\"field-input\" type=\"email\" id=\"email\" name=\"email\" required autocomplete=\"email\" placeholder=\"you@example.com\"></div><div class=\"field\"><label class=\"field-label\" for=\"password\">Password</label> <input class=\"field-input\" type=\"password\" id=\"password\" name=\"password\" required autocomplete=\"current-password\" placeholder=\"••••••••\"></div><button type=\"submit\" class=\"btn btn-primary btn-full\">Sign in</button></form><p class=\"auth-switch\">Don't have an account? <a href=\"/register\">Create one</a></p></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"><div class=\"field\"><label class=\"field-label\" for=\"email\">Email</label> <input class=\"field-input\" type=\"email\" id=\"email\" name=\"email\" required autocomplete=\"email\" placeholder=\"you@example.com\"></div><div class=\"field\"><label class=\"field-label\" for=\"password\">Password</label> <input class=\"field-input\" type=\"password\" id=\"password\" name=\"password\" required autocomplete=\"current-password\" placeholder=\"••••••••\"></div><button type=\"submit\" class=\"btn btn-primary btn-full\">Sign in</button></form>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if allowRegistration {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<p class=\"auth-switch\">Don&#39;t have an account? <a href=\"/register\">Create one</a></p>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
