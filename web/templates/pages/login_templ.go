@@ -84,7 +84,7 @@ func Login(csrfToken string, flash string, allowRegistration bool) templ.Compone
 				return templ_7745c5c3_Err
 			}
 			if allowRegistration {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<p class=\"auth-switch\">Don&#39;t have an account? <a href=\"/register\">Create one</a></p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<p class=\"auth-switch\">Don't have an account? <a href=\"/register\">Create one</a></p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
