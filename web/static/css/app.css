@@ -1372,6 +1372,19 @@ details.day-notes {
     font-variant-numeric: tabular-nums;
     font-size: var(--text-sm);
 }
+.transit-track-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-text-muted);
+    transition: color 0.15s;
+}
+.transit-track-link:hover {
+    color: var(--color-primary);
+}
+.transit-track-link .icon {
+    width: 1em;
+    height: 1em;
+}
 .transit-from,
 .transit-to {
     display: inline-flex;

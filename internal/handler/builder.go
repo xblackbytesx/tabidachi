@@ -332,6 +332,7 @@ func (h *BuilderHandler) AddEvent(c echo.Context) error {
 		event.TransportMode = c.FormValue("transport_mode")
 		event.Carrier = c.FormValue("carrier")
 		event.FlightNumber = c.FormValue("flight_number")
+		event.TrackFlight = c.FormValue("track_flight") == "on"
 		depLoc := c.FormValue("departure_location")
 		depCode := c.FormValue("departure_code")
 		if depLoc != "" {
@@ -467,6 +468,7 @@ func (h *BuilderHandler) UpdateEvent(c echo.Context) error {
 	existing.Arrival = nil
 	existing.Carrier = ""
 	existing.FlightNumber = ""
+	existing.TrackFlight = false
 	existing.CheckIn = false
 	existing.CheckOut = false
 
@@ -482,6 +484,7 @@ func (h *BuilderHandler) UpdateEvent(c echo.Context) error {
 		existing.TransportMode = c.FormValue("transport_mode")
 		existing.Carrier = c.FormValue("carrier")
 		existing.FlightNumber = c.FormValue("flight_number")
+		existing.TrackFlight = c.FormValue("track_flight") == "on"
 		existing.Duration = c.FormValue("duration")
 		depLoc := c.FormValue("departure_location")
 		depCode := c.FormValue("departure_code")

@@ -538,6 +538,9 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 					<label class="field-label">Duration (ISO8601)</label>
 					<input class="field-input" type="text" name="duration" placeholder="e.g. PT2H30M"/>
 				</div>
+				<label class="checkbox-item">
+					<input type="checkbox" name="track_flight"/> Show flight tracker link
+				</label>
 			</div>
 			<!-- Accommodation event fields -->
 			<div class="event-type-fields" data-type="accommodation" style="display:none">
@@ -754,6 +757,9 @@ templ editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, e
 					<label class="field-label">Duration</label>
 					<input class="field-input" type="text" name="duration" placeholder="e.g. PT2H30M" value={ event.Duration }/>
 				</div>
+				<label class="checkbox-item">
+					<input type="checkbox" name="track_flight" checked?={ event.TrackFlight }/> Show flight tracker link
+				</label>
 			</div>
 			<!-- Accommodation event fields -->
 			<div class="event-type-fields" data-type="accommodation" style={ editEventTypeDisplay(event.Type, "accommodation") }>
