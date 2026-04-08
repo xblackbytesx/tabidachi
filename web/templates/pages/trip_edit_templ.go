@@ -1485,14 +1485,14 @@ func DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 138, "\" onchange=\"onEventTypeChangeByAttr(this)\" required><option value=\"activity\">Activity</option> <option value=\"transit\">Transit</option> <option value=\"accommodation\">Accommodation</option></select></div><div class=\"field\"><label class=\"field-label\">Title <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"text\" name=\"title\" required placeholder=\"e.g. Fushimi Inari\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Start time</label> <input class=\"field-input\" type=\"text\" name=\"start_time\" placeholder=\"HH:MM\"></div><div class=\"field\"><label class=\"field-label\">End time</label> <input class=\"field-input\" type=\"text\" name=\"end_time\" placeholder=\"HH:MM\"></div></div><!-- Activity fields --><div class=\"event-type-fields\" data-type=\"activity\"><div class=\"field\"><label class=\"field-label\">Location name</label> <input class=\"field-input\" type=\"text\" name=\"location\" placeholder=\"Venue or place name\"></div><div class=\"field\"><label class=\"field-label\">Address / search query</label> <input class=\"field-input\" type=\"text\" name=\"address\" placeholder=\"Address or search term for Maps\"></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Latitude</label> <input class=\"field-input\" type=\"text\" name=\"latitude\" placeholder=\"e.g. 35.6762\"></div><div class=\"field\"><label class=\"field-label\">Longitude</label> <input class=\"field-input\" type=\"text\" name=\"longitude\" placeholder=\"e.g. 139.6503\"></div></div><div class=\"field\"><label class=\"field-label\">Booking reference</label> <input class=\"field-input\" type=\"text\" name=\"booking_reference\"></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"ticket_required\"> Ticket required</label></div><!-- Transit fields --><div class=\"event-type-fields\" data-type=\"transit\" style=\"display:none\"><div class=\"field\"><label class=\"field-label\">Transport mode</label> <select class=\"field-input\" name=\"transport_mode\"><option value=\"flight\">Flight</option> <option value=\"shinkansen\">Shinkansen</option> <option value=\"train\">Train</option> <option value=\"subway\">Subway</option> <option value=\"bus\">Bus</option> <option value=\"tram\">Tram</option> <option value=\"ferry\">Ferry</option> <option value=\"taxi\">Taxi</option> <option value=\"car\">Car</option> <option value=\"walk\">Walk</option></select></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">From</label> <input class=\"field-input\" type=\"text\" name=\"departure_location\" placeholder=\"City or station\"></div><div class=\"field\"><label class=\"field-label\">From code</label> <input class=\"field-input\" type=\"text\" name=\"departure_code\" placeholder=\"e.g. KIX\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">From lat</label> <input class=\"field-input\" type=\"text\" name=\"departure_latitude\" placeholder=\"Latitude\"></div><div class=\"field\"><label class=\"field-label\">From lng</label> <input class=\"field-input\" type=\"text\" name=\"departure_longitude\" placeholder=\"Longitude\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">To</label> <input class=\"field-input\" type=\"text\" name=\"arrival_location\" placeholder=\"City or station\"></div><div class=\"field\"><label class=\"field-label\">To code</label> <input class=\"field-input\" type=\"text\" name=\"arrival_code\" placeholder=\"e.g. NRT\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">To lat</label> <input class=\"field-input\" type=\"text\" name=\"arrival_latitude\" placeholder=\"Latitude\"></div><div class=\"field\"><label class=\"field-label\">To lng</label> <input class=\"field-input\" type=\"text\" name=\"arrival_longitude\" placeholder=\"Longitude\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Carrier</label> <input class=\"field-input\" type=\"text\" name=\"carrier\" placeholder=\"e.g. JAL\"></div><div class=\"field\"><label class=\"field-label\">Flight / train no.</label> <input class=\"field-input\" type=\"text\" name=\"flight_number\" placeholder=\"e.g. JL123\"></div></div><div class=\"field\"><label class=\"field-label\">Duration (ISO8601)</label> <input class=\"field-input\" type=\"text\" name=\"duration\" placeholder=\"e.g. PT2H30M\"></div></div><!-- Accommodation event fields --><div class=\"event-type-fields\" data-type=\"accommodation\" style=\"display:none\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_in\"> Check-in</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_out\"> Check-out</label></div><div class=\"field\"><label class=\"field-label\">URL</label> <input class=\"field-input\" type=\"url\" name=\"url\" placeholder=\"https://example.com\"></div><div class=\"field\"><label class=\"field-label\">Notes</label> <textarea class=\"field-textarea\" name=\"notes\"></textarea></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"optional\"> Optional event</label><div class=\"dialog-footer\"><button type=\"button\" class=\"btn btn-ghost\" data-dialog=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 138, "\" onchange=\"onEventTypeChangeByAttr(this)\" required><option value=\"activity\">Activity</option> <option value=\"transit\">Transit</option> <option value=\"accommodation\">Accommodation</option></select></div><div class=\"field\"><label class=\"field-label\">Title <span class=\"required\">*</span></label> <input class=\"field-input\" type=\"text\" name=\"title\" required placeholder=\"e.g. Fushimi Inari\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Start time</label> <input class=\"field-input\" type=\"text\" name=\"start_time\" placeholder=\"HH:MM\"></div><div class=\"field\"><label class=\"field-label\">End time</label> <input class=\"field-input\" type=\"text\" name=\"end_time\" placeholder=\"HH:MM\"></div></div><!-- Activity fields --><div class=\"event-type-fields\" data-type=\"activity\"><div class=\"field\"><label class=\"field-label\">Location name</label> <input class=\"field-input\" type=\"text\" name=\"location\" placeholder=\"Venue or place name\"></div><div class=\"field\"><label class=\"field-label\">Address / search query</label> <input class=\"field-input\" type=\"text\" name=\"address\" placeholder=\"Address or search term for Maps\"></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Latitude</label> <input class=\"field-input\" type=\"text\" name=\"latitude\" placeholder=\"e.g. 35.6762\"></div><div class=\"field\"><label class=\"field-label\">Longitude</label> <input class=\"field-input\" type=\"text\" name=\"longitude\" placeholder=\"e.g. 139.6503\"></div></div><div class=\"field\"><label class=\"field-label\">Booking reference</label> <input class=\"field-input\" type=\"text\" name=\"booking_reference\"></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"ticket_required\"> Ticket required</label></div><!-- Transit fields --><div class=\"event-type-fields\" data-type=\"transit\" style=\"display:none\"><div class=\"field\"><label class=\"field-label\">Transport mode</label> <select class=\"field-input\" name=\"transport_mode\"><option value=\"flight\">Flight</option> <option value=\"shinkansen\">Shinkansen</option> <option value=\"train\">Train</option> <option value=\"subway\">Subway</option> <option value=\"bus\">Bus</option> <option value=\"tram\">Tram</option> <option value=\"ferry\">Ferry</option> <option value=\"taxi\">Taxi</option> <option value=\"car\">Car</option> <option value=\"walk\">Walk</option></select></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">From</label> <input class=\"field-input\" type=\"text\" name=\"departure_location\" placeholder=\"City or station\"></div><div class=\"field\"><label class=\"field-label\">From code</label> <input class=\"field-input\" type=\"text\" name=\"departure_code\" placeholder=\"e.g. KIX\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">From lat</label> <input class=\"field-input\" type=\"text\" name=\"departure_latitude\" placeholder=\"Latitude\"></div><div class=\"field\"><label class=\"field-label\">From lng</label> <input class=\"field-input\" type=\"text\" name=\"departure_longitude\" placeholder=\"Longitude\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">To</label> <input class=\"field-input\" type=\"text\" name=\"arrival_location\" placeholder=\"City or station\"></div><div class=\"field\"><label class=\"field-label\">To code</label> <input class=\"field-input\" type=\"text\" name=\"arrival_code\" placeholder=\"e.g. NRT\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">To lat</label> <input class=\"field-input\" type=\"text\" name=\"arrival_latitude\" placeholder=\"Latitude\"></div><div class=\"field\"><label class=\"field-label\">To lng</label> <input class=\"field-input\" type=\"text\" name=\"arrival_longitude\" placeholder=\"Longitude\"></div></div><div class=\"field-row\"><div class=\"field\"><label class=\"field-label\">Carrier</label> <input class=\"field-input\" type=\"text\" name=\"carrier\" placeholder=\"e.g. JAL\"></div><div class=\"field\"><label class=\"field-label\">Flight / train no.</label> <input class=\"field-input\" type=\"text\" name=\"flight_number\" placeholder=\"e.g. JL123\"></div></div><div class=\"field\"><label class=\"field-label\">Duration (ISO8601)</label> <input class=\"field-input\" type=\"text\" name=\"duration\" placeholder=\"e.g. PT2H30M\"></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"track_flight\"> Show flight tracker link</label></div><!-- Accommodation event fields --><div class=\"event-type-fields\" data-type=\"accommodation\" style=\"display:none\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_in\"> Check-in</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_out\"> Check-out</label></div><div class=\"field\"><label class=\"field-label\">URL</label> <input class=\"field-input\" type=\"url\" name=\"url\" placeholder=\"https://example.com\"></div><div class=\"field\"><label class=\"field-label\">Notes</label> <textarea class=\"field-textarea\" name=\"notes\"></textarea></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"optional\"> Optional event</label><div class=\"dialog-footer\"><button type=\"button\" class=\"btn btn-ghost\" data-dialog=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var81 string
 		templ_7745c5c3_Var81, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("add-event-dialog-%d-%d", legIdx, dayIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 563, Col: 115}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 566, Col: 115}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var81))
 		if templ_7745c5c3_Err != nil {
@@ -1579,7 +1579,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var83 string
 		templ_7745c5c3_Var83, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 616, Col: 79}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 619, Col: 79}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var83))
 		if templ_7745c5c3_Err != nil {
@@ -1592,7 +1592,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var84 templ.SafeURL
 		templ_7745c5c3_Var84, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 619, Col: 149}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 622, Col: 149}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var84))
 		if templ_7745c5c3_Err != nil {
@@ -1605,7 +1605,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var85 string
 		templ_7745c5c3_Var85, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("edit-event-form-%d-%d-%d", legIdx, dayIdx, evtIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 621, Col: 71}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 624, Col: 71}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var85))
 		if templ_7745c5c3_Err != nil {
@@ -1618,7 +1618,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var86 string
 		templ_7745c5c3_Var86, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 625, Col: 125}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 628, Col: 125}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var86))
 		if templ_7745c5c3_Err != nil {
@@ -1639,7 +1639,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var87 string
 		templ_7745c5c3_Var87, templ_7745c5c3_Err = templ.JoinStringErrs(csrfToken)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 627, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 630, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var87))
 		if templ_7745c5c3_Err != nil {
@@ -1652,7 +1652,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var88 string
 		templ_7745c5c3_Var88, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("edit-event-form-%d-%d-%d", legIdx, dayIdx, evtIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 634, Col: 87}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 637, Col: 87}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var88))
 		if templ_7745c5c3_Err != nil {
@@ -1695,7 +1695,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var89 string
 		templ_7745c5c3_Var89, templ_7745c5c3_Err = templ.JoinStringErrs(event.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 645, Col: 85}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 648, Col: 85}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var89))
 		if templ_7745c5c3_Err != nil {
@@ -1708,7 +1708,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var90 string
 		templ_7745c5c3_Var90, templ_7745c5c3_Err = templ.JoinStringErrs(event.StartTime)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 651, Col: 105}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 654, Col: 105}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var90))
 		if templ_7745c5c3_Err != nil {
@@ -1721,7 +1721,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var91 string
 		templ_7745c5c3_Var91, templ_7745c5c3_Err = templ.JoinStringErrs(event.EndTime)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 655, Col: 101}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 658, Col: 101}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var91))
 		if templ_7745c5c3_Err != nil {
@@ -1734,7 +1734,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var92 string
 		templ_7745c5c3_Var92, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues(editEventTypeDisplay(event.Type, "activity"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 659, Col: 107}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 662, Col: 107}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var92))
 		if templ_7745c5c3_Err != nil {
@@ -1747,7 +1747,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var93 string
 		templ_7745c5c3_Var93, templ_7745c5c3_Err = templ.JoinStringErrs(event.Location)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 662, Col: 116}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 665, Col: 116}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var93))
 		if templ_7745c5c3_Err != nil {
@@ -1760,7 +1760,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var94 string
 		templ_7745c5c3_Var94, templ_7745c5c3_Err = templ.JoinStringErrs(event.Address)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 666, Col: 126}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 669, Col: 126}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var94))
 		if templ_7745c5c3_Err != nil {
@@ -1773,7 +1773,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var95 string
 		templ_7745c5c3_Var95, templ_7745c5c3_Err = templ.JoinStringErrs(event.Latitude)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 671, Col: 110}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 674, Col: 110}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var95))
 		if templ_7745c5c3_Err != nil {
@@ -1786,7 +1786,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var96 string
 		templ_7745c5c3_Var96, templ_7745c5c3_Err = templ.JoinStringErrs(event.Longitude)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 675, Col: 113}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 678, Col: 113}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var96))
 		if templ_7745c5c3_Err != nil {
@@ -1799,7 +1799,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var97 string
 		templ_7745c5c3_Var97, templ_7745c5c3_Err = templ.JoinStringErrs(event.BookingReference)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 680, Col: 99}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 683, Col: 99}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var97))
 		if templ_7745c5c3_Err != nil {
@@ -1822,7 +1822,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var98 string
 		templ_7745c5c3_Var98, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues(editEventTypeDisplay(event.Type, "transit"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 687, Col: 105}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 690, Col: 105}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var98))
 		if templ_7745c5c3_Err != nil {
@@ -1935,7 +1935,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var99 string
 		templ_7745c5c3_Var99, templ_7745c5c3_Err = templ.JoinStringErrs(transitPointVal(event.Departure, "location"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 706, Col: 153}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 709, Col: 153}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var99))
 		if templ_7745c5c3_Err != nil {
@@ -1948,7 +1948,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var100 string
 		templ_7745c5c3_Var100, templ_7745c5c3_Err = templ.JoinStringErrs(transitPointVal(event.Departure, "code"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 710, Col: 138}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 713, Col: 138}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var100))
 		if templ_7745c5c3_Err != nil {
@@ -1961,7 +1961,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var101 string
 		templ_7745c5c3_Var101, templ_7745c5c3_Err = templ.JoinStringErrs(transitPointVal(event.Departure, "latitude"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 716, Col: 146}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 719, Col: 146}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var101))
 		if templ_7745c5c3_Err != nil {
@@ -1974,7 +1974,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var102 string
 		templ_7745c5c3_Var102, templ_7745c5c3_Err = templ.JoinStringErrs(transitPointVal(event.Departure, "longitude"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 720, Col: 149}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 723, Col: 149}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var102))
 		if templ_7745c5c3_Err != nil {
@@ -1987,7 +1987,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var103 string
 		templ_7745c5c3_Var103, templ_7745c5c3_Err = templ.JoinStringErrs(transitPointVal(event.Arrival, "location"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 726, Col: 149}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 729, Col: 149}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var103))
 		if templ_7745c5c3_Err != nil {
@@ -2000,7 +2000,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var104 string
 		templ_7745c5c3_Var104, templ_7745c5c3_Err = templ.JoinStringErrs(transitPointVal(event.Arrival, "code"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 730, Col: 134}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 733, Col: 134}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var104))
 		if templ_7745c5c3_Err != nil {
@@ -2013,7 +2013,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var105 string
 		templ_7745c5c3_Var105, templ_7745c5c3_Err = templ.JoinStringErrs(transitPointVal(event.Arrival, "latitude"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 736, Col: 142}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 739, Col: 142}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var105))
 		if templ_7745c5c3_Err != nil {
@@ -2026,7 +2026,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var106 string
 		templ_7745c5c3_Var106, templ_7745c5c3_Err = templ.JoinStringErrs(transitPointVal(event.Arrival, "longitude"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 740, Col: 145}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 743, Col: 145}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var106))
 		if templ_7745c5c3_Err != nil {
@@ -2039,7 +2039,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var107 string
 		templ_7745c5c3_Var107, templ_7745c5c3_Err = templ.JoinStringErrs(event.Carrier)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 746, Col: 104}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 749, Col: 104}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var107))
 		if templ_7745c5c3_Err != nil {
@@ -2052,7 +2052,7 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var108 string
 		templ_7745c5c3_Var108, templ_7745c5c3_Err = templ.JoinStringErrs(event.FlightNumber)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 750, Col: 117}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 753, Col: 117}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var108))
 		if templ_7745c5c3_Err != nil {
@@ -2065,95 +2065,105 @@ func editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, ev
 		var templ_7745c5c3_Var109 string
 		templ_7745c5c3_Var109, templ_7745c5c3_Err = templ.JoinStringErrs(event.Duration)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 755, Col: 109}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 758, Col: 109}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var109))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 196, "\"></div></div><!-- Accommodation event fields --><div class=\"event-type-fields\" data-type=\"accommodation\" style=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 196, "\"></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"track_flight\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if event.TrackFlight {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 197, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 198, "> Show flight tracker link</label></div><!-- Accommodation event fields --><div class=\"event-type-fields\" data-type=\"accommodation\" style=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var110 string
 		templ_7745c5c3_Var110, templ_7745c5c3_Err = templruntime.SanitizeStyleAttributeValues(editEventTypeDisplay(event.Type, "accommodation"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 759, Col: 117}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 765, Col: 117}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var110))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 197, "\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_in\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 199, "\"><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_in\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if event.CheckIn {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 198, " checked")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 199, "> Check-in</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_out\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if event.CheckOut {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 200, " checked")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 201, "> Check-out</label></div><div class=\"field\"><label class=\"field-label\">URL</label> <input class=\"field-input\" type=\"url\" name=\"url\" placeholder=\"https://example.com\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 201, "> Check-in</label> <label class=\"checkbox-item\"><input type=\"checkbox\" name=\"check_out\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if event.CheckOut {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 202, " checked")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 203, "> Check-out</label></div><div class=\"field\"><label class=\"field-label\">URL</label> <input class=\"field-input\" type=\"url\" name=\"url\" placeholder=\"https://example.com\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var111 string
 		templ_7745c5c3_Var111, templ_7745c5c3_Err = templ.JoinStringErrs(event.URL)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 769, Col: 104}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 775, Col: 104}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var111))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 202, "\"></div><div class=\"field\"><label class=\"field-label\">Notes</label> <textarea class=\"field-textarea\" name=\"notes\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 204, "\"></div><div class=\"field\"><label class=\"field-label\">Notes</label> <textarea class=\"field-textarea\" name=\"notes\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var112 string
 		templ_7745c5c3_Var112, templ_7745c5c3_Err = templ.JoinStringErrs(event.Notes)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 773, Col: 63}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 779, Col: 63}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var112))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 203, "</textarea></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"optional\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 205, "</textarea></div><label class=\"checkbox-item\"><input type=\"checkbox\" name=\"optional\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if event.Optional {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 204, " checked")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 206, " checked")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 205, "> Optional event</label><div class=\"dialog-footer\"><button type=\"button\" class=\"btn btn-ghost\" data-dialog=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 207, "> Optional event</label><div class=\"dialog-footer\"><button type=\"button\" class=\"btn btn-ghost\" data-dialog=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var113 string
 		templ_7745c5c3_Var113, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("edit-event-dialog-%d-%d-%d", legIdx, dayIdx, evtIdx))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 779, Col: 127}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/pages/trip_edit.templ`, Line: 785, Col: 127}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var113))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 206, "\" onclick=\"closeDataDialog(this)\">Cancel</button> <button type=\"submit\" class=\"btn btn-primary\">Save event</button></div></form></dialog>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 208, "\" onclick=\"closeDataDialog(this)\">Cancel</button> <button type=\"submit\" class=\"btn btn-primary\">Save event</button></div></form></dialog>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -329,6 +329,11 @@ templ transitConnector(event domain.Event) {
 					if event.FlightNumber != "" {
 						<span class="transit-flight">{ event.FlightNumber }</span>
 					}
+					if event.TrackFlight && event.FlightNumber != "" {
+						<a href={ templ.SafeURL(domain.FlightTrackerURL(event.FlightNumber)) } target="_blank" rel="noopener" class="transit-track-link" title="Track flight on Flightradar24">
+							@components.Icon("plane-takeoff")
+						</a>
+					}
 				</div>
 				if event.Notes != "" {
 					<div class="transit-notes">{ event.Notes }</div>

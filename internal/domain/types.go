@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -107,6 +108,7 @@ type Event struct {
 	Arrival       *TransitPoint `json:"arrival,omitempty"`
 	Carrier       string        `json:"carrier,omitempty"`
 	FlightNumber  string        `json:"flightNumber,omitempty"`
+	TrackFlight   bool          `json:"trackFlight,omitempty"`
 
 	// accommodation event fields
 	CheckIn  bool `json:"checkIn,omitempty"`
@@ -170,6 +172,16 @@ func TransportIcon(mode string) string {
 		return icon
 	}
 	return "arrow-right"
+}
+
+// FlightTrackerURL returns a Flightradar24 URL for the given flight number.
+// It strips spaces so "JL 123" becomes "JL123".
+func FlightTrackerURL(flightNumber string) string {
+	fn := strings.ReplaceAll(strings.TrimSpace(flightNumber), " ", "")
+	if fn == "" {
+		return ""
+	}
+	return "https://www.flightradar24.com/" + fn
 }
 
 // DayTypeLabel returns a human-friendly label for a day type.
