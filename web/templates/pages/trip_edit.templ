@@ -261,7 +261,7 @@ templ legSection(csrfToken string, tripID string, leg domain.Leg, legIdx int) {
 }
 
 templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, day domain.Day, dayIdx int) {
-	<div class="day-builder">
+	<div class="day-builder" id={ fmt.Sprintf("day-builder-%d-%d", legIdx, dayIdx) }>
 		<div class="day-builder-header">
 			<div class="day-builder-info">
 				<span class="day-builder-date">{ day.Date }</span>
@@ -300,10 +300,9 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 				action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx)) }
 				class="form-stack"
 				hx-post={ "/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) }
-				hx-target="closest .day-builder"
+				hx-target={ "#day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
 				hx-swap="outerHTML"
-				hx-select="unset"
-			>
+				>
 				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 				<div class="field-row">
 					<div class="field">
@@ -355,7 +354,14 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 								title="Edit event"
 								aria-label="Edit event"
 							>@components.Icon("pencil")</button>
-							<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
+							<form
+								method="POST"
+								action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") }
+								style="display:inline"
+								class="event-async-form"
+								data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+								hx-boost="false"
+							>
 								<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 								<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event" onclick="return confirm('Delete this event?')">×</button>
 							</form>
@@ -383,7 +389,14 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 							title="Edit event"
 							aria-label="Edit event"
 						>@components.Icon("pencil")</button>
-						<form method="POST" action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") } style="display:inline">
+						<form
+							method="POST"
+							action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") }
+							style="display:inline"
+							class="event-async-form"
+							data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+							hx-boost="false"
+						>
 							<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
 							<button type="submit" class="btn btn-xs btn-ghost" title="Delete event" aria-label="Delete event" onclick="return confirm('Delete this event?')">×</button>
 						</form>
@@ -391,7 +404,6 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 				}
 			}
 		</div>
-	</div>
 	<!-- Edit Event dialogs -->
 	for evtIdx, event := range day.Events {
 		@editEventDialog(csrfToken, tripID, legIdx, dayIdx, evtIdx, event)
@@ -401,8 +413,10 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 		<form
 			method="POST"
 			action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events") }
-			class="form-stack"
+			class="form-stack event-async-form"
 			id={ fmt.Sprintf("event-form-%d-%d", legIdx, dayIdx) }
+			data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+			hx-boost="false"
 		>
 			<div class="modal-header">
 				<h2>Add Event</h2>
@@ -568,6 +582,7 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 			</div>
 		</form>
 	</dialog>
+	</div>
 }
 
 func colorOrDefault(color string) string {
@@ -620,8 +635,10 @@ templ editEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, e
 		<form
 			method="POST"
 			action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/events/" + strconv.Itoa(evtIdx)) }
-			class="form-stack"
+			class="form-stack event-async-form"
 			id={ fmt.Sprintf("edit-event-form-%d-%d-%d", legIdx, dayIdx, evtIdx) }
+			data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+			hx-boost="false"
 		>
 			<div class="modal-header">
 				<h2>Edit Event</h2>

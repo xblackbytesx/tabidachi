@@ -191,10 +191,81 @@
   }
 
   // ============================================================
+  // Builder: async event form handling (add/edit/delete events)
+  // Forms with .event-async-form are submitted via fetch, the
+  // server responds with a fresh DayBuilder fragment, and we
+  // swap it into the DOM manually — bypassing HTMX to avoid
+  // issues with outerHTML swaps inside open <dialog> elements.
+  // ============================================================
+  function initAsyncEventForms() {
+    document.querySelectorAll('.event-async-form').forEach(function (form) {
+      if (form._asyncBound) return;
+      form._asyncBound = true;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (form._asyncPending) return; // prevent double-submit
+        var dayBuilderId = form.getAttribute('data-day-builder');
+        if (!dayBuilderId) return;
+        form._asyncPending = true;
+        var submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+
+        // Sync CSRF token
+        var csrfEl = document.getElementById('csrf-live');
+        var hiddenInput = form.querySelector('input[name="gorilla.csrf.Token"]');
+        if (csrfEl && csrfEl.value && hiddenInput) {
+          hiddenInput.value = csrfEl.value;
+        }
+
+        var headers = { 'X-Day-Refresh': 'true' };
+        if (csrfEl && csrfEl.value) {
+          headers['X-CSRF-Token'] = csrfEl.value;
+        }
+
+        fetch(form.action, {
+          method: 'POST',
+          headers: headers,
+          body: new FormData(form)
+        }).then(function (res) {
+          if (!res.ok) throw new Error('Save failed: ' + res.status);
+          return res.text();
+        }).then(function (html) {
+          // Close dialog if the form is inside one
+          var dlg = form.closest('dialog');
+          if (dlg) dlg.close();
+
+          // Replace the day builder with the fresh HTML
+          var target = document.getElementById(dayBuilderId);
+          if (target) {
+            // Destroy old Sortable instances before removing DOM
+            target.querySelectorAll('.day-events-preview').forEach(function (c) {
+              if (c._sortable) { c._sortable.destroy(); c._sortable = null; }
+            });
+            var tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            var newBuilder = tmp.querySelector('#' + dayBuilderId) || tmp.firstElementChild;
+            if (newBuilder) {
+              target.replaceWith(newBuilder);
+              initSortableEvents();
+              initAsyncEventForms();
+            }
+          }
+        }).catch(function (err) {
+          console.error('Event save error:', err);
+          form._asyncPending = false;
+          if (submitBtn) submitBtn.disabled = false;
+          window.location.reload();
+        });
+      });
+    });
+  }
+
+  // ============================================================
   // HTMX hooks
   // ============================================================
   document.addEventListener('DOMContentLoaded', function () {
     initSortableEvents();
+    initAsyncEventForms();
     if (document.getElementById('timeline')) {
       scrollToToday();
     }
@@ -210,6 +281,7 @@
     document.addEventListener('submit', function (evt) {
       var form = evt.target;
       if (!form || form.tagName !== 'FORM') return;
+      if (form.classList.contains('event-async-form')) return; // handled above
       var csrfEl = document.getElementById('csrf-live');
       if (!csrfEl || !csrfEl.value) return;
       var hiddenInput = form.querySelector('input[name="gorilla.csrf.Token"]');
@@ -223,6 +295,7 @@
         scrollToToday();
       }
       initSortableEvents();
+      initAsyncEventForms();
     });
   });
 })();
