@@ -50,6 +50,28 @@ func (h *BuilderHandler) saveAndRedirect(c echo.Context, trip *domain.Trip) erro
 	return redirect(c, "/trips/"+trip.ID.String()+"/edit")
 }
 
+// saveAndRenderDay persists the trip then either returns the re-rendered
+// DayBuilder fragment (for fetch-based JS callers) or falls back to a redirect.
+func (h *BuilderHandler) saveAndRenderDay(c echo.Context, trip *domain.Trip, legIdx, dayIdx int) error {
+	if err := h.trips.Update(c.Request().Context(), trip); err != nil {
+		slog.Error("builder: update trip", "err", err)
+		return c.String(http.StatusInternalServerError, "error saving trip")
+	}
+	// Requests from the async event JS handler include X-Day-Refresh.
+	if c.Request().Header.Get("X-Day-Refresh") == "true" {
+		return render(c, http.StatusOK, pages.DayBuilder(
+			csrfToken(c),
+			trip.ID.String(),
+			trip.Data.Legs[legIdx],
+			legIdx,
+			trip.Data.Legs[legIdx].Days[dayIdx],
+			dayIdx,
+		))
+	}
+	// Fallback: redirect (works for non-JS and HTMX form submissions).
+	return h.saveAndRedirect(c, trip)
+}
+
 // parseDate parses an ISO date string, returning zero time on failure.
 func parseDate(s string) (time.Time, bool) {
 	t, err := time.Parse("2006-01-02", s)
@@ -210,25 +232,12 @@ func (h *BuilderHandler) AddDay(c echo.Context) error {
 	if date == "" {
 		return c.String(http.StatusBadRequest, "date is required")
 	}
-	dayDate, ok := parseDate(date)
-	if !ok {
+	if _, ok := parseDate(date); !ok {
 		return c.String(http.StatusBadRequest, "invalid date format (expected YYYY-MM-DD)")
 	}
 
-	// #5: day date must be within leg date range
-	leg := trip.Data.Legs[idx]
-	if legStart, ok := parseDate(leg.StartDate); ok {
-		if dayDate.Before(legStart) {
-			return c.String(http.StatusBadRequest, "day date must be on or after leg start date ("+leg.StartDate+")")
-		}
-	}
-	if legEnd, ok := parseDate(leg.EndDate); ok {
-		if dayDate.After(legEnd) {
-			return c.String(http.StatusBadRequest, "day date must be on or before leg end date ("+leg.EndDate+")")
-		}
-	}
-
 	// #7: prevent duplicate day dates within this leg
+	leg := trip.Data.Legs[idx]
 	for _, existing := range leg.Days {
 		if existing.Date == date {
 			return c.String(http.StatusBadRequest, "a day with date "+date+" already exists in this leg")
@@ -359,7 +368,7 @@ func (h *BuilderHandler) AddEvent(c echo.Context) error {
 	}
 
 	day.Events = append(day.Events, event)
-	return h.saveAndRedirect(c, trip)
+	return h.saveAndRenderDay(c, trip, legIdx, dayIdx)
 }
 
 // UpdateDay updates a day's label, type, and notes.
@@ -511,7 +520,7 @@ func (h *BuilderHandler) UpdateEvent(c echo.Context) error {
 		existing.CheckOut = c.FormValue("check_out") == "on"
 	}
 
-	return h.saveAndRedirect(c, trip)
+	return h.saveAndRenderDay(c, trip, legIdx, dayIdx)
 }
 
 // DeleteEvent removes an event from a day.
@@ -540,7 +549,7 @@ func (h *BuilderHandler) DeleteEvent(c echo.Context) error {
 	for i := range trip.Data.Legs[legIdx].Days[dayIdx].Events {
 		trip.Data.Legs[legIdx].Days[dayIdx].Events[i].Sequence = i + 1
 	}
-	return h.saveAndRedirect(c, trip)
+	return h.saveAndRenderDay(c, trip, legIdx, dayIdx)
 }
 
 // ReorderEvents reorders events within a day based on the provided index order.
