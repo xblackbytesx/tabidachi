@@ -76,11 +76,23 @@ type Accommodation struct {
 }
 
 type Day struct {
-	Date   string  `json:"date"`
-	Label  string  `json:"label,omitempty"`
-	Type   string  `json:"type"` // normal|arrival|departure|travel|rest|flexible
-	Notes  string  `json:"notes,omitempty"`
-	Events []Event `json:"events"`
+	Date    string      `json:"date"`
+	Label   string      `json:"label,omitempty"`
+	Type    string      `json:"type"` // normal|arrival|departure|travel|rest|flexible
+	Notes   string      `json:"notes,omitempty"`
+	Events  []Event     `json:"events"`
+	Options []DayOption `json:"options,omitempty"`
+}
+
+// DayOption represents one alternative plan for a free/flexible day.
+// A day can list multiple options; at most one can be marked Selected.
+type DayOption struct {
+	Sequence    int     `json:"sequence"`
+	Title       string  `json:"title"`
+	Description string  `json:"description,omitempty"`
+	Location    string  `json:"location,omitempty"` // proximity context, e.g. "Near Mt. Fuji"
+	Events      []Event `json:"events,omitempty"`
+	Selected    bool    `json:"selected,omitempty"`
 }
 
 type Event struct {

@@ -404,6 +404,60 @@ templ DayBuilder(csrfToken string, tripID string, leg domain.Leg, legIdx int, da
 				}
 			}
 		</div>
+	<!-- Alternatives (day options) section -->
+	<div class="day-options-section">
+		<div class="day-options-header">
+			<span class="day-options-label">@components.Icon("shuffle") Alternatives</span>
+			<button
+				class="btn btn-xs btn-ghost"
+				data-dialog={ fmt.Sprintf("add-option-dialog-%d-%d", legIdx, dayIdx) }
+				onclick="openDataDialog(this); return false;"
+			>@components.Icon("plus") Alternative</button>
+		</div>
+		for optIdx, opt := range day.Options {
+			@optionBuilderCard(csrfToken, tripID, legIdx, dayIdx, optIdx, opt)
+		}
+	</div>
+	<!-- Edit Option dialogs -->
+	for optIdx, opt := range day.Options {
+		@editOptionDialog(csrfToken, tripID, legIdx, dayIdx, optIdx, opt)
+		for evtIdx, event := range opt.Events {
+			@editOptionEventDialog(csrfToken, tripID, legIdx, dayIdx, optIdx, evtIdx, event)
+		}
+		@addOptionEventDialog(csrfToken, tripID, legIdx, dayIdx, optIdx)
+	}
+	<!-- Add Option dialog -->
+	<dialog id={ fmt.Sprintf("add-option-dialog-%d-%d", legIdx, dayIdx) } class="modal-dialog">
+		<form
+			method="POST"
+			action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/options") }
+			class="form-stack event-async-form"
+			data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+			hx-boost="false"
+		>
+			<div class="modal-header">
+				<h2>Add Alternative</h2>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("add-option-dialog-%d-%d", legIdx, dayIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
+			</div>
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<div class="field">
+				<label class="field-label">Title <span class="required">*</span></label>
+				<input class="field-input" type="text" name="title" required placeholder="e.g. Day trip to Lake Kawaguchiko"/>
+			</div>
+			<div class="field">
+				<label class="field-label">Proximity / location</label>
+				<input class="field-input" type="text" name="location" placeholder="e.g. Near Mt. Fuji"/>
+			</div>
+			<div class="field">
+				<label class="field-label">Description</label>
+				<textarea class="field-textarea" name="description" placeholder="Brief description of this option"></textarea>
+			</div>
+			<div class="dialog-footer">
+				<button type="button" class="btn btn-ghost" data-dialog={ fmt.Sprintf("add-option-dialog-%d-%d", legIdx, dayIdx) } onclick="closeDataDialog(this)">Cancel</button>
+				<button type="submit" class="btn btn-primary">Add alternative</button>
+			</div>
+		</form>
+	</dialog>
 	<!-- Edit Event dialogs -->
 	for evtIdx, event := range day.Events {
 		@editEventDialog(csrfToken, tripID, legIdx, dayIdx, evtIdx, event)
@@ -813,4 +867,365 @@ func editEventTypeDisplay(eventType, sectionType string) string {
 		return ""
 	}
 	return "display:none"
+}
+
+templ optionBuilderCard(csrfToken string, tripID string, legIdx int, dayIdx int, optIdx int, opt domain.DayOption) {
+	<div class={ "option-builder-card", templ.KV("is-selected", opt.Selected) }>
+		<div class="option-builder-header">
+			<span class="option-builder-title">{ opt.Title }</span>
+			if opt.Location != "" {
+				<span class="option-card-location">@components.Icon("map-pin") { opt.Location }</span>
+			}
+			if opt.Selected {
+				<span class="badge badge-chosen badge-sm">✓ Chosen</span>
+			}
+			<div class="option-builder-actions">
+				<form
+					method="POST"
+					action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/options/" + strconv.Itoa(optIdx) + "/select") }
+					style="display:inline"
+					class="event-async-form"
+					data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+					hx-boost="false"
+				>
+					<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+					<button type="submit" class="btn btn-xs btn-ghost" title="Mark as chosen">
+						if opt.Selected {
+							Deselect
+						} else {
+							Select
+						}
+					</button>
+				</form>
+				<button
+					class="btn btn-xs btn-ghost"
+					data-dialog={ fmt.Sprintf("edit-option-dialog-%d-%d-%d", legIdx, dayIdx, optIdx) }
+					onclick="openDataDialog(this); return false;"
+					aria-label="Edit alternative"
+				>@components.Icon("pencil")</button>
+				<button
+					class="btn btn-xs btn-ghost"
+					data-dialog={ fmt.Sprintf("add-opt-event-dialog-%d-%d-%d", legIdx, dayIdx, optIdx) }
+					onclick="openDataDialog(this); return false;"
+				>@components.Icon("plus") Event</button>
+				<form
+					method="POST"
+					action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/options/" + strconv.Itoa(optIdx) + "/delete") }
+					style="display:inline"
+					class="event-async-form"
+					data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+					hx-boost="false"
+				>
+					<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+					<button type="submit" class="btn btn-xs btn-ghost" onclick="return confirm('Delete this alternative?')" aria-label="Delete alternative">×</button>
+				</form>
+			</div>
+		</div>
+		if opt.Description != "" {
+			<div class="option-card-description">{ opt.Description }</div>
+		}
+		if len(opt.Events) > 0 {
+			<div class="option-events-list">
+				for evtIdx, event := range opt.Events {
+					<div class="event-preview-row">
+						<span class={ "event-preview-type", templ.KV("event-preview-transit", event.Type == "transit"), templ.KV("event-preview-accommodation", event.Type == "accommodation") }>
+							if event.Type == "transit" {
+								@components.Icon(domain.TransportIcon(event.TransportMode))
+							} else if event.Type == "accommodation" {
+								@components.Icon("building")
+							} else {
+								@components.Icon("location-dot")
+							}
+						</span>
+						<span class="event-preview-title">{ event.Title }</span>
+						if event.StartTime != "" {
+							<span class="event-preview-time">{ event.StartTime }</span>
+						}
+						<button
+							class="btn btn-xs btn-ghost"
+							data-dialog={ fmt.Sprintf("edit-opt-event-dialog-%d-%d-%d-%d", legIdx, dayIdx, optIdx, evtIdx) }
+							onclick="openDataDialog(this); return false;"
+							title="Edit event"
+							aria-label="Edit event"
+						>@components.Icon("pencil")</button>
+						<form
+							method="POST"
+							action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/options/" + strconv.Itoa(optIdx) + "/events/" + strconv.Itoa(evtIdx) + "/delete") }
+							style="display:inline"
+							class="event-async-form"
+							data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+							hx-boost="false"
+						>
+							<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+							<button type="submit" class="btn btn-xs btn-ghost" onclick="return confirm('Delete this event?')" aria-label="Delete event">×</button>
+						</form>
+					</div>
+				}
+			</div>
+		}
+	</div>
+}
+
+templ editOptionDialog(csrfToken string, tripID string, legIdx int, dayIdx int, optIdx int, opt domain.DayOption) {
+	<dialog id={ fmt.Sprintf("edit-option-dialog-%d-%d-%d", legIdx, dayIdx, optIdx) } class="modal-dialog">
+		<form
+			method="POST"
+			action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/options/" + strconv.Itoa(optIdx)) }
+			class="form-stack event-async-form"
+			data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+			hx-boost="false"
+		>
+			<div class="modal-header">
+				<h2>Edit Alternative</h2>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("edit-option-dialog-%d-%d-%d", legIdx, dayIdx, optIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
+			</div>
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<div class="field">
+				<label class="field-label">Title <span class="required">*</span></label>
+				<input class="field-input" type="text" name="title" required value={ opt.Title }/>
+			</div>
+			<div class="field">
+				<label class="field-label">Proximity / location</label>
+				<input class="field-input" type="text" name="location" value={ opt.Location } placeholder="e.g. Near Mt. Fuji"/>
+			</div>
+			<div class="field">
+				<label class="field-label">Description</label>
+				<textarea class="field-textarea" name="description">{ opt.Description }</textarea>
+			</div>
+			<div class="dialog-footer">
+				<button type="button" class="btn btn-ghost" data-dialog={ fmt.Sprintf("edit-option-dialog-%d-%d-%d", legIdx, dayIdx, optIdx) } onclick="closeDataDialog(this)">Cancel</button>
+				<button type="submit" class="btn btn-primary">Save</button>
+			</div>
+		</form>
+	</dialog>
+}
+
+templ addOptionEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, optIdx int) {
+	<dialog id={ fmt.Sprintf("add-opt-event-dialog-%d-%d-%d", legIdx, dayIdx, optIdx) } class="modal-dialog">
+		<form
+			method="POST"
+			action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/options/" + strconv.Itoa(optIdx) + "/events") }
+			class="form-stack event-async-form"
+			id={ fmt.Sprintf("opt-event-form-%d-%d-%d", legIdx, dayIdx, optIdx) }
+			data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+			hx-boost="false"
+		>
+			<div class="modal-header">
+				<h2>Add Event to Alternative</h2>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("add-opt-event-dialog-%d-%d-%d", legIdx, dayIdx, optIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
+			</div>
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label">Event type <span class="required">*</span></label>
+					<select
+						class="field-input"
+						name="event_type"
+						data-event-form={ fmt.Sprintf("opt-event-form-%d-%d-%d", legIdx, dayIdx, optIdx) }
+						onchange="onEventTypeChangeByAttr(this)"
+						required
+					>
+						<option value="activity">Activity</option>
+						<option value="transit">Transit</option>
+						<option value="accommodation">Accommodation</option>
+					</select>
+				</div>
+				<div class="field">
+					<label class="field-label">Title <span class="required">*</span></label>
+					<input class="field-input" type="text" name="title" required placeholder="e.g. Arakurayama Sengen Park"/>
+				</div>
+			</div>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label">Start time</label>
+					<input class="field-input" type="text" name="start_time" placeholder="HH:MM"/>
+				</div>
+				<div class="field">
+					<label class="field-label">End time</label>
+					<input class="field-input" type="text" name="end_time" placeholder="HH:MM"/>
+				</div>
+			</div>
+			<div class="event-type-fields" data-type="activity">
+				<div class="field">
+					<label class="field-label">Location name</label>
+					<input class="field-input" type="text" name="location" placeholder="Venue or place name"/>
+				</div>
+				<div class="field">
+					<label class="field-label">Address / search query</label>
+					<input class="field-input" type="text" name="address" placeholder="Address or search term for Maps"/>
+				</div>
+				<label class="checkbox-item">
+					<input type="checkbox" name="ticket_required"/> Ticket required
+				</label>
+			</div>
+			<div class="event-type-fields" data-type="transit" style="display:none">
+				<div class="field">
+					<label class="field-label">Transport mode</label>
+					<select class="field-input" name="transport_mode">
+						<option value="flight">Flight</option>
+						<option value="shinkansen">Shinkansen</option>
+						<option value="train">Train</option>
+						<option value="subway">Subway</option>
+						<option value="bus">Bus</option>
+						<option value="tram">Tram</option>
+						<option value="ferry">Ferry</option>
+						<option value="taxi">Taxi</option>
+						<option value="car">Car</option>
+						<option value="walk">Walk</option>
+					</select>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">From</label>
+						<input class="field-input" type="text" name="departure_location" placeholder="City or station"/>
+					</div>
+					<div class="field">
+						<label class="field-label">To</label>
+						<input class="field-input" type="text" name="arrival_location" placeholder="City or station"/>
+					</div>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">Carrier</label>
+						<input class="field-input" type="text" name="carrier" placeholder="e.g. JR"/>
+					</div>
+					<div class="field">
+						<label class="field-label">Duration (ISO8601)</label>
+						<input class="field-input" type="text" name="duration" placeholder="e.g. PT2H"/>
+					</div>
+				</div>
+			</div>
+			<div class="event-type-fields" data-type="accommodation" style="display:none">
+				<label class="checkbox-item">
+					<input type="checkbox" name="check_in"/> Check-in
+				</label>
+				<label class="checkbox-item">
+					<input type="checkbox" name="check_out"/> Check-out
+				</label>
+			</div>
+			<div class="field">
+				<label class="field-label">Notes</label>
+				<textarea class="field-textarea" name="notes"></textarea>
+			</div>
+			<div class="dialog-footer">
+				<button type="button" class="btn btn-ghost" data-dialog={ fmt.Sprintf("add-opt-event-dialog-%d-%d-%d", legIdx, dayIdx, optIdx) } onclick="closeDataDialog(this)">Cancel</button>
+				<button type="submit" class="btn btn-primary">Add event</button>
+			</div>
+		</form>
+	</dialog>
+}
+
+templ editOptionEventDialog(csrfToken string, tripID string, legIdx int, dayIdx int, optIdx int, evtIdx int, event domain.Event) {
+	<dialog id={ fmt.Sprintf("edit-opt-event-dialog-%d-%d-%d-%d", legIdx, dayIdx, optIdx, evtIdx) } class="modal-dialog">
+		<form
+			method="POST"
+			action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/options/" + strconv.Itoa(optIdx) + "/events/" + strconv.Itoa(evtIdx)) }
+			class="form-stack event-async-form"
+			id={ fmt.Sprintf("edit-opt-event-form-%d-%d-%d-%d", legIdx, dayIdx, optIdx, evtIdx) }
+			data-day-builder={ "day-builder-" + strconv.Itoa(legIdx) + "-" + strconv.Itoa(dayIdx) }
+			hx-boost="false"
+		>
+			<div class="modal-header">
+				<h2>Edit Event</h2>
+				<button type="button" class="modal-close" data-dialog={ fmt.Sprintf("edit-opt-event-dialog-%d-%d-%d-%d", legIdx, dayIdx, optIdx, evtIdx) } onclick="closeDataDialog(this)" aria-label="Close">@components.Icon("xmark")</button>
+			</div>
+			<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label">Event type <span class="required">*</span></label>
+					<select
+						class="field-input"
+						name="event_type"
+						data-event-form={ fmt.Sprintf("edit-opt-event-form-%d-%d-%d-%d", legIdx, dayIdx, optIdx, evtIdx) }
+						onchange="onEventTypeChangeByAttr(this)"
+						required
+					>
+						<option value="activity" selected?={ event.Type == "activity" }>Activity</option>
+						<option value="transit" selected?={ event.Type == "transit" }>Transit</option>
+						<option value="accommodation" selected?={ event.Type == "accommodation" }>Accommodation</option>
+					</select>
+				</div>
+				<div class="field">
+					<label class="field-label">Title <span class="required">*</span></label>
+					<input class="field-input" type="text" name="title" required value={ event.Title }/>
+				</div>
+			</div>
+			<div class="field-row">
+				<div class="field">
+					<label class="field-label">Start time</label>
+					<input class="field-input" type="text" name="start_time" placeholder="HH:MM" value={ event.StartTime }/>
+				</div>
+				<div class="field">
+					<label class="field-label">End time</label>
+					<input class="field-input" type="text" name="end_time" placeholder="HH:MM" value={ event.EndTime }/>
+				</div>
+			</div>
+			<div class="event-type-fields" data-type="activity" style={ editEventTypeDisplay(event.Type, "activity") }>
+				<div class="field">
+					<label class="field-label">Location name</label>
+					<input class="field-input" type="text" name="location" value={ event.Location }/>
+				</div>
+				<div class="field">
+					<label class="field-label">Address / search query</label>
+					<input class="field-input" type="text" name="address" value={ event.Address }/>
+				</div>
+				<label class="checkbox-item">
+					<input type="checkbox" name="ticket_required" checked?={ event.TicketRequired }/> Ticket required
+				</label>
+			</div>
+			<div class="event-type-fields" data-type="transit" style={ editEventTypeDisplay(event.Type, "transit") }>
+				<div class="field">
+					<label class="field-label">Transport mode</label>
+					<select class="field-input" name="transport_mode">
+						<option value="flight" selected?={ event.TransportMode == "flight" }>Flight</option>
+						<option value="shinkansen" selected?={ event.TransportMode == "shinkansen" }>Shinkansen</option>
+						<option value="train" selected?={ event.TransportMode == "train" }>Train</option>
+						<option value="subway" selected?={ event.TransportMode == "subway" }>Subway</option>
+						<option value="bus" selected?={ event.TransportMode == "bus" }>Bus</option>
+						<option value="tram" selected?={ event.TransportMode == "tram" }>Tram</option>
+						<option value="ferry" selected?={ event.TransportMode == "ferry" }>Ferry</option>
+						<option value="taxi" selected?={ event.TransportMode == "taxi" }>Taxi</option>
+						<option value="car" selected?={ event.TransportMode == "car" }>Car</option>
+						<option value="walk" selected?={ event.TransportMode == "walk" }>Walk</option>
+					</select>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">From</label>
+						<input class="field-input" type="text" name="departure_location" value={ transitPointVal(event.Departure, "location") }/>
+					</div>
+					<div class="field">
+						<label class="field-label">To</label>
+						<input class="field-input" type="text" name="arrival_location" value={ transitPointVal(event.Arrival, "location") }/>
+					</div>
+				</div>
+				<div class="field-row">
+					<div class="field">
+						<label class="field-label">Carrier</label>
+						<input class="field-input" type="text" name="carrier" value={ event.Carrier }/>
+					</div>
+					<div class="field">
+						<label class="field-label">Duration</label>
+						<input class="field-input" type="text" name="duration" value={ event.Duration }/>
+					</div>
+				</div>
+			</div>
+			<div class="event-type-fields" data-type="accommodation" style={ editEventTypeDisplay(event.Type, "accommodation") }>
+				<label class="checkbox-item">
+					<input type="checkbox" name="check_in" checked?={ event.CheckIn }/> Check-in
+				</label>
+				<label class="checkbox-item">
+					<input type="checkbox" name="check_out" checked?={ event.CheckOut }/> Check-out
+				</label>
+			</div>
+			<div class="field">
+				<label class="field-label">Notes</label>
+				<textarea class="field-textarea" name="notes">{ event.Notes }</textarea>
+			</div>
+			<div class="dialog-footer">
+				<button type="button" class="btn btn-ghost" data-dialog={ fmt.Sprintf("edit-opt-event-dialog-%d-%d-%d-%d", legIdx, dayIdx, optIdx, evtIdx) } onclick="closeDataDialog(this)">Cancel</button>
+				<button type="submit" class="btn btn-primary">Save event</button>
+			</div>
+		</form>
+	</dialog>
 }

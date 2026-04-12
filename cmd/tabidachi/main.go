@@ -226,6 +226,15 @@ func main() {
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx", builderHandler.UpdateEvent)
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/delete", builderHandler.DeleteEvent)
 
+	// Day alternatives (options) endpoints
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/options", builderHandler.AddOption)
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/options/:optIdx", builderHandler.UpdateOption)
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/options/:optIdx/delete", builderHandler.DeleteOption)
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/options/:optIdx/select", builderHandler.SelectOption)
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/options/:optIdx/events", builderHandler.AddOptionEvent)
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/options/:optIdx/events/:eventIdx", builderHandler.UpdateOptionEvent)
+	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/options/:optIdx/events/:eventIdx/delete", builderHandler.DeleteOptionEvent)
+
 	go func() {
 		sig := make(chan os.Signal, 1)
 		signal.Notify(sig, syscall.SIGTERM, syscall.SIGINT)
