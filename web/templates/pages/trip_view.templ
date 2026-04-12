@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 	"github.com/xblackbytesx/tabidachi/internal/domain"
@@ -135,8 +136,8 @@ templ TripView(csrfToken string, trip *domain.Trip, shares []*domain.TripShare, 
 								<p class="notes-text">{ leg.Notes }</p>
 							</details>
 						}
-						for _, day := range leg.Days {
-							@daySection(trip, day)
+						for dayIdx, day := range leg.Days {
+							@DaySection(csrfToken, trip, day, legIdx, dayIdx)
 						}
 					</div>
 					if legIdx < len(trip.Data.Legs)-1 {
@@ -158,7 +159,7 @@ templ TripView(csrfToken string, trip *domain.Trip, shares []*domain.TripShare, 
 	}
 }
 
-templ daySection(trip *domain.Trip, day domain.Day) {
+templ DaySection(csrfToken string, trip *domain.Trip, day domain.Day, legIdx, dayIdx int) {
 	<div
 		class={ "day-section", templ.KV("day-today", isToday(day.Date)) }
 		data-date={ day.Date }
@@ -185,7 +186,7 @@ templ daySection(trip *domain.Trip, day domain.Day) {
 			</div>
 		</div>
 		if day.Notes != "" {
-			<details class="day-notes">
+			<details class="day-notes" id={ "day-notes-" + day.Date }>
 				<summary>@components.Icon("note-sticky") Day notes</summary>
 				<p class="notes-text">{ day.Notes }</p>
 			</details>
@@ -199,6 +200,74 @@ templ daySection(trip *domain.Trip, day domain.Day) {
 				}
 			}
 		</div>
+		if len(day.Options) > 0 {
+			<div class="alternatives-section">
+				<div class="alternatives-header">
+					@components.Icon("shuffle")
+					Alternatives
+				</div>
+				for optIdx, opt := range day.Options {
+					@optionCard(csrfToken, trip.ID.String(), day.Date, opt, legIdx, dayIdx, optIdx)
+				}
+			</div>
+		}
+	</div>
+}
+
+templ optionCard(csrfToken string, tripID string, dayDate string, opt domain.DayOption, legIdx, dayIdx, optIdx int) {
+	<div class={ "option-card", templ.KV("is-selected", opt.Selected) }>
+		<div class="option-card-header">
+			<span class="option-card-title">{ opt.Title }</span>
+			if opt.Location != "" {
+				<span class="option-card-location">@components.Icon("map-pin") { opt.Location }</span>
+			}
+			if opt.Selected {
+				<span class="badge badge-chosen">✓ Chosen</span>
+			}
+			<form
+				method="POST"
+				action={ templ.SafeURL("/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/options/" + strconv.Itoa(optIdx) + "/select") }
+				class="option-select-form"
+				hx-boost="false"
+				hx-post={ "/trips/" + tripID + "/legs/" + strconv.Itoa(legIdx) + "/days/" + strconv.Itoa(dayIdx) + "/options/" + strconv.Itoa(optIdx) + "/select" }
+				hx-target={ "#day-" + dayDate }
+				hx-swap="outerHTML"
+				hx-select={ "#day-" + dayDate }
+			>
+				<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+				<button type="submit" class="btn btn-xs btn-ghost">
+					if opt.Selected {
+						Deselect
+					} else {
+						Select
+					}
+				</button>
+			</form>
+		</div>
+		if opt.Description != "" {
+			<div class="option-card-description">{ opt.Description }</div>
+		}
+		if len(opt.Events) > 0 {
+			<details class="option-card-events" id={ fmt.Sprintf("opt-events-%s-%d", dayDate, optIdx) }>
+				<summary class="option-card-events-toggle">
+					@components.Icon("list-ul")
+					if len(opt.Events) == 1 {
+						1 event
+					} else {
+						{ fmt.Sprintf("%d events", len(opt.Events)) }
+					}
+				</summary>
+				<div class="option-events-preview">
+					for _, event := range opt.Events {
+						if event.Type == "transit" {
+							@transitConnector(event)
+						} else {
+							@eventCard(event)
+						}
+					}
+				</div>
+			</details>
+		}
 	</div>
 }
 

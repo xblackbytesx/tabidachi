@@ -2,9 +2,11 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -548,6 +550,324 @@ func (h *BuilderHandler) DeleteEvent(c echo.Context) error {
 	// Re-sequence
 	for i := range trip.Data.Legs[legIdx].Days[dayIdx].Events {
 		trip.Data.Legs[legIdx].Days[dayIdx].Events[i].Sequence = i + 1
+	}
+	return h.saveAndRenderDay(c, trip, legIdx, dayIdx)
+}
+
+// AddOption adds an alternative plan option to a day.
+func (h *BuilderHandler) AddOption(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+
+	title := strings.TrimSpace(c.FormValue("title"))
+	if title == "" {
+		return c.String(http.StatusBadRequest, "title is required")
+	}
+	if len(title) > 200 || len(c.FormValue("description")) > 500 || len(c.FormValue("location")) > 500 {
+		return c.String(http.StatusBadRequest, "field value too long")
+	}
+
+	day := &trip.Data.Legs[legIdx].Days[dayIdx]
+	opt := domain.DayOption{
+		Sequence:    len(day.Options) + 1,
+		Title:       title,
+		Description: c.FormValue("description"),
+		Location:    c.FormValue("location"),
+		Events:      []domain.Event{},
+	}
+	day.Options = append(day.Options, opt)
+	return h.saveAndRenderDay(c, trip, legIdx, dayIdx)
+}
+
+// UpdateOption edits the title, description, and location of an alternative.
+func (h *BuilderHandler) UpdateOption(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+	optIdx, err := strconv.Atoi(c.Param("optIdx"))
+	if err != nil || optIdx < 0 || optIdx >= len(trip.Data.Legs[legIdx].Days[dayIdx].Options) {
+		return c.String(http.StatusBadRequest, "invalid option index")
+	}
+
+	title := strings.TrimSpace(c.FormValue("title"))
+	if title == "" {
+		return c.String(http.StatusBadRequest, "title is required")
+	}
+	if len(title) > 200 || len(c.FormValue("description")) > 500 || len(c.FormValue("location")) > 500 {
+		return c.String(http.StatusBadRequest, "field value too long")
+	}
+
+	opt := &trip.Data.Legs[legIdx].Days[dayIdx].Options[optIdx]
+	opt.Title = title
+	opt.Description = c.FormValue("description")
+	opt.Location = c.FormValue("location")
+	return h.saveAndRenderDay(c, trip, legIdx, dayIdx)
+}
+
+// DeleteOption removes an alternative from a day.
+func (h *BuilderHandler) DeleteOption(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+	optIdx, err := strconv.Atoi(c.Param("optIdx"))
+	if err != nil || optIdx < 0 || optIdx >= len(trip.Data.Legs[legIdx].Days[dayIdx].Options) {
+		return c.String(http.StatusBadRequest, "invalid option index")
+	}
+
+	day := &trip.Data.Legs[legIdx].Days[dayIdx]
+	day.Options = append(day.Options[:optIdx], day.Options[optIdx+1:]...)
+	for i := range day.Options {
+		day.Options[i].Sequence = i + 1
+	}
+	return h.saveAndRenderDay(c, trip, legIdx, dayIdx)
+}
+
+// SelectOption toggles the selected state of an alternative.
+// Selecting an already-selected option deselects it; otherwise the chosen option
+// is marked selected and all others are deselected.
+func (h *BuilderHandler) SelectOption(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+	optIdx, err := strconv.Atoi(c.Param("optIdx"))
+	if err != nil || optIdx < 0 || optIdx >= len(trip.Data.Legs[legIdx].Days[dayIdx].Options) {
+		return c.String(http.StatusBadRequest, "invalid option index")
+	}
+
+	day := &trip.Data.Legs[legIdx].Days[dayIdx]
+	alreadySelected := day.Options[optIdx].Selected
+	for i := range day.Options {
+		day.Options[i].Selected = false
+	}
+	if !alreadySelected {
+		day.Options[optIdx].Selected = true
+	}
+
+	if err := h.trips.Update(c.Request().Context(), trip); err != nil {
+		slog.Error("builder: select option", "err", err)
+		return c.String(http.StatusInternalServerError, "error saving trip")
+	}
+
+	// Builder context: JS async form sends X-Day-Refresh to re-render the DayBuilder fragment.
+	if c.Request().Header.Get("X-Day-Refresh") == "true" {
+		return render(c, http.StatusOK, pages.DayBuilder(
+			csrfToken(c),
+			trip.ID.String(),
+			trip.Data.Legs[legIdx],
+			legIdx,
+			trip.Data.Legs[legIdx].Days[dayIdx],
+			dayIdx,
+		))
+	}
+	// Trip view context: return the re-rendered day section so HTMX can swap it
+	// in place without a page reload. Falls back to a plain redirect for non-HTMX.
+	if isHTMX(c) {
+		return render(c, http.StatusOK, pages.DaySection(
+			csrfToken(c),
+			trip,
+			trip.Data.Legs[legIdx].Days[dayIdx],
+			legIdx,
+			dayIdx,
+		))
+	}
+	return redirect(c, "/trips/"+trip.ID.String()+"#day-"+day.Date)
+}
+
+// buildEventFromForm constructs an Event from form values (shared by AddOptionEvent / UpdateOptionEvent).
+func buildEventFromForm(c echo.Context, seq int) (domain.Event, error) {
+	eventType := c.FormValue("event_type")
+	title := c.FormValue("title")
+	if title == "" || eventType == "" {
+		return domain.Event{}, fmt.Errorf("event_type and title are required")
+	}
+	if len(title) > 500 || len(c.FormValue("notes")) > 5000 || len(c.FormValue("location")) > 500 {
+		return domain.Event{}, fmt.Errorf("field value too long")
+	}
+	startTime := c.FormValue("start_time")
+	endTime := c.FormValue("end_time")
+	if !validateTimeFormat(startTime) {
+		return domain.Event{}, fmt.Errorf("invalid start time format (expected HH:MM)")
+	}
+	if !validateTimeFormat(endTime) {
+		return domain.Event{}, fmt.Errorf("invalid end time format (expected HH:MM)")
+	}
+	event := domain.Event{
+		Sequence:  seq,
+		Type:      eventType,
+		Title:     title,
+		StartTime: startTime,
+		EndTime:   endTime,
+		Duration:  c.FormValue("duration"),
+		Notes:     c.FormValue("notes"),
+		Optional:  c.FormValue("optional") == "on",
+		URL:       c.FormValue("url"),
+	}
+	switch eventType {
+	case "activity":
+		event.Location = c.FormValue("location")
+		event.Address = c.FormValue("address")
+		event.Latitude = c.FormValue("latitude")
+		event.Longitude = c.FormValue("longitude")
+		event.TicketRequired = c.FormValue("ticket_required") == "on"
+		event.BookingReference = c.FormValue("booking_reference")
+	case "transit":
+		event.TransportMode = c.FormValue("transport_mode")
+		event.Carrier = c.FormValue("carrier")
+		event.FlightNumber = c.FormValue("flight_number")
+		event.TrackFlight = c.FormValue("track_flight") == "on"
+		depLoc := c.FormValue("departure_location")
+		if depLoc != "" {
+			event.Departure = &domain.TransitPoint{
+				Location:  depLoc,
+				Code:      c.FormValue("departure_code"),
+				Latitude:  c.FormValue("departure_latitude"),
+				Longitude: c.FormValue("departure_longitude"),
+			}
+		}
+		arrLoc := c.FormValue("arrival_location")
+		if arrLoc != "" {
+			event.Arrival = &domain.TransitPoint{
+				Location:  arrLoc,
+				Code:      c.FormValue("arrival_code"),
+				Latitude:  c.FormValue("arrival_latitude"),
+				Longitude: c.FormValue("arrival_longitude"),
+			}
+		}
+	case "accommodation":
+		event.CheckIn = c.FormValue("check_in") == "on"
+		event.CheckOut = c.FormValue("check_out") == "on"
+	}
+	return event, nil
+}
+
+// AddOptionEvent adds an event to an alternative's event list.
+func (h *BuilderHandler) AddOptionEvent(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+	optIdx, err := strconv.Atoi(c.Param("optIdx"))
+	if err != nil || optIdx < 0 || optIdx >= len(trip.Data.Legs[legIdx].Days[dayIdx].Options) {
+		return c.String(http.StatusBadRequest, "invalid option index")
+	}
+
+	opt := &trip.Data.Legs[legIdx].Days[dayIdx].Options[optIdx]
+	event, err := buildEventFromForm(c, len(opt.Events)+1)
+	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+	opt.Events = append(opt.Events, event)
+	return h.saveAndRenderDay(c, trip, legIdx, dayIdx)
+}
+
+// UpdateOptionEvent edits an event within an alternative.
+func (h *BuilderHandler) UpdateOptionEvent(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+	optIdx, err := strconv.Atoi(c.Param("optIdx"))
+	if err != nil || optIdx < 0 || optIdx >= len(trip.Data.Legs[legIdx].Days[dayIdx].Options) {
+		return c.String(http.StatusBadRequest, "invalid option index")
+	}
+	evtIdx, err := strconv.Atoi(c.Param("eventIdx"))
+	opt := &trip.Data.Legs[legIdx].Days[dayIdx].Options[optIdx]
+	if err != nil || evtIdx < 0 || evtIdx >= len(opt.Events) {
+		return c.String(http.StatusBadRequest, "invalid event index")
+	}
+
+	event, err := buildEventFromForm(c, opt.Events[evtIdx].Sequence)
+	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+	// Preserve image fields from existing event
+	event.ImageURL = opt.Events[evtIdx].ImageURL
+	event.ImageThumbURL = opt.Events[evtIdx].ImageThumbURL
+	event.ImageCredit = opt.Events[evtIdx].ImageCredit
+	opt.Events[evtIdx] = event
+	return h.saveAndRenderDay(c, trip, legIdx, dayIdx)
+}
+
+// DeleteOptionEvent removes an event from an alternative.
+func (h *BuilderHandler) DeleteOptionEvent(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+	legIdx, err := strconv.Atoi(c.Param("legIdx"))
+	if err != nil || legIdx < 0 || legIdx >= len(trip.Data.Legs) {
+		return c.String(http.StatusBadRequest, "invalid leg index")
+	}
+	dayIdx, err := strconv.Atoi(c.Param("dayIdx"))
+	if err != nil || dayIdx < 0 || dayIdx >= len(trip.Data.Legs[legIdx].Days) {
+		return c.String(http.StatusBadRequest, "invalid day index")
+	}
+	optIdx, err := strconv.Atoi(c.Param("optIdx"))
+	if err != nil || optIdx < 0 || optIdx >= len(trip.Data.Legs[legIdx].Days[dayIdx].Options) {
+		return c.String(http.StatusBadRequest, "invalid option index")
+	}
+	opt := &trip.Data.Legs[legIdx].Days[dayIdx].Options[optIdx]
+	evtIdx, err := strconv.Atoi(c.Param("eventIdx"))
+	if err != nil || evtIdx < 0 || evtIdx >= len(opt.Events) {
+		return c.String(http.StatusBadRequest, "invalid event index")
+	}
+
+	opt.Events = append(opt.Events[:evtIdx], opt.Events[evtIdx+1:]...)
+	for i := range opt.Events {
+		opt.Events[i].Sequence = i + 1
 	}
 	return h.saveAndRenderDay(c, trip, legIdx, dayIdx)
 }

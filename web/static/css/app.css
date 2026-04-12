@@ -639,6 +639,154 @@ a:hover {
 }
 
 /* -----------------------------------------------------------------
+   Day alternatives (options)
+   ----------------------------------------------------------------- */
+
+.alternatives-section {
+    margin-top: var(--space-500);
+    padding-top: var(--space-400);
+    border-top: 1px solid var(--color-border-light);
+}
+.alternatives-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-200);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-faint);
+    margin-block-end: var(--space-300);
+}
+.option-card {
+    border: 1px dashed var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-300) var(--space-400);
+    margin-block-end: var(--space-300);
+    background: var(--color-surface-2);
+    transition: border-color 0.2s, background 0.2s;
+}
+.option-card.is-selected {
+    border-color: rgba(245, 158, 11, 0.45);
+    background: rgba(245, 158, 11, 0.04);
+}
+.option-card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-200);
+    flex-wrap: wrap;
+}
+.option-card-title {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+}
+.option-card-location {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-100);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    background: var(--color-surface-3);
+    padding: var(--space-50) var(--space-200);
+    border-radius: var(--radius-full);
+}
+.option-card-description {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-150);
+}
+.option-select-form {
+    margin-inline-start: auto;
+}
+.option-card-events {
+    margin-top: var(--space-300);
+}
+.option-card-events-toggle {
+    font-size: var(--text-xs);
+    color: var(--color-text-faint);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-100);
+    list-style: none;
+}
+.option-card-events-toggle::-webkit-details-marker { display: none; }
+.option-events-preview {
+    margin-top: var(--space-200);
+    padding-inline-start: var(--space-300);
+}
+.badge-chosen {
+    background: rgba(245, 158, 11, 0.18);
+    color: #fcd34d;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Builder alternatives */
+.day-options-section {
+    margin-top: var(--space-400);
+    padding-top: var(--space-300);
+    border-top: 1px dashed var(--color-border);
+}
+.day-options-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-block-end: var(--space-300);
+}
+.day-options-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-150);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-faint);
+}
+.option-builder-card {
+    border: 1px dashed var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-300);
+    margin-block-end: var(--space-300);
+    background: var(--color-surface-2);
+}
+.option-builder-card.is-selected {
+    border-color: rgba(245, 158, 11, 0.4);
+}
+.option-builder-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-200);
+    flex-wrap: wrap;
+}
+.option-builder-title {
+    font-weight: 600;
+    font-size: var(--text-sm);
+    flex: 1;
+    min-width: 0;
+}
+.option-builder-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-100);
+    margin-inline-start: auto;
+    flex-shrink: 0;
+}
+.option-events-list {
+    margin-top: var(--space-200);
+    padding-inline-start: var(--space-300);
+    border-inline-start: 2px solid var(--color-border);
+}
+
+/* Light mode overrides */
+:root:not(.dark) .badge-chosen {
+    background: rgba(217, 119, 6, 0.1);
+    color: #b45309;
+    border-color: rgba(217, 119, 6, 0.25);
+}
+
+/* -----------------------------------------------------------------
    Page header
    ----------------------------------------------------------------- */
 

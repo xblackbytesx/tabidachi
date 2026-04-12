@@ -237,6 +237,9 @@
           // Replace the day builder with the fresh HTML
           var target = document.getElementById(dayBuilderId);
           if (target) {
+            // Capture open <details> before removing them from the DOM
+            var openDetails = captureOpenDetails(target);
+
             // Destroy old Sortable instances before removing DOM
             target.querySelectorAll('.day-events-preview').forEach(function (c) {
               if (c._sortable) { c._sortable.destroy(); c._sortable = null; }
@@ -248,6 +251,7 @@
               target.replaceWith(newBuilder);
               initSortableEvents();
               initAsyncEventForms();
+              restoreOpenDetails(openDetails);
             }
           }
         }).catch(function (err) {
@@ -257,6 +261,26 @@
           window.location.reload();
         });
       });
+    });
+  }
+
+  // ============================================================
+  // <details> open-state preservation across DOM swaps
+  // Captures which <details id="..."> are open before a swap
+  // and re-opens them afterwards by ID.
+  // ============================================================
+  function captureOpenDetails(root) {
+    var ids = [];
+    root.querySelectorAll('details[open][id]').forEach(function (d) {
+      ids.push(d.id);
+    });
+    return ids;
+  }
+
+  function restoreOpenDetails(ids) {
+    ids.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.open = true;
     });
   }
 
@@ -290,12 +314,21 @@
       }
     });
 
+    // Preserve open <details> elements across HTMX partial swaps.
+    var _savedOpenDetails = [];
+    document.body.addEventListener('htmx:beforeSwap', function (evt) {
+      var target = evt.detail.target;
+      if (target) _savedOpenDetails = captureOpenDetails(target);
+    });
+
     document.body.addEventListener('htmx:afterSwap', function () {
       if (document.getElementById('timeline')) {
         scrollToToday();
       }
       initSortableEvents();
       initAsyncEventForms();
+      restoreOpenDetails(_savedOpenDetails);
+      _savedOpenDetails = [];
     });
   });
 })();

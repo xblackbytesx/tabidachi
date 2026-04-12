@@ -197,6 +197,51 @@ func validateTripData(data *domain.TripData) error {
 					}
 				}
 			}
+			// Validate day options (alternatives).
+			if len(day.Options) > 10 {
+				return fmt.Errorf("Leg %d, day %d has too many options (max 10).", i+1, j+1)
+			}
+			selectedCount := 0
+			for oi, opt := range day.Options {
+				if strings.TrimSpace(opt.Title) == "" {
+					return fmt.Errorf("Leg %d, day %d, option %d title is required.", i+1, j+1, oi+1)
+				}
+				if len(opt.Title) > 200 {
+					return fmt.Errorf("Leg %d, day %d, option %d title is too long (max 200 characters).", i+1, j+1, oi+1)
+				}
+				if len(opt.Description) > 500 {
+					return fmt.Errorf("Leg %d, day %d, option %d description is too long (max 500 characters).", i+1, j+1, oi+1)
+				}
+				if len(opt.Location) > 500 {
+					return fmt.Errorf("Leg %d, day %d, option %d location is too long (max 500 characters).", i+1, j+1, oi+1)
+				}
+				if opt.Selected {
+					selectedCount++
+				}
+				if len(opt.Events) > maxEventsPerDay {
+					return fmt.Errorf("Leg %d, day %d, option %d has too many events (max %d).", i+1, j+1, oi+1, maxEventsPerDay)
+				}
+				for k, event := range opt.Events {
+					if !validEventTypes[event.Type] {
+						return fmt.Errorf("Leg %d, day %d, option %d, event %d has invalid type %q.", i+1, j+1, oi+1, k+1, event.Type)
+					}
+					if len(event.Title) > maxStringLen {
+						return fmt.Errorf("Leg %d, day %d, option %d, event %d title is too long.", i+1, j+1, oi+1, k+1)
+					}
+					if len(event.Notes) > 5000 {
+						return fmt.Errorf("Leg %d, day %d, option %d, event %d notes are too long.", i+1, j+1, oi+1, k+1)
+					}
+					if err := validateCoords(event.Latitude, event.Longitude); err != nil {
+						return fmt.Errorf("Leg %d, day %d, option %d, event %d: %w.", i+1, j+1, oi+1, k+1, err)
+					}
+					if event.URL != "" && !strings.HasPrefix(event.URL, "http://") && !strings.HasPrefix(event.URL, "https://") {
+						return fmt.Errorf("Leg %d, day %d, option %d, event %d URL must start with http:// or https://.", i+1, j+1, oi+1, k+1)
+					}
+				}
+			}
+			if selectedCount > 1 {
+				return fmt.Errorf("Leg %d, day %d has more than one option marked as selected.", i+1, j+1)
+			}
 		}
 	}
 	return nil

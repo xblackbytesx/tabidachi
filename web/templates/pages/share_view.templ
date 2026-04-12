@@ -178,6 +178,55 @@ templ shareDaySection(trip *domain.Trip, day domain.Day, shareToken string) {
 				}
 			}
 		</div>
+		if len(day.Options) > 0 {
+			<div class="alternatives-section">
+				<div class="alternatives-header">
+					@components.Icon("shuffle")
+					Alternatives
+				</div>
+				for _, opt := range day.Options {
+					@shareOptionCard(opt, shareToken)
+				}
+			</div>
+		}
+	</div>
+}
+
+templ shareOptionCard(opt domain.DayOption, shareToken string) {
+	<div class={ "option-card", templ.KV("is-selected", opt.Selected) }>
+		<div class="option-card-header">
+			<span class="option-card-title">{ opt.Title }</span>
+			if opt.Location != "" {
+				<span class="option-card-location">@components.Icon("map-pin") { opt.Location }</span>
+			}
+			if opt.Selected {
+				<span class="badge badge-chosen">✓ Chosen</span>
+			}
+		</div>
+		if opt.Description != "" {
+			<div class="option-card-description">{ opt.Description }</div>
+		}
+		if len(opt.Events) > 0 {
+			<details class="option-card-events">
+				<summary class="option-card-events-toggle">
+					@components.Icon("list-ul")
+					if len(opt.Events) == 1 {
+						1 event
+					} else {
+						{ fmt.Sprintf("%d events", len(opt.Events)) }
+					}
+				</summary>
+				<div class="option-events-preview">
+					for _, event := range opt.Events {
+						if event.Type == "transit" {
+							@transitConnector(event)
+						} else {
+							@shareEventCard(event, shareToken)
+						}
+					}
+				</div>
+			</details>
+		}
 	</div>
 }
 
