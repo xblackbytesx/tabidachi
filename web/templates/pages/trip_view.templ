@@ -92,6 +92,7 @@ templ TripView(csrfToken string, trip *domain.Trip, shares []*domain.TripShare, 
 					</a>
 				</div>
 			}
+			@viewFilterBar()
 			<div class="timeline" id="timeline">
 				if len(trip.Data.Legs) == 0 {
 					<div class="empty-state">
@@ -409,6 +410,20 @@ templ transitConnector(event domain.Event) {
 				}
 			</div>
 		</div>
+	</div>
+}
+
+templ viewFilterBar() {
+	<div class="view-filter-bar" id="view-filter-bar">
+		<span class="view-filter-label">Show</span>
+		<button class="view-filter-btn" id="filter-btn-notes" type="button">
+			@components.Icon("note-sticky")
+			Notes
+		</button>
+		<button class="view-filter-btn" id="filter-btn-alternatives" type="button">
+			@components.Icon("shuffle")
+			Alternatives
+		</button>
 	</div>
 }
 

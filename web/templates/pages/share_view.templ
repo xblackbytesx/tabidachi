@@ -71,6 +71,7 @@ templ ShareView(trip *domain.Trip, shareToken string) {
 					}
 				</div>
 			}
+			@shareViewFilterBar()
 			<div class="timeline" id="timeline">
 				if len(trip.Data.Legs) == 0 {
 					<div class="empty-state">
@@ -294,6 +295,20 @@ templ shareEventCard(event domain.Event, shareToken string) {
 				}
 			</div>
 		</div>
+	</div>
+}
+
+templ shareViewFilterBar() {
+	<div class="view-filter-bar" id="view-filter-bar">
+		<span class="view-filter-label">Show</span>
+		<button class="view-filter-btn" id="filter-btn-notes" type="button">
+			@components.Icon("note-sticky")
+			Notes
+		</button>
+		<button class="view-filter-btn" id="filter-btn-alternatives" type="button">
+			@components.Icon("shuffle")
+			Alternatives
+		</button>
 	</div>
 }
 

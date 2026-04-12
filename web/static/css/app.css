@@ -639,6 +639,79 @@ a:hover {
 }
 
 /* -----------------------------------------------------------------
+   View filter bar (Notes / Alternatives toggles)
+   ----------------------------------------------------------------- */
+.view-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-200);
+    padding: var(--space-200) 0;
+    margin-bottom: var(--space-600);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-bg);
+    box-shadow: 0 1px 0 var(--color-border);
+}
+
+.view-filter-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-inline-end: var(--space-100);
+}
+
+.view-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-150);
+    padding: var(--space-100) var(--space-300);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-faint);
+    cursor: pointer;
+    font-family: var(--font);
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.view-filter-btn .icon {
+    width: 0.85em;
+    height: 0.85em;
+    flex-shrink: 0;
+}
+
+.view-filter-btn.is-active {
+    color: var(--color-text);
+    border-color: var(--color-border-light);
+    background: var(--color-surface-2);
+}
+
+.view-filter-btn:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-light);
+    background: var(--color-surface-2);
+}
+
+/* ---- filter: hide notes ---- */
+.timeline.hide-notes .day-notes,
+.timeline.hide-notes .leg-notes,
+.timeline.hide-notes .event-notes,
+.timeline.hide-notes .transit-notes {
+    display: none;
+}
+
+/* ---- filter: hide alternatives ---- */
+.timeline.hide-alternatives .alternatives-section {
+    display: none;
+}
+
+/* -----------------------------------------------------------------
    Day alternatives (options)
    ----------------------------------------------------------------- */
 

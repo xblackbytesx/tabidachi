@@ -265,6 +265,50 @@
   }
 
   // ============================================================
+  // View filters (Notes / Alternatives toggles)
+  // Persisted in localStorage. Applied via CSS classes on #timeline.
+  // ============================================================
+  function initViewFilters() {
+    var bar = document.getElementById('view-filter-bar');
+    if (!bar) return;
+    var timeline = document.getElementById('timeline');
+    if (!timeline) return;
+
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem('tabidachi-view-filters') || '{}'); } catch (e) {}
+
+    // true = content visible (default on)
+    var state = {
+      notes: saved.notes !== false,
+      alternatives: saved.alternatives !== false
+    };
+
+    function applyFilter(key) {
+      timeline.classList.toggle('hide-' + key, !state[key]);
+      var btn = document.getElementById('filter-btn-' + key);
+      if (btn) btn.classList.toggle('is-active', state[key]);
+    }
+
+    function applyAll() {
+      applyFilter('notes');
+      applyFilter('alternatives');
+    }
+
+    ['notes', 'alternatives'].forEach(function (key) {
+      var btn = document.getElementById('filter-btn-' + key);
+      if (!btn || btn._filterBound) return;
+      btn._filterBound = true;
+      btn.addEventListener('click', function () {
+        state[key] = !state[key];
+        localStorage.setItem('tabidachi-view-filters', JSON.stringify(state));
+        applyAll();
+      });
+    });
+
+    applyAll();
+  }
+
+  // ============================================================
   // <details> open-state preservation across DOM swaps
   // Captures which <details id="..."> are open before a swap
   // and re-opens them afterwards by ID.
@@ -290,6 +334,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     initSortableEvents();
     initAsyncEventForms();
+    initViewFilters();
     if (document.getElementById('timeline')) {
       scrollToToday();
     }
@@ -327,6 +372,7 @@
       }
       initSortableEvents();
       initAsyncEventForms();
+      initViewFilters();
       restoreOpenDetails(_savedOpenDetails);
       _savedOpenDetails = [];
     });
