@@ -133,10 +133,19 @@ func (h *APIHandler) GetSharedTrip(c echo.Context) error {
 	data := trip.Data
 	for i, leg := range data.Legs {
 		data.Legs[i].CoverImageURL = h.absShareImageURL(leg.CoverImageURL, sharePrefix)
+		if data.Legs[i].Accommodation != nil {
+			data.Legs[i].Accommodation.BookingReference = ""
+		}
 		for j, day := range leg.Days {
 			for k, ev := range day.Events {
 				data.Legs[i].Days[j].Events[k].ImageURL = h.absShareImageURL(ev.ImageURL, sharePrefix)
 				data.Legs[i].Days[j].Events[k].ImageThumbURL = h.absShareImageURL(ev.ImageThumbURL, sharePrefix)
+				data.Legs[i].Days[j].Events[k].BookingReference = ""
+			}
+			for oi := range day.Options {
+				for k := range day.Options[oi].Events {
+					data.Legs[i].Days[j].Options[oi].Events[k].BookingReference = ""
+				}
 			}
 		}
 	}

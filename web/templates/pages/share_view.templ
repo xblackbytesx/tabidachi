@@ -116,9 +116,6 @@ templ ShareView(trip *domain.Trip, shareToken string) {
 									<span class="accomm-dates">
 										{ format.StayInfo(leg.Accommodation.CheckIn, leg.Accommodation.CheckOut) }
 									</span>
-									if leg.Accommodation.BookingReference != "" {
-										<span class="accomm-ref">Ref: { leg.Accommodation.BookingReference }</span>
-									}
 								</div>
 							}
 							if leg.Notes != "" {
@@ -304,10 +301,7 @@ templ shareEventCard(event domain.Event, shareToken string) {
 						}
 					</div>
 				}
-				if event.BookingReference != "" {
-					<div class="event-ref">@components.Icon("ticket") Ref: { event.BookingReference }</div>
-				}
-				if event.Notes != "" {
+					if event.Notes != "" {
 					<div class="event-notes">{ event.Notes }</div>
 				}
 			</div>
