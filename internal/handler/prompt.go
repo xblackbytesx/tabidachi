@@ -62,7 +62,37 @@ const tabidachiSchema = `{
               "checkIn": true,
               "checkOut": false
             }
+          ],
+          "options": [
+            {
+              "sequence": 1,
+              "title": "Option title (e.g. 'Arashiyama day trip')",
+              "description": "Brief description of this alternative (optional)",
+              "location": "Area or neighbourhood context (optional)",
+              "selected": false,
+              "events": [
+                {
+                  "sequence": 1,
+                  "type": "activity|transit|accommodation",
+                  "title": "Event title"
+                }
+              ]
+            }
           ]
+        }
+      ]
+    }
+  ],
+  "phrasebooks": [
+    {
+      "language": "Japanese",
+      "phrases": [
+        {
+          "category": "Greetings",
+          "english": "Thank you",
+          "local": "ありがとうございます",
+          "pronunciation": "Arigatou gozaimasu",
+          "notes": "optional contextual note"
         }
       ]
     }
@@ -225,7 +255,9 @@ You are a travel data extraction assistant. Extract ONLY the practical logistics
 
 Always include startTime and endTime where available. Always include transportMode, departure.location, arrival.location, and duration for transit events. Always include carrier and flightNumber or trainType where mentioned. Populate every optional field that has available data.
 
-For the optional "notes" field on legs and days: include a note ONLY if it contains genuinely actionable logistics — things like baggage storage instructions, pass validity reminders, check-out deadlines, or event booking requirements. Do NOT include food suggestions, cultural etiquette, general tips, or inspirational content in notes. Keep notes short and practical (one or two sentences max).` +
+For the optional "notes" field on legs and days: include a note ONLY if it contains genuinely actionable logistics — things like baggage storage instructions, pass validity reminders, check-out deadlines, or event booking requirements. Do NOT include food suggestions, cultural etiquette, general tips, or inspirational content in notes. Keep notes short and practical (one or two sentences max).
+
+If the itinerary visits destinations where a non-English language is spoken, include a "phrasebooks" array at the trip level — one entry per destination language. For each language generate 20–40 essential phrases covering: Greetings, Basic phrases, Getting around, Dining, Shopping, Emergency. Populate "local" with the native script, and "pronunciation" with natural phonetic spelling (romaji for Japanese, pinyin with tones for Mandarin, etc.).` +
 		dateHint + includedList + `
 
 Output schema (schemaVersion 1.0):
@@ -290,5 +322,7 @@ Important output rules:
 - Always populate startTime and endTime where you can make a reasonable estimate.
 - Always include transportMode, departure.location, arrival.location, and duration for transit events.
 - For the optional "notes" field on legs and days: include ONLY actionable logistics (e.g. "Book tickets in advance", "JR Pass valid for this segment"). No cultural tips or food suggestions.
-- Suggest realistic travel times between locations based on the destinations and transport modes.`
+- Suggest realistic travel times between locations based on the destinations and transport modes.
+- For any day with "type": "flexible", provide 2–3 distinct alternatives in the "options" array (e.g. different day-trip destinations or activity themes). Set "selected": false on all options — the traveller will choose later. A flexible day should have no top-level events, only events inside each option.
+- Include a "phrasebooks" array at the trip level with one entry per destination language. For each language generate 40–60 phrases across these categories: Greetings, Basic phrases, Getting around, Accommodation, Dining, Shopping, Numbers, Emergency. Use the local script in "local" and natural phonetic spelling in "pronunciation" (romaji for Japanese, pinyin with tone marks for Mandarin, etc.). Add a brief "notes" to any phrase where context helps (e.g. etiquette, when to use it).`
 }

@@ -244,6 +244,36 @@ func validateTripData(data *domain.TripData) error {
 			}
 		}
 	}
+	// Phrasebook validation
+	if len(data.Phrasebooks) > 5 {
+		return fmt.Errorf("phrasebooks: max 5 languages per trip")
+	}
+	for pbIdx, pb := range data.Phrasebooks {
+		if len(pb.Language) > 100 {
+			return fmt.Errorf("phrasebook %d: language name too long", pbIdx+1)
+		}
+		if len(pb.Phrases) > 200 {
+			return fmt.Errorf("phrasebook %d (%s): max 200 phrases", pbIdx+1, pb.Language)
+		}
+		for pIdx, p := range pb.Phrases {
+			loc := fmt.Sprintf("phrasebook %d, phrase %d", pbIdx+1, pIdx+1)
+			if len(p.Category) > 100 {
+				return fmt.Errorf("%s: category too long", loc)
+			}
+			if len(p.English) > 500 {
+				return fmt.Errorf("%s: english too long", loc)
+			}
+			if len(p.Local) > 500 {
+				return fmt.Errorf("%s: local too long", loc)
+			}
+			if len(p.Pronunciation) > 500 {
+				return fmt.Errorf("%s: pronunciation too long", loc)
+			}
+			if len(p.Notes) > 1000 {
+				return fmt.Errorf("%s: notes too long", loc)
+			}
+		}
+	}
 	return nil
 }
 

@@ -71,63 +71,80 @@ templ ShareView(trip *domain.Trip, shareToken string) {
 					}
 				</div>
 			}
-			@shareViewFilterBar()
-			<div class="timeline" id="timeline">
-				if len(trip.Data.Legs) == 0 {
-					<div class="empty-state">
-						@components.IconC("map", "empty-icon")
-						<p>No itinerary yet.</p>
-					</div>
-				}
-				for legIdx, leg := range trip.Data.Legs {
-					<div class="leg-section" id={ fmt.Sprintf("leg-%d", legIdx) }>
-						<div class={ "leg-header", templ.KV("leg-header-has-image", leg.CoverImageURL != "") }
-							if leg.CoverImageURL != "" {
-								style={ shareLegHeaderStyle(leg.CoverImageURL, shareToken) }
-							}
-						>
-							<div class="leg-destination">
-								<span class="leg-num">Leg { fmt.Sprintf("%d", leg.Sequence) }</span>
-								<h2 class="leg-title">{ leg.Destination }</h2>
-								if leg.Region != "" {
-									<span class="leg-region">{ leg.Region }</span>
-								}
-							</div>
-							<div class="leg-dates">{ format.ShortDate(ctx, leg.StartDate) } — { format.ShortDate(ctx, leg.EndDate) }</div>
-						</div>
-						if leg.Accommodation != nil {
-							<div class="accommodation-banner">
-								@components.Icon("building")
-								<span class="accomm-name">{ leg.Accommodation.Name }</span>
-								if leg.Accommodation.Neighborhood != "" {
-									<span class="accomm-neighborhood">{ leg.Accommodation.Neighborhood }</span>
-								}
-								<span class="accomm-dates">
-									{ format.StayInfo(leg.Accommodation.CheckIn, leg.Accommodation.CheckOut) }
-								</span>
-								if leg.Accommodation.BookingReference != "" {
-									<span class="accomm-ref">Ref: { leg.Accommodation.BookingReference }</span>
-								}
-							</div>
-						}
-						if leg.Notes != "" {
-							<details class="leg-notes">
-								<summary>@components.Icon("circle-info") Leg notes</summary>
-								<p class="notes-text">{ leg.Notes }</p>
-							</details>
-						}
-						for _, day := range leg.Days {
-							@shareDaySection(trip, day, shareToken)
-						}
-					</div>
-					if legIdx < len(trip.Data.Legs)-1 {
-						<div class="leg-connector">
-							@components.IconC("circle-arrow-down", "leg-connector-icon")
-							<span class="leg-connector-label">{ trip.Data.Legs[legIdx+1].Destination }</span>
+			if len(trip.Data.Phrasebooks) > 0 {
+				<div class="view-tab-bar" id="view-tabs">
+					<button type="button" class="view-tab active" data-view="timeline">
+						@components.Icon("calendar-days") Timeline
+					</button>
+					<button type="button" class="view-tab" data-view="phrasebook">
+						@components.Icon("globe") Phrasebook
+					</button>
+				</div>
+			}
+			<div id="view-timeline">
+				@shareViewFilterBar()
+				<div class="timeline" id="timeline">
+					if len(trip.Data.Legs) == 0 {
+						<div class="empty-state">
+							@components.IconC("map", "empty-icon")
+							<p>No itinerary yet.</p>
 						</div>
 					}
-				}
+					for legIdx, leg := range trip.Data.Legs {
+						<div class="leg-section" id={ fmt.Sprintf("leg-%d", legIdx) }>
+							<div class={ "leg-header", templ.KV("leg-header-has-image", leg.CoverImageURL != "") }
+								if leg.CoverImageURL != "" {
+									style={ shareLegHeaderStyle(leg.CoverImageURL, shareToken) }
+								}
+							>
+								<div class="leg-destination">
+									<span class="leg-num">Leg { fmt.Sprintf("%d", leg.Sequence) }</span>
+									<h2 class="leg-title">{ leg.Destination }</h2>
+									if leg.Region != "" {
+										<span class="leg-region">{ leg.Region }</span>
+									}
+								</div>
+								<div class="leg-dates">{ format.ShortDate(ctx, leg.StartDate) } — { format.ShortDate(ctx, leg.EndDate) }</div>
+							</div>
+							if leg.Accommodation != nil {
+								<div class="accommodation-banner">
+									@components.Icon("building")
+									<span class="accomm-name">{ leg.Accommodation.Name }</span>
+									if leg.Accommodation.Neighborhood != "" {
+										<span class="accomm-neighborhood">{ leg.Accommodation.Neighborhood }</span>
+									}
+									<span class="accomm-dates">
+										{ format.StayInfo(leg.Accommodation.CheckIn, leg.Accommodation.CheckOut) }
+									</span>
+									if leg.Accommodation.BookingReference != "" {
+										<span class="accomm-ref">Ref: { leg.Accommodation.BookingReference }</span>
+									}
+								</div>
+							}
+							if leg.Notes != "" {
+								<details class="leg-notes">
+									<summary>@components.Icon("circle-info") Leg notes</summary>
+									<p class="notes-text">{ leg.Notes }</p>
+								</details>
+							}
+							for _, day := range leg.Days {
+								@shareDaySection(trip, day, shareToken)
+							}
+						</div>
+						if legIdx < len(trip.Data.Legs)-1 {
+							<div class="leg-connector">
+								@components.IconC("circle-arrow-down", "leg-connector-icon")
+								<span class="leg-connector-label">{ trip.Data.Legs[legIdx+1].Destination }</span>
+							</div>
+						}
+					}
+				</div>
 			</div>
+			if len(trip.Data.Phrasebooks) > 0 {
+				<div id="view-phrasebook" style="display:none">
+					@phrasebookSection(trip.Data.Phrasebooks)
+				</div>
+			}
 		</div>
 		<dialog id="event-lightbox" class="event-lightbox-dialog" aria-label="Event photo viewer">
 			<button class="event-lightbox-close" onclick="document.getElementById('event-lightbox').close()" aria-label="Close lightbox">

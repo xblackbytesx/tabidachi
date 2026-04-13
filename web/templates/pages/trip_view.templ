@@ -92,63 +92,80 @@ templ TripView(csrfToken string, trip *domain.Trip, shares []*domain.TripShare, 
 					</a>
 				</div>
 			}
-			@viewFilterBar()
-			<div class="timeline" id="timeline">
-				if len(trip.Data.Legs) == 0 {
-					<div class="empty-state">
-						@components.IconC("map", "empty-icon")
-						<p>No itinerary yet. <a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/edit") }>Add legs and events</a>.</p>
-					</div>
-				}
-				for legIdx, leg := range trip.Data.Legs {
-					<div class="leg-section" id={ fmt.Sprintf("leg-%d", legIdx) }>
-						<div class={ "leg-header", templ.KV("leg-header-has-image", leg.CoverImageURL != "") }
-							if leg.CoverImageURL != "" {
-								style={ legHeaderStyle(leg.CoverImageURL) }
-							}
-						>
-							<div class="leg-destination">
-								<span class="leg-num">Leg { fmt.Sprintf("%d", leg.Sequence) }</span>
-								<h2 class="leg-title">{ leg.Destination }</h2>
-								if leg.Region != "" {
-									<span class="leg-region">{ leg.Region }</span>
-								}
-							</div>
-							<div class="leg-dates">{ format.ShortDate(ctx, leg.StartDate) } — { format.ShortDate(ctx, leg.EndDate) }</div>
-						</div>
-						if leg.Accommodation != nil {
-							<div class="accommodation-banner">
-								@components.Icon("building")
-								<span class="accomm-name">{ leg.Accommodation.Name }</span>
-								if leg.Accommodation.Neighborhood != "" {
-									<span class="accomm-neighborhood">{ leg.Accommodation.Neighborhood }</span>
-								}
-								<span class="accomm-dates">
-									{ format.StayInfo(leg.Accommodation.CheckIn, leg.Accommodation.CheckOut) }
-								</span>
-								if leg.Accommodation.BookingReference != "" {
-									<span class="accomm-ref">Ref: { leg.Accommodation.BookingReference }</span>
-								}
-							</div>
-						}
-						if leg.Notes != "" {
-							<details class="leg-notes">
-								<summary>@components.Icon("circle-info") Leg notes</summary>
-								<p class="notes-text">{ leg.Notes }</p>
-							</details>
-						}
-						for dayIdx, day := range leg.Days {
-							@DaySection(csrfToken, trip, day, legIdx, dayIdx)
-						}
-					</div>
-					if legIdx < len(trip.Data.Legs)-1 {
-						<div class="leg-connector">
-							@components.IconC("circle-arrow-down", "leg-connector-icon")
-							<span class="leg-connector-label">{ trip.Data.Legs[legIdx+1].Destination }</span>
+			if len(trip.Data.Phrasebooks) > 0 {
+				<div class="view-tab-bar" id="view-tabs">
+					<button type="button" class="view-tab active" data-view="timeline">
+						@components.Icon("calendar-days") Timeline
+					</button>
+					<button type="button" class="view-tab" data-view="phrasebook">
+						@components.Icon("globe") Phrasebook
+					</button>
+				</div>
+			}
+			<div id="view-timeline">
+				@viewFilterBar()
+				<div class="timeline" id="timeline">
+					if len(trip.Data.Legs) == 0 {
+						<div class="empty-state">
+							@components.IconC("map", "empty-icon")
+							<p>No itinerary yet. <a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/edit") }>Add legs and events</a>.</p>
 						</div>
 					}
-				}
+					for legIdx, leg := range trip.Data.Legs {
+						<div class="leg-section" id={ fmt.Sprintf("leg-%d", legIdx) }>
+							<div class={ "leg-header", templ.KV("leg-header-has-image", leg.CoverImageURL != "") }
+								if leg.CoverImageURL != "" {
+									style={ legHeaderStyle(leg.CoverImageURL) }
+								}
+							>
+								<div class="leg-destination">
+									<span class="leg-num">Leg { fmt.Sprintf("%d", leg.Sequence) }</span>
+									<h2 class="leg-title">{ leg.Destination }</h2>
+									if leg.Region != "" {
+										<span class="leg-region">{ leg.Region }</span>
+									}
+								</div>
+								<div class="leg-dates">{ format.ShortDate(ctx, leg.StartDate) } — { format.ShortDate(ctx, leg.EndDate) }</div>
+							</div>
+							if leg.Accommodation != nil {
+								<div class="accommodation-banner">
+									@components.Icon("building")
+									<span class="accomm-name">{ leg.Accommodation.Name }</span>
+									if leg.Accommodation.Neighborhood != "" {
+										<span class="accomm-neighborhood">{ leg.Accommodation.Neighborhood }</span>
+									}
+									<span class="accomm-dates">
+										{ format.StayInfo(leg.Accommodation.CheckIn, leg.Accommodation.CheckOut) }
+									</span>
+									if leg.Accommodation.BookingReference != "" {
+										<span class="accomm-ref">Ref: { leg.Accommodation.BookingReference }</span>
+									}
+								</div>
+							}
+							if leg.Notes != "" {
+								<details class="leg-notes">
+									<summary>@components.Icon("circle-info") Leg notes</summary>
+									<p class="notes-text">{ leg.Notes }</p>
+								</details>
+							}
+							for dayIdx, day := range leg.Days {
+								@DaySection(csrfToken, trip, day, legIdx, dayIdx)
+							}
+						</div>
+						if legIdx < len(trip.Data.Legs)-1 {
+							<div class="leg-connector">
+								@components.IconC("circle-arrow-down", "leg-connector-icon")
+								<span class="leg-connector-label">{ trip.Data.Legs[legIdx+1].Destination }</span>
+							</div>
+						}
+					}
+				</div>
 			</div>
+			if len(trip.Data.Phrasebooks) > 0 {
+				<div id="view-phrasebook" style="display:none">
+					@phrasebookSection(trip.Data.Phrasebooks)
+				</div>
+			}
 		</div>
 		@sharePanel(csrfToken, trip.ID.String(), shares, newShareToken)
 		<dialog id="event-lightbox" class="event-lightbox-dialog" aria-label="Event photo viewer">
@@ -583,4 +600,74 @@ func legHeaderStyle(url string) string {
 		return ""
 	}
 	return "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.7) 100%), url(" + url + "); background-size: cover; background-position: center;"
+}
+
+// phraseGroup is used by the phrasebook template to group phrases by category.
+type phraseGroup struct {
+	Category string
+	Phrases  []domain.Phrase
+}
+
+// groupPhrasesByCategory preserves the original ordering of categories as they
+// first appear, while collecting all phrases of the same category together.
+func groupPhrasesByCategory(phrases []domain.Phrase) []phraseGroup {
+	var groups []phraseGroup
+	seen := map[string]int{}
+	for _, p := range phrases {
+		cat := p.Category
+		if cat == "" {
+			cat = "General"
+		}
+		if idx, ok := seen[cat]; ok {
+			groups[idx].Phrases = append(groups[idx].Phrases, p)
+		} else {
+			seen[cat] = len(groups)
+			groups = append(groups, phraseGroup{Category: cat, Phrases: []domain.Phrase{p}})
+		}
+	}
+	return groups
+}
+
+templ phrasebookSection(phrasebooks []domain.Phrasebook) {
+	<div class="phrasebook-container">
+		for pbIdx, pb := range phrasebooks {
+			<div class="phrasebook-language">
+				<h2 class="phrasebook-language-title">
+					@components.Icon("globe")
+					{ pb.Language }
+				</h2>
+				for _, group := range groupPhrasesByCategory(pb.Phrases) {
+					<div class="phrase-category">
+						<h3 class="phrase-category-title">{ group.Category }</h3>
+						<table class="phrasebook-table">
+							<thead>
+								<tr>
+									<th class="phrase-col-english">English</th>
+									<th class="phrase-col-local">{ pb.Language }</th>
+									<th class="phrase-col-pronunciation">Pronunciation</th>
+								</tr>
+							</thead>
+							<tbody>
+								for _, p := range group.Phrases {
+									<tr class="phrase-row">
+										<td class="phrase-english">{ p.English }</td>
+										<td class="phrase-local">{ p.Local }</td>
+										<td class="phrase-pronunciation">{ p.Pronunciation }</td>
+									</tr>
+									if p.Notes != "" {
+										<tr class="phrase-notes-row">
+											<td colspan="3" class="phrase-notes">{ p.Notes }</td>
+										</tr>
+									}
+								}
+							</tbody>
+						</table>
+					</div>
+				}
+			</div>
+			if pbIdx < len(phrasebooks)-1 {
+				<hr class="phrasebook-divider"/>
+			}
+		}
+	</div>
 }
