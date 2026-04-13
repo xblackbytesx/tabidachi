@@ -148,7 +148,7 @@ func (h *TripHandler) Edit(c echo.Context) error {
 		return c.String(http.StatusNotFound, "trip not found")
 	}
 
-	return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip))
+	return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip, "", ""))
 }
 
 func (h *TripHandler) Update(c echo.Context) error {
@@ -172,7 +172,7 @@ func (h *TripHandler) Update(c echo.Context) error {
 	endStr := c.FormValue("end_date")
 
 	if title == "" || startStr == "" || endStr == "" {
-		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip))
+		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip, "", ""))
 	}
 	if len(title) > 500 || len(c.FormValue("home_location")) > 500 || len(c.FormValue("timezone")) > 100 {
 		return c.String(http.StatusBadRequest, "field value too long")
@@ -184,11 +184,11 @@ func (h *TripHandler) Update(c echo.Context) error {
 
 	startDate, err := time.Parse("2006-01-02", startStr)
 	if err != nil {
-		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip))
+		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip, "", ""))
 	}
 	endDate, err := time.Parse("2006-01-02", endStr)
 	if err != nil {
-		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip))
+		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip, "", ""))
 	}
 
 	trip.Title = title
@@ -210,7 +210,7 @@ func (h *TripHandler) Update(c echo.Context) error {
 
 	if err := h.trips.Update(c.Request().Context(), trip); err != nil {
 		slog.Error("trip update", "err", err)
-		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip))
+		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip, "", ""))
 	}
 
 	return redirect(c, "/trips/"+trip.ID.String()+"/edit")

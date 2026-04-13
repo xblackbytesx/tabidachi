@@ -922,3 +922,39 @@ func (h *BuilderHandler) ReorderEvents(c echo.Context) error {
 
 	return c.NoContent(http.StatusNoContent)
 }
+
+func (h *BuilderHandler) UpdateData(c echo.Context) error {
+	trip, _, err := h.loadTrip(c)
+	if err != nil {
+		return c.String(http.StatusNotFound, "trip not found")
+	}
+	raw := c.FormValue("data")
+	var newData domain.TripData
+	if jsonErr := json.Unmarshal([]byte(raw), &newData); jsonErr != nil {
+		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip, raw, "Invalid JSON: "+jsonErr.Error()))
+	}
+	if valErr := validateTripData(&newData); valErr != nil {
+		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip, raw, valErr.Error()))
+	}
+	trip.Data = newData
+	if newData.Title != "" {
+		trip.Title = newData.Title
+	}
+	if newData.StartDate != "" {
+		if t, parseErr := time.Parse("2006-01-02", newData.StartDate); parseErr == nil {
+			trip.StartDate = t
+		}
+	}
+	if newData.EndDate != "" {
+		if t, parseErr := time.Parse("2006-01-02", newData.EndDate); parseErr == nil {
+			trip.EndDate = t
+		}
+	}
+	trip.HomeLocation = newData.HomeLocation
+	trip.Timezone = newData.Timezone
+	if err := h.trips.Update(c.Request().Context(), trip); err != nil {
+		slog.Error("builder: update data", "err", err)
+		return render(c, http.StatusOK, pages.TripEdit(csrfToken(c), trip, raw, "Failed to save: "+err.Error()))
+	}
+	return redirect(c, "/trips/"+trip.ID.String()+"/edit")
+}
