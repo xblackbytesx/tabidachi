@@ -9,7 +9,7 @@ import (
 	"github.com/xblackbytesx/tabidachi/web/templates/layouts"
 )
 
-templ TripEdit(csrfToken string, trip *domain.Trip) {
+templ TripEdit(csrfToken string, trip *domain.Trip, jsonRaw string, jsonErr string) {
 	@layouts.Base("Edit "+trip.Title, csrfToken) {
 		<div class="page-header">
 			<a href={ templ.SafeURL("/trips/" + trip.ID.String()) } class="btn btn-ghost btn-sm">
@@ -63,17 +63,38 @@ templ TripEdit(csrfToken string, trip *domain.Trip) {
 		<div class="form-card">
 			<div class="form-section-header">
 				<h2 class="form-section-title">Legs &amp; days</h2>
-				<button class="btn btn-sm btn-primary" data-dialog="add-leg-dialog" onclick="openDataDialog(this); return false;">
+				<div class="editor-tab-bar">
+					<button type="button" class="editor-tab" data-tab="builder">Builder</button>
+					<button type="button" class="editor-tab" data-tab="json">JSON</button>
+				</div>
+				<button class="btn btn-sm btn-primary editor-add-leg-btn" data-dialog="add-leg-dialog" onclick="openDataDialog(this); return false;">
 					@components.Icon("plus") Add leg
 				</button>
 			</div>
-			if len(trip.Data.Legs) == 0 {
-				<div class="empty-state-sm">No legs yet. Click "Add leg" to start building your itinerary.</div>
-			}
-			<div class="legs-list">
-				for legIdx, leg := range trip.Data.Legs {
-					@legSection(csrfToken, trip.ID.String(), leg, legIdx)
+			<div id="editor-builder-panel" class="editor-panel">
+				if len(trip.Data.Legs) == 0 {
+					<div class="empty-state-sm">No legs yet. Click "Add leg" to start building your itinerary.</div>
 				}
+				<div class="legs-list">
+					for legIdx, leg := range trip.Data.Legs {
+						@legSection(csrfToken, trip.ID.String(), leg, legIdx)
+					}
+				</div>
+			</div>
+			<div id="editor-json-panel" class="editor-panel" style="display:none">
+				if jsonErr != "" {
+					<div class="alert alert-error json-editor-error">{ jsonErr }</div>
+				}
+				<form method="POST" action={ templ.SafeURL("/trips/" + trip.ID.String() + "/data") } hx-boost="false">
+					<input type="hidden" name="gorilla.csrf.Token" value={ csrfToken }/>
+					<textarea name="data" class="json-editor-textarea" spellcheck="false" placeholder="Paste your full trip JSON here...">{ jsonRaw }</textarea>
+					<div class="json-editor-actions">
+						<a href={ templ.SafeURL("/trips/" + trip.ID.String() + "/export") } class="btn btn-ghost btn-sm" hx-boost="false">
+							@components.Icon("download") Load current JSON
+						</a>
+						<button type="submit" class="btn btn-primary">Save JSON</button>
+					</div>
+				</form>
 			</div>
 		</div>
 		<!-- Add Leg Dialog -->

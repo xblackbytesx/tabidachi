@@ -329,12 +329,45 @@
   }
 
   // ============================================================
+  // JSON / Builder editor tab switcher
+  // ============================================================
+  function initJsonEditor() {
+    var tabs = document.querySelectorAll('.editor-tab');
+    if (!tabs.length) return;
+
+    var builderPanel = document.getElementById('editor-builder-panel');
+    var jsonPanel = document.getElementById('editor-json-panel');
+    var addLegBtn = document.querySelector('.editor-add-leg-btn');
+    var STORAGE_KEY = 'tabidachi-editor-mode';
+
+    function activate(mode) {
+      tabs.forEach(function (t) {
+        t.classList.toggle('active', t.dataset.tab === mode);
+      });
+      if (builderPanel) builderPanel.style.display = mode === 'builder' ? '' : 'none';
+      if (jsonPanel) jsonPanel.style.display = mode === 'json' ? '' : 'none';
+      if (addLegBtn) addLegBtn.style.display = mode === 'builder' ? '' : 'none';
+      localStorage.setItem(STORAGE_KEY, mode);
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () { activate(tab.dataset.tab); });
+    });
+
+    // If there's a JSON parse/validation error visible, force JSON tab
+    var hasJsonError = jsonPanel && jsonPanel.querySelector('.json-editor-error');
+    var initial = hasJsonError ? 'json' : (localStorage.getItem(STORAGE_KEY) || 'builder');
+    activate(initial);
+  }
+
+  // ============================================================
   // HTMX hooks
   // ============================================================
   document.addEventListener('DOMContentLoaded', function () {
     initSortableEvents();
     initAsyncEventForms();
     initViewFilters();
+    initJsonEditor();
     if (document.getElementById('timeline')) {
       scrollToToday();
     }

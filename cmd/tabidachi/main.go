@@ -226,6 +226,9 @@ func main() {
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx", builderHandler.UpdateEvent)
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/events/:eventIdx/delete", builderHandler.DeleteEvent)
 
+	// Bulk JSON data replacement
+	protected.POST("/trips/:id/data", builderHandler.UpdateData)
+
 	// Day alternatives (options) endpoints
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/options", builderHandler.AddOption)
 	protected.POST("/trips/:id/legs/:legIdx/days/:dayIdx/options/:optIdx", builderHandler.UpdateOption)
