@@ -44,13 +44,14 @@ func (t *Trip) IsActive() bool {
 
 // TripData is the full nested itinerary stored as JSONB.
 type TripData struct {
-	SchemaVersion string `json:"schemaVersion"`
-	Title         string `json:"title"`
-	StartDate     string `json:"startDate"`
-	EndDate       string `json:"endDate"`
-	HomeLocation  string `json:"homeLocation,omitempty"`
-	Timezone      string `json:"timezone,omitempty"`
-	Legs          []Leg  `json:"legs"`
+	SchemaVersion string       `json:"schemaVersion"`
+	Title         string       `json:"title"`
+	StartDate     string       `json:"startDate"`
+	EndDate       string       `json:"endDate"`
+	HomeLocation  string       `json:"homeLocation,omitempty"`
+	Timezone      string       `json:"timezone,omitempty"`
+	Legs          []Leg        `json:"legs"`
+	Phrasebooks   []Phrasebook `json:"phrasebooks,omitempty"`
 }
 
 type Leg struct {
@@ -137,6 +138,21 @@ type TransitPoint struct {
 	Code      string `json:"code,omitempty"`
 	Latitude  string `json:"latitude,omitempty"`
 	Longitude string `json:"longitude,omitempty"`
+}
+
+// Phrasebook holds phrases for one language used during a trip.
+type Phrasebook struct {
+	Language string   `json:"language"` // e.g. "Japanese", "French"
+	Phrases  []Phrase `json:"phrases"`
+}
+
+// Phrase is one entry in a phrasebook.
+type Phrase struct {
+	Category      string `json:"category"`             // e.g. "Greetings", "Dining", "Emergency"
+	English       string `json:"english"`               // English meaning / prompt
+	Local         string `json:"local"`                 // native script
+	Pronunciation string `json:"pronunciation"`         // phonetic: romaji, IPA, informal
+	Notes         string `json:"notes,omitempty"`
 }
 
 // TripShare represents a shareable link scoped to a single trip.

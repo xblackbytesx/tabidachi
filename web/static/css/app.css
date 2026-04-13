@@ -698,6 +698,121 @@ a:hover {
 }
 
 /* -----------------------------------------------------------------
+   View tab bar (Timeline / Phrasebook)
+   ----------------------------------------------------------------- */
+.view-tab-bar {
+    display: flex;
+    gap: var(--space-100);
+    padding: var(--space-300) var(--space-500);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+}
+.view-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-200);
+    padding: var(--space-200) var(--space-400);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: var(--text-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.view-tab.active {
+    background: var(--color-surface-2);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+.view-tab:hover:not(.active) {
+    color: var(--color-text);
+}
+
+/* -----------------------------------------------------------------
+   Phrasebook display
+   ----------------------------------------------------------------- */
+.phrasebook-container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: var(--space-600) var(--space-500);
+}
+.phrasebook-language {
+    margin-block-end: var(--space-700);
+}
+.phrasebook-language-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-300);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin-block-end: var(--space-600);
+}
+.phrase-category {
+    margin-block-end: var(--space-600);
+}
+.phrase-category-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-block-end: var(--space-300);
+    padding-block-end: var(--space-200);
+    border-bottom: 1px solid var(--color-border);
+}
+.phrasebook-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.phrasebook-table thead th {
+    padding: var(--space-200) var(--space-300);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-faint);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--color-border);
+}
+.phrase-col-english     { width: 30%; }
+.phrase-col-local       { width: 35%; }
+.phrase-col-pronunciation { width: 35%; }
+.phrase-row td {
+    padding: var(--space-300);
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+    line-height: 1.5;
+}
+.phrase-english {
+    color: var(--color-text);
+    font-size: var(--text-md);
+}
+.phrase-local {
+    font-size: var(--text-md);
+    font-weight: 500;
+    color: var(--color-text);
+}
+.phrase-pronunciation {
+    font-size: var(--text-md);
+    color: var(--color-accent);
+    font-style: italic;
+}
+.phrase-notes-row td {
+    padding: 2px var(--space-300) var(--space-300);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    font-style: italic;
+    border-bottom: 1px solid var(--color-border);
+}
+.phrasebook-divider {
+    border: none;
+    border-top: 1px solid var(--color-border-light);
+    margin: var(--space-700) 0;
+}
+
+/* -----------------------------------------------------------------
    View filter bar (Notes / Alternatives toggles)
    ----------------------------------------------------------------- */
 .view-filter-bar {

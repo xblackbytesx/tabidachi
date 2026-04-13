@@ -329,6 +329,31 @@
   }
 
   // ============================================================
+  // View tabs (Timeline / Phrasebook)
+  // ============================================================
+  function initViewTabs() {
+    var tabs = document.querySelectorAll('.view-tab');
+    if (!tabs.length) return;
+
+    var timelineView = document.getElementById('view-timeline');
+    var phrasebookView = document.getElementById('view-phrasebook');
+
+    function activate(view) {
+      tabs.forEach(function (t) {
+        t.classList.toggle('active', t.dataset.view === view);
+      });
+      if (timelineView) timelineView.style.display = view === 'timeline' ? '' : 'none';
+      if (phrasebookView) phrasebookView.style.display = view === 'phrasebook' ? '' : 'none';
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () { activate(tab.dataset.view); });
+    });
+
+    activate('timeline');
+  }
+
+  // ============================================================
   // JSON / Builder editor tab switcher
   // ============================================================
   function initJsonEditor() {
@@ -367,6 +392,7 @@
     initSortableEvents();
     initAsyncEventForms();
     initViewFilters();
+    initViewTabs();
     initJsonEditor();
     if (document.getElementById('timeline')) {
       scrollToToday();
